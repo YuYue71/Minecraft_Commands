@@ -44,7 +44,7 @@
 
 ---
 
-## 參數選用列表 (Parameter list)
+## 參數枚舉列表 (Parameter Enumeration)
 ### 文字內容
 `輸入要顯示之文本即可`
 
