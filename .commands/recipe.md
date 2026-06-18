@@ -5,10 +5,10 @@
 ## 語法結構 (Syntax)
 
 ```commands
-/recipe give <目標選擇器> <配方ID>
-/recipe take <目標選擇器> <配方ID>
-/recipe give <目標選擇器> *
-/recipe take <目標選擇器> *
+/recipe give <目標> <配方ID>
+/recipe take <目標> <配方ID>
+/recipe give <目標> *
+/recipe take <目標> *
 ```
 
 ## 參數與引數拆解 (Arguments)
@@ -36,9 +36,6 @@
 
 ## 跨元素語法關聯表 (Links Matrix)
 
-| 關聯參數欄位    | 連結                                                                                                                                                                                                                             |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `<座標位置>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)                                         |
-| `<目標選擇器>` | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)                               |
-| `<物品ID>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md)                             |
-| `<文字內容>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md) |
+| 關聯參數欄位    | 參引語法元件名稱 |
+| --------- | --------------- |
+| `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)                               |

@@ -26,6 +26,6 @@
 
 ## 跨元素語法關聯表 (Links Matrix)
 
-| 關聯參數欄位    | 連結                                                                                                                                                                                               |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `<目標選擇器>` | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
+| 關聯參數欄位    | 參引語法元件名稱 |
+| --------- | --------------- |
+| `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)|
