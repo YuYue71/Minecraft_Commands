@@ -1,0 +1,26 @@
+# ====== Windows OS Garbage ======
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ====== macOS Garbage ======
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ====== IDE & Editors Workspaces ======
+# VS Code 本地設定與歷史快取
+.vscode/
+*.code-workspace
+
+# Obsidian 本地外掛狀態與工作區（若有使用）
+.obsidian/
+
+# JetBrains / IntelliJ 暫存檔
+.idea/
+
+# ====== System & Backup ======
+*.bak
+*.tmp
+*.log
