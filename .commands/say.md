@@ -1,0 +1,40 @@
+# `/say`（廣播訊息指令）
+* > 用於向全伺服器的所有玩家發送一條廣播訊息
+* > 發送的訊息會以醒目的粉紅色文字（或因伺服器版本、語系而異的專用樣式）顯示在聊天欄中
+* > 常用於命令方塊公告、伺服器自動化廣播與重要事件提醒
+
+---
+
+## 語法結構 (Syntax)
+```commands id="say0"
+/say <訊息>
+```
+
+---
+
+## 參數與引數拆解 (Arguments)
+> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
+
+| 參數名稱 | 功能與語義說明 |
+| --- | --- |
+| `[必填]` `<訊息>` | 要向全世界廣播的文字內容，格式會自動附帶發送者的名稱（如命令方塊執行會顯示 `* [@] 訊息內容`） |
+
+---
+
+## 參數枚舉列表 (Parameter Enumeration)
+
+### 訊息
+
+| 參數 | 說明 |
+| --- | --- |
+| `<文字內容>` | 自由輸入的純文字字串，支援包含空格的多個單字 |
+| `<目標選擇器>` | 支援在內文中嵌入目標選擇器（例如輸入 `哈囉 @a`，執行時會自動將 `@a` 解析為當前所有玩家的名稱列表） |
+
+---
+
+## 跨元素語法關聯表 (Links Matrix)
+
+| 關聯參數欄位 | 參引語法元件名稱 |
+| --- | --- |
+| `<訊息>`（內嵌選擇器時） | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
+| `<訊息>` | [聊天與文本系統 (Chat and Text System)](https://www.google.com/search?q=https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/chat_system.md) |
