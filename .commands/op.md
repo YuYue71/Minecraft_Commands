@@ -26,4 +26,4 @@
 
 | 關聯參數欄位 | 參引語法元件名稱 |
 | ------ | -------- |
-| `<玩家>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
+| `<玩家>` | 玩家名稱識別系統 |
