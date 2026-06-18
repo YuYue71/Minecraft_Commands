@@ -51,7 +51,7 @@
 
 ## 跨元素語法關聯表 (Links Matrix)
 
-| 關聯參數欄位    | 參引語法元件名稱                                                                                                                                                                                                                       |
+| 關聯參數欄位    | 參引語法元件名稱 |
 | --------- | --------------- |
 | `<座標>`  | [空間座標系統全指南（Coordinates）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)                                         |
 | `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)                               |
