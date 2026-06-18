@@ -37,4 +37,3 @@
 | 關聯參數欄位 | 參引語法元件名稱 |
 | --- | --- |
 | `<訊息>`（內嵌選擇器時） | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<訊息>` | [聊天與文本系統 (Chat and Text System)](https://www.google.com/search?q=https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/chat_system.md) |
