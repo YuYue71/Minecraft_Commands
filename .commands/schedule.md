@@ -72,5 +72,5 @@
 
 | 關聯參數欄位 | 參引語法元件名稱 |
 | --- | --- |
-| `<函數>` / `<函數標籤或識別碼>` | [函數執行指令 (Function)](https://www.google.com/search?q=https%3A%2F%2Fgithub.com%2FYuYue71%2FMinecraft_Commands%2Fblob%2Fmain%2Ffunction.md) |
-| 動態內容封裝 | [複合執行與條件判定指令 (Execute)](https://www.google.com/search?q=https%3A%2F%2Fgithub.com%2FYuYue71%2FMinecraft_Commands%2Fblob%2Fmain%2Fexecute.md) |
+| `<函數>` / `<函數標籤或識別碼>` | [函數執行指令 (Function)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/function.md) |
+| 動態內容封裝 | [複合執行與條件判定指令 (Execute)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/execute.md) |
