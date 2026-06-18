@@ -36,9 +36,9 @@
 
 ## 跨元素語法關聯表 (Links Matrix)
 
-| 關聯參數欄位    | 連結                        |
-| --------- | ------------------------- |
-| `<座標位置>`  | coordinates.md            |
-| `<目標選擇器>` | target_selectors.md       |
-| `<物品ID>`  | item_nbt.md               |
-| `<文字內容>`  | text_components_legacy.md |
+| 關聯參數欄位    | 連結                                                                                                                                                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `<座標位置>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)                                         |
+| `<目標選擇器>` | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)                               |
+| `<物品ID>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md)                             |
+| `<文字內容>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md) |
