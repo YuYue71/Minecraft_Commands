@@ -24,5 +24,3 @@
 |---|---|
 |`players`|顯示被封鎖的玩家用戶名名單（對應 `banned-players.json`）|
 |`ips`|顯示被封鎖的 IP 位址名單（對應 `banned-ips.json`）|
-
----
