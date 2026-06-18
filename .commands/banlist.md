@@ -19,6 +19,7 @@
 ---
 
 ## 參數枚舉列表 (Parameter Enumeration)
+### 類型
 |參數|說明|
 |---|---|
 |`players`|顯示被封鎖的玩家用戶名名單（對應 `banned-players.json`）|
