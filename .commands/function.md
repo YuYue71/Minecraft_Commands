@@ -48,7 +48,6 @@
 ```commands id="function_macro_example"
 # 在 custom_rpg:spawn_mob.mcfunction 檔案內部
 summon $(mob_type) ~ ~ ~ {Health:$(hp)f}
-
 ```
 
 #### 外部 NBT 資料源欄位對應表（傳入範例）：
