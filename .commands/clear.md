@@ -48,4 +48,3 @@
 | 關聯參數欄位 | 參引語法元件名稱                                                                                                                   |
 | ------ | -------------------------------------------------------------------------------------------------------------------------- |
 | `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<nbt>` | [物品NBT（Item NBT Structure）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md)          |
