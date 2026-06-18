@@ -1,79 +1,59 @@
-# `/item`（物品管理指令）
+# `/item`（物品指令）
 
-* > 用於修改玩家或容器中的物品
-* > 支援取得, 替換, 修改物品內容
-* > 基於 Minecraft Java 1.20.4 item components 系統
-
----
+* > 用於修改或替換容器或實體中的物品
 
 ## 語法結構 (Syntax)
 
-```commands id="item0"
-/item <目標> <子指令> <槽位> <來源>
+```commands
+/item replace block <座標> <容器槽位> <物品> [數量]
+/item replace entity <目標> <物品欄位> <物品> [數量]
 ```
-
----
 
 ## 參數與引數拆解 (Arguments)
 
-| 參數名稱           | 功能與語義說明     |
-| -------------- | ----------- |
-| `[必填]` `<目標>`  | 指定被操作的實體或容器 |
-| `[必填]` `<子指令>` | 指定操作方式      |
-| `[選填]` `<槽位>`  | 指定物品槽位      |
-| `[選填]` `<來源>`  | 指定物品來源或修改來源 |
-
----
+| 參數名稱                 | 功能與語義說明  |
+| -------------------- | -------- |
+| `[必填]` `<替換>`        | 固定子指令    |
+| `[必填]` `<方塊容器或實體>`   | 指定作用目標類型 |
+| `[必填]` `<座標>`        | 方塊位置     |
+| `[必填]` `<目標選擇器>`     | 指定實體     |
+| `[必填]` `<容器槽位或裝備欄位>` | 物品放置位置   |
+| `[必填]` `<物品ID>`      | 要放入的物品   |
+| `[選填]` `<數量>`        | 物品數量     |
 
 ## 參數枚舉列表 (Parameter Enumeration)
 
-### 子指令
+### 替換類型
 
-| 參數        | 說明              |
-| --------- | --------------- |
-| `replace` | 替換指定槽位物品        |
-| `copy`    | 複製物品到目標槽位       |
-| `modify`  | 修改物品 components |
-| `get`     | 取得物品            |
+| 參數       | 說明     |
+| -------- | ------ |
+| `block`  | 方塊容器   |
+| `entity` | 實體物品欄位 |
 
----
+### 容器槽位（方塊）
 
-### 槽位
+| 參數                 | 說明      |
+| ------------------ | ------- |
+| `container.<0-53>` | 箱子等容器槽位 |
+
+### 物品欄位（實體）
 
 | 參數                 | 說明  |
 | ------------------ | --- |
-| `mainhand`         | 主手  |
-| `offhand`          | 副手  |
-| `hotbar.<0-8>`     | 快捷欄 |
-| `inventory.<0-26>` | 背包  |
 | `armor.head`       | 頭盔  |
 | `armor.chest`      | 胸甲  |
 | `armor.legs`       | 護腿  |
-| `armor.feet`       | 鞋子  |
-
----
-
-### 來源
-
-| 參數             | 說明     |
-| -------------- | ------ |
-| `<item_stack>` | 直接物品堆  |
-| `<block>`      | 方塊容器來源 |
-| `<entity>`     | 實體物品來源 |
-
----
-
-### 數值
-
-| 參數     | 說明                         |
-| ------ | -------------------------- |
-| `<數值>` | 最小值：1 / 最大值：32767 / 支援負數：否 |
-
----
+| `armor.feet`       | 靴子  |
+| `weapon.mainhand`  | 主手  |
+| `weapon.offhand`   | 副手  |
+| `hotbar.<0-8>`     | 快捷欄 |
+| `inventory.<0-35>` | 背包  |
 
 ## 跨元素語法關聯表 (Links Matrix)
 
-| 關聯參數欄位  |                                                                                                                              |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `<目標>`  | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)   |
-| `<nbt>` | [物品NBT（Item NBT Structure）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md) |
+| 關聯參數欄位    | 參引語法元件名稱                                                                                                                                                                                                                       |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `<座標位置>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)                                         |
+| `<目標選擇器>` | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)                               |
+| `<物品ID>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/item_nbt.md)                             |
+| `<文字內容>`  | [https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md) |
