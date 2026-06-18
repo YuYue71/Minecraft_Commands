@@ -27,5 +27,3 @@
 | --- | --- |
 | `<目標玩家>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
 | `<封鎖原因>` | [文本NBT標籤](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md) |
-
----
