@@ -112,6 +112,6 @@
 
 | 關聯參數欄位    | 參引語法元件名稱                                                                   |
 | --------- | -------------------------------------------------------------------------- |
-| `<座標>`    | [空間座標系統全指南（Coordinates）](./.syntax_components/coordinates.md)              |
-| `<目標>`    | [目標選擇器 (Target Selectors)](./.syntax_components/target_selectors.md)       |
-| `<生物NBT>` | [生物NBT（Entity NBT Structure）](./.data_structures/nbt_legacy/entity_nbt.md) |
+| `<座標>`    | [空間座標系統全指南（Coordinates）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)              |
+| `<目標>`    | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)       |
+| `<生物NBT>` | [生物NBT（Entity NBT Structure）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/entity_nbt.md) |
