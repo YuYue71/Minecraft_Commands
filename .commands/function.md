@@ -35,12 +35,12 @@
 > 使用 `with` 時，NBT 路徑下的所有鍵值對會映射為該函數檔案內部的巨集引數。
 
 * **函數內部寫法範例 (`spawn_mob.mcfunction`)**：
-`summon $(mob_type) ~ ~ ~ {Health:$(hp)f}`
+    * `summon $(mob_type) ~ ~ ~ {Health:$(hp)f}`
 * **數據映射對應表**：
-| 傳入 NBT 鍵值 | 函數內部對應 | 說明 |
-| :--- | :--- | :--- |
-| `mob_type: "minecraft:zombie"` | `$(mob_type)` | 替換生物實體識別碼 |
-| `hp: 100` | `$(hp)` | 替換生命值數值 |
+    | 傳入 NBT 鍵值 | 函數內部對應 | 說明 |
+    |:---|:---|:---|
+    | `mob_type: "minecraft:zombie"` | `$(mob_type)` | 替換生物實體識別碼 |
+    | `hp: 100` | `$(hp)` | 替換生命值數值 |
 
 ---
 
