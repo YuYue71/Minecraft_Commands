@@ -11,11 +11,11 @@
 
 ## 技巧
 ### 重複執行 function
-- 在 minecraft 命名空間下建立一個 function 並使用該函式指定要每 tick 重複執行函數
+- 在 minecraft 命名空間下建立一個 tags 臉面使用 function 函式指定要每 tick 重複執行函數
 - 結構如下
     ```tree
     data/
-    └── minecraft/name/functions/
+    └── minecraft/tags/functions/
         └── tick.json   # 指定重複執行檔(必須名為tick.json)
     ```
 - tick.json
@@ -30,11 +30,11 @@
     ```
 
 ### 每次重新加載執行一次 function
-- 在 minecraft 命名空間下建立一個 function 並使用該函式指定要每次重新加載都執行一次的函數
+- 在 minecraft 命名空間下建立一個 tags 裡面使用 function 函式指定要每次重新加載都執行一次的函數
 - 結構如下
     ```tree
     data/
-    └── minecraft/name/functions/
+    └── minecraft/tags/functions/
         └── load.json   # 指定重複執行檔(必須名為load.json)
     ```
 - load.json
