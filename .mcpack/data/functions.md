@@ -56,3 +56,4 @@
 | --- | --- |
 | 函式指令 | [/function（函數執行指令）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/function.md) |
 | 指令列表 | [空間座標系統全指南 (Coordinates)](https://github.com/YuYue71/Minecraft_Commands/blob/main/README.md) |
+| Minecraft Wiki | [函式](https://minecraft.fandom.com/zh/wiki/Java%E7%89%88%E5%87%BD%E6%95%B0) |
