@@ -1,4 +1,4 @@
-# function/
+# function/ (函式巨集)
 ## 注意事項
 - function 資料夾內每個檔案必須以 `.mcfunction` 結尾
 - 指令開頭不能有"/"
