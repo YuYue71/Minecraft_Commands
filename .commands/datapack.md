@@ -1,5 +1,4 @@
 # `/datapack`（資料包管理指令）
-
 * > 用於管理世界中已載入的資料包
 * > 可啟用, 停用與查詢資料包
 
@@ -12,7 +11,6 @@
 ---
 
 ## 參數與引數拆解 (Arguments)
-
 > 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
 
 | 參數名稱          | 功能與語義說明   |
@@ -45,3 +43,10 @@
 | `last`      | 移至最後方      |
 | `available` | 顯示可用資料包    |
 | `enabled`   | 顯示已啟用資料包   |
+
+---
+
+## 跨元素語法關聯表 (Links Matrix)
+| 關聯參數欄位 | 參引語法元件名稱 |
+| --- | --- |
+| 關於資料包 | [資料包編寫說明 (Data package preparation)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.mcpack/illustrate.md) |

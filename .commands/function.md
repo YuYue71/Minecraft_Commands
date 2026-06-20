@@ -75,3 +75,5 @@
 | --- | --- |
 | `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
 | `<座標>` | [空間座標系統全指南 (Coordinates)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md) |
+| 關於函式 | [function/](https://github.com/YuYue71/Minecraft_Commands/blob/main/.mcpack/data/function.md) |
+| 資料包 | [資料包編寫說明 (Data package preparation)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.mcpack/illustrate.md) |
