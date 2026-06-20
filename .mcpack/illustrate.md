@@ -57,16 +57,19 @@ datapack/               # 世界資料夾內, 主要放資料包的資料夾
 
 |分類|資料夾名稱|主要功能用途|
 |---|---|---|
-|生成結構|[worldgen/](data/worldgen.md)|世界生成核心, 包含結構, 生物群系, 特徵等|
+|生成地形|[worldgen/](data/worldgen.md)|世界生成核心, 包含結構, 生物群系, 特徵等|
 |函式巨集|[functions/](data/functions.md)|存放 .mcfunction 指令腳本, 用於自動化執行指令|
 |修改數據|[loot_tables/](data/loot_tables)|修改方塊挖掘, 生物掉落物, 釣魚或寶箱內容|
 |成就進度|[advancements/](data/advancements.md)|定義成就系統, 可用於觸發特殊事件或獎勵|
 |自訂合成|[recipes/](data/recipes.md)|定義新的物品合成表（工作台、熔爐等）|
 |定義標籤|[tags/](data/tags.md)|將多種方塊, 物品或實體進行分組|
+|生成結構|[structures/](data/structures.md)|存放 .nbt 結構檔案（與 worldgen 平級）|
 |傷害類型|[damage_type/](data/damage_type.md)|定義自定義的傷害來源類型|
 |聊天訊息|[chat_type/](data/chat_type.md)|自定義聊天室訊息的顯示格式|
 |自訂維度|[dimension/](data/dimension.md)|定義新的維度|
 |維度類型|[dimension_type/](data/dimension_type.md)|定義維度的環境屬性（如亮度, 天空顏色, 高度限制）|
+|條件判斷|[predicates/](data/predicates.md)|自定義邏輯條件（如：檢測玩家背包是否有物品、時間是否為夜晚）|
+|物品修飾|[item_modifiers/](data/item_modifiers.md)|用於在指令中修改物品屬性（如修改名稱、附魔）|
 
 ---
 
