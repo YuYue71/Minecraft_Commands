@@ -26,7 +26,7 @@ datapack/               # 世界資料夾內, 主要放資料包的資料夾
 ```mcmeta
 {
     "pack": {
-        "pack_format": 0,   # 版本編號
+        "pack_format": <版本編號>,
         "description": "此為資料包說明"
     }
 }
