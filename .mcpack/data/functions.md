@@ -1,4 +1,4 @@
-# 函式 (Functions/)
+# 函式 (`Functions/`)
 
 > **分類:** `資料包` | **適用版本:** `JE 1.20.4` | **路徑:** `data/<namespace>/functions/<名稱>.mcfunction`
 
