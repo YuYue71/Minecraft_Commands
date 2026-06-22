@@ -76,5 +76,6 @@ datapack/               # 世界資料夾內, 主要放資料包的資料夾
 ## 跨元素語法關聯表 (Links Matrix)
 | 關聯參數欄位 | 參引語法元件名稱 |
 | --- | --- |
+| 生成器 | [Data Pack Generators](https://misode.github.io/) |
 | 資料包 | [資料包管理指令 (Data package management instructions)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/datapack.md) |
 | Minecraft Wiki | [資料包](https://minecraft.fandom.com/zh/wiki/%E6%95%B0%E6%8D%AE%E5%8C%85?variant=zh-tw) |
