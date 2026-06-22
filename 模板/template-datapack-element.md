@@ -14,7 +14,6 @@
   - [子欄位：欄位B](#fields-b)
 - [枚舉值速查](#enums)
   - [欄位A 可填值](#enum-a)
-  - [欄位B.子欄位 可填值](#enum-b-sub)
 - [條件依賴](#conditional-fields)
 - [注意事項](#notes)
 - [外部連結](#references)
@@ -29,6 +28,11 @@
 
 ## JSON 結構 {#json-structure}
 
+> **此元素只有單一結構時**，使用下方單一範本。
+> **此元素依 `type` 有多種結構時**，刪除單一範本，改用多結構範本格式。
+
+### 單一結構
+
 ```json
 {
     "欄位A": "minecraft:值",
@@ -36,6 +40,28 @@
         "子欄位": "值"
     },
     "選填欄位C": false
+}
+```
+
+### 多結構（依 type 展開）
+
+#### type = `"minecraft:值X"` 時
+
+```json
+{
+    "type": "minecraft:值X",
+    "欄位A": "值",
+    "欄位B": 0
+}
+```
+
+#### type = `"minecraft:值Y"` 時
+
+```json
+{
+    "type": "minecraft:值Y",
+    "欄位C": "值",
+    "欄位D": []
 }
 ```
 
@@ -68,13 +94,7 @@
 | `minecraft:值A` | 分類X | 說明 |
 | `minecraft:值B` | 分類X | 說明 |
 | `minecraft:值C` | 分類Y | 說明 `[1.XX+]` |
-
-### `欄位B.子欄位` 可填值 {#enum-b-sub}
-
-| 值 | 分類 | 說明 |
-|----|------|------|
-| `值A` | 分類X | 說明 |
-| `值B` | 分類Y | 說明 |
+| ~~`minecraft:舊值`~~ | 分類Z | **Deprecated** — 說明，建議改用 `minecraft:新值` |
 
 ---
 
