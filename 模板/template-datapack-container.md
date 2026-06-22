@@ -7,24 +7,23 @@
 
 ## 目錄
 
-- [概覽](#overview)
-- [目錄結構](#directory-structure)
-- [子分類索引](#subcategory-index)
-  - [子分類A](#sub-a)
-  - [子分類B](#sub-b)
-- [跨子分類引用規則](#cross-reference)
-- [注意事項](#notes)
-- [外部連結](#references)
-
+- [概覽](#)
+- [目錄結構](#)
+- [子分類索引](#)
+  - [子分類A](#)
+  - [子分類B](#)
+- [跨子分類引用規則](#)
+- [注意事項](#)
+- [外部連結](#)
 ---
 
-## 概覽 (Overview) {#overview}
+## 概覽 (Overview)
 
 一句話說明此容器的功能範疇與使用場景。
 
 ---
 
-## 目錄結構 {#directory-structure}
+## 目錄結構
 
 ```
 container_folder/
@@ -38,17 +37,17 @@ container_folder/
 
 ---
 
-## 子分類索引 {#subcategory-index}
+## 子分類索引
 
 | 子分類資料夾 | 功能說明 |
 |------------|---------|
-| [`子分類A/`](#sub-a) | 說明 |
-| [`子分類B/`](#sub-b) | 說明 |
+| [`子分類A/`](#) | 說明 |
+| [`子分類B/`](#) | 說明 |
 | [`子分類C/`](#) | 說明（獨立文件見連結）|
 
 ---
 
-## 子分類A {#sub-a}
+## 子分類A
 
 > 一句話說明此子分類的功能與使用場景
 
@@ -125,7 +124,7 @@ container_folder/
 
 ---
 
-## 子分類B {#sub-b}
+## 子分類B
 
 > 一句話說明此子分類的功能與使用場景
 
@@ -158,7 +157,7 @@ container_folder/
 
 ---
 
-## 跨子分類引用規則 {#cross-reference}
+## 跨子分類引用規則
 
 > 無跨子分類引用關係時，此區塊整段刪除
 
@@ -168,14 +167,14 @@ container_folder/
 
 ---
 
-## 注意事項 (Notes) {#notes}
+## 注意事項 (Notes)
 
 - 條列，一點一事，不廢話
 - `[1.XX+]` 版本後行為變更說明
 
 ---
 
-## 外部連結 (References) {#references}
+## 外部連結 (References)
 
 - [Minecraft Wiki - 容器名稱](#)
 

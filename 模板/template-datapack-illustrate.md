@@ -6,23 +6,22 @@
 
 ## 目錄
 
-- [說明](#overview)
-- [資料結構](#structure)
-- [pack.mcmeta](#pack-mcmeta)
-  - [pack_format 版本對應](#pack-format)
-- [命名空間資料夾索引](#namespace-folders)
-- [注意事項](#notes)
-- [外部連結](#references)
-
+- [說明](#)
+- [資料結構](#)
+- [pack.mcmeta](#)
+  - [pack_format 版本對應](#)
+- [命名空間資料夾索引](#)
+- [注意事項](#)
+- [外部連結](#)
 ---
 
-## 說明 {#overview}
+## 說明
 
 > 每次資料包有更新必須使用 `/reload` 指令來重新加載資料包
 
 ---
 
-## 資料結構 {#structure}
+## 資料結構
 
 ```
 datapack/
@@ -37,7 +36,7 @@ datapack/
 
 ---
 
-## pack.mcmeta {#pack-mcmeta}
+## pack.mcmeta
 
 ```json
 {
@@ -48,7 +47,7 @@ datapack/
 }
 ```
 
-### `pack_format` 版本對應 {#pack-format}
+### `pack_format` 版本對應
 
 | 編號 | 版本 |
 |------|------|
@@ -69,7 +68,7 @@ datapack/
 
 ---
 
-## 命名空間資料夾索引 {#namespace-folders}
+## 命名空間資料夾索引
 
 | 分類 | 資料夾名稱 | 主要功能用途 |
 |------|-----------|------------|
@@ -89,7 +88,7 @@ datapack/
 
 ---
 
-## 注意事項 (Notes) {#notes}
+## 注意事項 (Notes)
 
 - `namespace` 只允許小寫字母、數字、`_`、`-`、`.`，不可含大寫或空格
 - `minecraft/` 命名空間會直接覆蓋原版內容，操作需謹慎
@@ -97,7 +96,7 @@ datapack/
 
 ---
 
-## 外部連結 (References) {#references}
+## 外部連結 (References)
 
 - [Minecraft Wiki - 資料包](#)
 - [資料包管理指令](#)

@@ -6,18 +6,17 @@
 
 ## 目錄
 
-- [語法](#syntax)
-- [子指令說明](#subcommands)
-  - [子指令A](#subcommand-a)
-  - [子指令B](#subcommand-b)
-- [回傳值](#return-value)
-- [條件依賴](#conditional-fields)
-- [注意事項](#notes)
-- [外部連結](#references)
-
+- [語法](#)
+- [子指令說明](#)
+  - [子指令A](#)
+  - [子指令B](#)
+- [回傳值](#)
+- [條件依賴](#)
+- [注意事項](#)
+- [外部連結](#)
 ---
 
-## 語法 (Syntax) {#syntax}
+## 語法 (Syntax)
 
 ```
 /command <子指令A> <欄位1> <欄位2>
@@ -29,9 +28,9 @@
 
 ---
 
-## 子指令說明 (Subcommands) {#subcommands}
+## 子指令說明 (Subcommands)
 
-### `子指令A` {#subcommand-a}
+### `子指令A`
 
 > 一句話說明此子指令的功能與使用場景
 
@@ -46,7 +45,7 @@
 
 ---
 
-### `子指令B` {#subcommand-b}
+### `子指令B`
 
 > 一句話說明此子指令的功能與使用場景
 
@@ -71,7 +70,7 @@
 
 ---
 
-## 回傳值 (Return Value) {#return-value}
+## 回傳值 (Return Value)
 
 > 無回傳值邏輯（如 `/say`、`/title` 等純輸出指令）時，此區塊整段刪除
 
@@ -83,7 +82,7 @@
 
 ---
 
-## 條件依賴 (Conditional Fields) {#conditional-fields}
+## 條件依賴 (Conditional Fields)
 
 > 無欄位相依或互斥關係時，此區塊整段刪除
 
@@ -94,14 +93,14 @@
 
 ---
 
-## 注意事項 (Notes) {#notes}
+## 注意事項 (Notes)
 
 - 條列，一點一事，不廢話
 - `[1.XX+]` 版本後行為變更說明
 
 ---
 
-## 外部連結 (References) {#references}
+## 外部連結 (References)
 
 - [Minecraft Wiki - /command](#)
 

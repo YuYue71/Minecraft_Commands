@@ -6,24 +6,23 @@
 
 ## 目錄
 
-- [概覽](#overview)
-- [通用欄位](#common-fields)
-- [子類A 專屬欄位](#category-a)
-  - [複合結構：欄位名稱](#category-a-compound)
-- [子類B 專屬欄位](#category-b)
-- [條件依賴](#conditional-fields)
-- [注意事項](#notes)
-- [外部連結](#references)
-
+- [概覽](#)
+- [通用欄位](#)
+- [子類A 專屬欄位](#)
+  - [複合結構：欄位名稱](#)
+- [子類B 專屬欄位](#)
+- [條件依賴](#)
+- [注意事項](#)
+- [外部連結](#)
 ---
 
-## 概覽 (Overview) {#overview}
+## 概覽 (Overview)
 
 一句話說明此大類 NBT 的適用對象與使用場景。
 
 ---
 
-## 通用欄位（所有 [大類] 共用） {#common-fields}
+## 通用欄位（所有 [大類] 共用）
 
 | Tag | 類型 | 預設 | 說明 |
 |-----|------|:----:|------|
@@ -33,7 +32,7 @@
 
 ---
 
-## [子類A] 專屬欄位 {#category-a}
+## [子類A] 專屬欄位
 
 > 適用對象說明（如：所有生物 Mob、容器類方塊實體）
 
@@ -51,7 +50,7 @@
 | `minecraft:值B` | 分類X | 說明 |
 | `minecraft:值C` | 分類Y | 說明 `[1.XX+]` |
 
-### 複合結構：`欄位名稱[]` {#category-a-compound}
+### 複合結構：`欄位名稱[]`
 
 ```snbt
 欄位名稱: [
@@ -79,7 +78,7 @@
 
 ---
 
-## [子類B] 專屬欄位 {#category-b}
+## [子類B] 專屬欄位
 
 > 適用對象說明
 
@@ -89,7 +88,7 @@
 
 ---
 
-## 條件依賴 (Conditional Fields) {#conditional-fields}
+## 條件依賴 (Conditional Fields)
 
 > 無欄位相依或互斥關係時，此區塊整段刪除
 
@@ -99,14 +98,14 @@
 
 ---
 
-## 注意事項 (Notes) {#notes}
+## 注意事項 (Notes)
 
 - 條列，一點一事，不廢話
 - `[1.XX+]` 版本後行為變更說明
 
 ---
 
-## 外部連結 (References) {#references}
+## 外部連結 (References)
 
 - [Minecraft Wiki - [大類名稱]](#)
 
