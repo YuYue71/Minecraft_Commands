@@ -59,7 +59,7 @@ datapack/               # 世界資料夾內, 主要放資料包的資料夾
 |---|---|---|
 |生成地形|[worldgen/](data/worldgen.md)|世界生成核心, 包含結構, 生物群系, 特徵等|
 |函式巨集|[functions/](data/functions.md)|存放 .mcfunction 指令腳本, 用於自動化執行指令|
-|修改數據|[loot_tables/](data/loot_tables)|修改方塊挖掘, 生物掉落物, 釣魚或寶箱內容|
+|修改數據|[loot_tables/](data/loot_tables.md)|修改方塊挖掘, 生物掉落物, 釣魚或寶箱內容|
 |成就進度|[advancements/](data/advancements.md)|定義成就系統, 可用於觸發特殊事件或獎勵|
 |自訂合成|[recipes/](data/recipes.md)|定義新的物品合成表（工作台、熔爐等）|
 |定義標籤|[tags/](data/tags.md)|將多種方塊, 物品或實體進行分組|
