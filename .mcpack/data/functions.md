@@ -1,84 +1,98 @@
-# 函式 (`Functions/`)
+# 函式巨集 (`functions/`)
 
-> **分類:** `資料包` | **適用版本:** `JE 1.20.4` | **路徑:** `data/<namespace>/functions/<名稱>.mcfunction`
+> **分類:** `資料包` ｜ **適用版本:** `JE ≤ 1.20.4`
 
-* **引用格式:** `namespace:名稱` (不含副檔名)
+---
+
+## 目錄
+
+* [概覽](#概覽-overview)
+* [核心結構](#核心結構-core-structure)
+* [執行與語法限制](#執行與語法限制-execution-and-syntax-constraints)
+* [生命週期與函式標籤](#生命週期與函式標籤-life-cycle-and-function-tags)
+* [巨集展開](#巨集展開-macros-1202)
+* [注意事項](#注意事項-notes)
+* [外部連結](#外部連結-references)
 
 ---
 
 ## 概覽 (Overview)
 
-以 `.mcfunction` 為副檔名的純文字檔案, 用於按順序執行一系列 Minecraft 指令. 支援透過資料包進行邏輯群組, 循環呼叫以及 1.20.4 核心的巨集 (Macros) 動態參數傳遞.
+函式 (`functions/`) 存放由純文字構成之 `.mcfunction` Command Scripts (指令腳本)，允許遊戲於單一 Tick (遊戲刻) 內依序執行多條指令，為資料包建構複雜系統與自動化流程之核心邏輯引擎。
 
 ---
 
-## 檔案格式 (File Format)
+## 核心結構 (Core Structure)
+
+**路徑：** `data/<namespace>/functions/<名稱>.mcfunction`
 
 ```mcfunction
-# 這是註解內容
-say 這是第一條執行的指令
-give @s minecraft:diamond 1
-$say 這是巨集指令, 歡迎使用 $(player_name)
+# 這是一行註解 (Comment)
+execute as @a[tag=player] at @s run particle minecraft:flame ~ ~1 ~ 0 0 0 0.05 10
+
+# 執行另一個函式
+function namespace:system/init
 
 ```
 
 ---
 
-## 核心規則 (Core Rules)
+## 執行與語法限制 (Execution and Syntax Constraints)
 
-### 基礎語法規範
+| 規則 | 說明 |
+| --- | --- |
+| 指令前綴 | 腳本內之指令**不可**使用 `/` 作為開頭，直接撰寫指令名稱即可。 |
+| 註解符號 | 以 `#` 開頭的行視為 Comment (註解)，執行時會被引擎安全忽略。 |
+| 執行順序 | 嚴格 Top-to-Bottom (由上至下) 依序執行，上一行指令之副作用會立即影響下一行。 |
+| 執行環境 | 若未透過 `execute` 顯式切換 Execution Context (執行上下文)，函式預設由 Server (伺服器) 執行，執行座標為世界原點 `(0, 0, 0)`。 |
+| 遞迴上限 | 受限於 Game Rule (遊戲規則) 之 `maxCommandChainLength`（預設 `65536`），指令總執行數超出限制將強制中斷以防止伺服器 Crash (崩潰)。 |
 
-* 每行只能寫一條指令.
-* 指令前方**嚴禁**加上斜線前綴 `/` (例如: 必須寫 `say test`, 嚴禁寫 `/say test`).
-* 使用井字號 `#` 開頭的行會被識別為註解, 執行時會自動忽略.
-* 檔案編碼必須嚴格維持 `UTF-8` 無 BOM 格式, 否則會造成中文或特殊字元解析失敗.
+---
 
-### 巨集機制 (Macros) `[1.20.2+]`
+## 生命週期與函式標籤 (Life Cycle and Function Tags)
 
-> 在 1.20.4 中, 函式支援動態參數傳遞. 當某行以 `$` 開頭時, 該行會被編譯為巨集行.
+透過定義 Function Tags (函式標籤，路徑：`data/minecraft/tags/functions/<名稱>.json`)，可將特定函式綁定至伺服器之底層生命週期。
 
-* **語法格式:** `$cmd $(變數名)`
-* **呼叫方式:** 必須搭配 `/function <命名空間:函式> <NBT_Compound>` 傳遞參數.
-* **範例:**
-若 `data/demo/functions/spawn.mcfunction` 內容為:
+| 標籤路徑 | 觸發時機 | 說明 |
+| --- | --- | --- |
+| `#minecraft:load` | 資料包載入時 | 當伺服器啟動或玩家執行 `/reload` 指令時觸發**一次**。常用於初始化 Scoreboard (計分板) 或設定常數。 |
+| `#minecraft:tick` | 每遊戲刻 | 每 1 Tick（即每秒 20 次）自動觸發。為實現常駐檢測、自訂實體行為與 Game Loop (遊戲迴圈) 之核心入口。 |
+
+---
+
+## 巨集展開 (Macros) `[1.20.2+]`
+
+自 1.20.2 起，函式引入 Macro (巨集) 系統，允許在執行期動態替換變數，大幅減少重複之 Hardcode (硬編碼) 與窮舉窮舉列舉。
+
+* **宣告變數：** 在 `.mcfunction` 內部指令中使用 `$(變數名)` 標記需替換的位置。巨集函式內包含 `$` 替換字符的行，其開頭亦會以 `$` 標示為巨集指令。
+* **動態呼叫：** 必須搭配包含目標變數之 Compound NBT (複合 NBT 標籤) 或 NBT 路徑進行呼叫，引擎會在編譯時將 NBT 值注入變數。
+
 ```mcfunction
-$summon $(mob_id) ~ ~ ~
+# 檔案：namespace:print_message.mcfunction
+$say Hello, $(name)! Your score is $(score).
 
 ```
 
-
-執行以下指令呼叫:
-```minecraft
-/function demo:spawn {mob_id:"minecraft:zombie"}
+```mcfunction
+# 呼叫端範例
+function namespace:print_message {name: "Steve", score: 100}
 
 ```
-
-
-
----
-
-## 執行機制 (Execution Mechanism)
-
-### 執行聯鎖與效能
-
-* **單池限制 (Max Command Chain):** 單次函式呼叫引發的指令執行總上限受遊戲規則 `maxCommandChainLength` 限制 (預設為 65536 條指令). 超出此限制的指令將不會被執行.
-* **同刻執行 (Tick-based Execution):** 函式內的所有指令皆在同一個遊戲刻 (Tick) 內瞬間按順序執行完畢, 畫面不會產生指令間的物理延遲.
-* **執行主體與定位:** 預設情況下, 函式內所有指令的執行者 (`@s`) 與執行座標皆繼承自觸發該 `/function` 指令的實體或系統源. 可在內部搭配 `/execute` 重新定位.
 
 ---
 
 ## 注意事項 (Notes)
 
-* 函式內支援遞迴呼叫 (自己呼叫自己), 但必須嚴格設計終止條件, 否則會瞬間觸發 `maxCommandChainLength` 上限而強制中斷.
-* 空白行會被自動忽略, 不會計入 `maxCommandChainLength` 消耗.
-* 若函式內任何一行指令語法出錯, 遊戲主控台會拋出錯誤, 但該行前后的正確指令仍會繼續執行, 不會導致整份檔案崩潰.
+* 包含語法錯誤的 `.mcfunction` 檔案在伺服器載入時會直接失效，並於 Server Log (伺服器日誌) 拋出解析錯誤，導致整個函式無法被呼叫。
+* 大量或高運算複雜度（如多重巢狀 `execute` 實體選擇）的指令若掛載於 `#minecraft:tick`，將導致嚴重的 TPS (每秒 Tick 數) 衰減。
+* 函式內無法直接捕捉單一指令的 Return Value (回傳值)，若需儲存運算結果，必須搭配 `execute store` 寫入計分板或實體 NBT。
 
 ---
 
 ## 外部連結 (References)
 
-* [Minecraft Wiki - 函式](https://minecraft.fandom.com/zh/wiki/Java%E7%89%88%E5%87%BD%E6%95%B0?variant=zh-tw)
+* [Minecraft Wiki - 函式/巨集](https://minecraft.fandom.com/zh/wiki/Java%E7%89%88%E5%87%BD%E6%95%B0)
 
 ---
 
-*最後更新: 2026-06-21*
+*最後更新：2026-06-22*
