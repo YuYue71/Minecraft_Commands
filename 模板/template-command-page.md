@@ -103,15 +103,15 @@
 6. 全域系統自動映射規則 (Cross-Reference Auto-Linking):
 * 只要該指令的語法或參數中, 有使用或提及下列任何全域系統機制, 必須強制將對應的 Markdown 連結直接複製並加入到 `## 外部連結 (References)` 區塊中.
 * 絕對映射清單 (請完全使用此格式貼上):
-  * `[目標選擇器 (Target Selectors)](.syntax_components/TargetSelectors.md)`
-  * `[座標系統 (Coordinate Systems)](.syntax_components/Coordinates.md)`
-  * `[JSON 文本元件 (Raw JSON Text Components)](.syntax_components/json_text.md)`
-  * `[時間與時間單位 (Time & Duration Formats)](.syntax_components/TimeFormats.md)`
-  * `[資源位置與命名空間規範 (Resource Locations)](.syntax_components/ResourceLocations.md)`
-  * `[方塊狀態與標籤 (Block States & Tags)](.syntax_components/BlockStates_or_Tags.md)`
-  * `[物品欄位編號 (Slot IDs)](.syntax_components/Slot_IDs.md)`
-  * `[粒子特殊參數 (Particle Extra Arguments)](.syntax_components/ParticleExtraArguments.md)`
-  * `[粒子效果 ID (Particle Effects)](.syntax_components/ParticleEffects.md)`
-  * `[狀態效果 ID (Status Effects)](.syntax_components/StatusEffects.md)`
-  * `[附魔類型 ID (Enchantments)](.syntax_components/Enchantments.md)`
-  * `[音效 ID (Sound effects)](.syntax_components/SoundEffects.md)`
+  * `[目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)`
+  * `[座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)`
+  * `[JSON 文本元件 (Raw JSON Text Components)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/json_text.md)`
+  * `[時間與時間單位 (Time & Duration Formats)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TimeFormats.md)`
+  * `[資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)`
+  * `[方塊狀態與標籤 (Block States & Tags)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/BlockStates_or_Tags.md)`
+  * `[物品欄位編號 (Slot IDs)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Slot_IDs.md)`
+  * `[粒子特殊參數 (Particle Extra Arguments)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ParticleExtraArguments.md)`
+  * `[粒子效果 ID (Particle Effects)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ParticleEffects.md)`
+  * `[狀態效果 ID (Status Effects)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/StatusEffects.md)`
+  * `[附魔類型 ID (Enchantments)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Enchantments.md)`
+  * `[音效 ID (Sound effects)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/SoundEffects.md)`
