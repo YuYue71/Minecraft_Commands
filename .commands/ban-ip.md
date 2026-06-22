@@ -1,29 +1,55 @@
-# `ban-ip`（封鎖 IP 位址）
-- > 將特定的 IP 位址或特定玩家目前的 IP 位址加入伺服器的黑名單
-- > 一旦 IP 被封鎖，任何嘗試從該 IP 連線的玩家都將無法進入伺服器
-- > 如果輸入的是玩家名稱，伺服器會自動查出該玩家當前的 IP 並將其封鎖
+# /ban-ip
 
-## 語法結構 (Syntax)
+> **分類:** `指令` | **權限等級:** `3` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `false`
+
+---
+
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [target](#target)
+    * [reason](#reason)
+* [外部連結](#外部連結-references)
+---
+
+## 語法 (Syntax)
+
 ```commands
-/ban-ip <目標IP> <封鎖原因>
+/ban-ip <target> [reason]
+
 ```
 
----
+* `<>` = 必填, `[]` = 選填
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
-
-| 參數名稱 | 功能與語義說明 |
-| --- | --- |
-| `[必填]` `<目標IP>` | 指定要加入伺服器黑名單的玩家IP或名稱（該玩家可在線或離線） |
-| `[選填]` `<封鎖原因>` | 當該玩家嘗試再次連線時, 畫面彈出的自訂踢出說明訊息（預設為 Banned by an operator） |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<target>` | `string` | - | 欲封鎖的 IP 位址或在線玩家名稱 |
+| `[reason]` | `string` | `IP banned by an operator.` | 顯示給被封鎖 IP 玩家的原因與提示訊息 |
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
-> 此指令中所呼叫的外部複合參數, 可透過以下相對路徑直接連結至專題獨立筆記頁面進行深度查詢
+## 參數說明 (Parameters)
 
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| `<目標玩家>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<封鎖原因>` | [文本NBT標籤](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md) |
+### `target`
+
+> 將指定的 IP 位址加入伺服器黑名單 (Blacklist).
+
+* 允許直接輸入標準的 IPv4 位址 (如 `192.168.1.100`).
+* 若輸入的是**當前在線玩家的名稱**, 伺服器會自動抓取該玩家連線時所使用的 IP 位址進行封鎖, 並將該玩家踢出伺服器.
+* 一旦某個 IP 位址被封鎖, 任何試圖從該 IP 連線進入伺服器的玩家 (無論使用哪個遊戲帳號) 都會被拒絕登入.
+
+---
+
+### `reason`
+
+> 顯示給被封鎖連線者的自訂訊息.
+
+* 當使用者嘗試從被封鎖的 IP 重新連線進入伺服器時, 遊戲畫面上所顯示的提示文字.
+* 允許輸入包含空格的完整句子, 無需使用引號包覆.
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /ban-ip](https://minecraft.fandom.com/zh/wiki/Talk:%E5%91%BD%E4%BB%A4/ban?variant=zh-tw)
