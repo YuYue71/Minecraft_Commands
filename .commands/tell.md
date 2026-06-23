@@ -1,62 +1,63 @@
-# `/tell`（私訊指令）
-* > 用於向指定玩家發送一條私密訊息（非公開廣播）
-* > 只有發送者與被指定的接收者可以在聊天欄中看到該訊息內容
-* > 常用於玩家間隱密溝通、地圖腳本對特定玩家的劇情旁白提示，或伺服器系統的私人通知
+# /tell | /msg | /w
+
+> **分類:** `指令` | **權限等級:** `0` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="tell"
-/tell <目標> <訊息>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [targets](#targets)
+    * [message](#message)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/tell <targets> <message>
+/msg <targets> <message>
+/w <targets> <message>
+
 ```
 
----
+* `<>` = 必填
+* `/tell`, `/msg` 與 `/w` (whisper) 在遊戲底層互為別名 (Alias), 三者的功能與語法結構完全相同, 玩家可依據個人習慣交替使用.
 
-## 縮寫別名 (Aliases)
-
-```commands id="tell_aliases"
-/msg <目標> <訊息>
-/w <目標> <訊息>
-```
-
----
-
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
-
-| 參數名稱 | 功能與語義說明 |
-| --- | --- |
-| `[必填]` `<目標>` | 指定要接收私訊的目標玩家（支援玩家名稱或目標選擇器） |
-| `[必填]` `<訊息>` | 要發送的文字內容，支援空格及多個單字 |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<targets>` | `entity` | - | 欲發送私訊的目標玩家 |
+| `<message>` | `string` | - | 欲發送的私訊文字內容 |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+## 參數說明 (Parameters)
 
-### 訊息
+### `targets`
 
-| 參數 | 說明 |
-| --- | --- |
-| `<文字內容>` | 自由輸入的純文字字串 |
-| `<目標選擇器>` | 支援在私訊內文中嵌入目標選擇器（例如輸入 `目前離你最近的人是 @p`，執行時會自動將 `@p` 解析為符合條件的玩家名稱） |
+> 指定要接收私人訊息的對象.
 
----
-
-## 運作邏輯與格式規則
-
-### 聊天欄顯示格式
-
-當指令成功執行後，發送端與接收端的聊天欄會顯示特定格式的文本（具體樣式會因伺服器核心、客戶端語系或本地化檔案設定而異）：
-
-* **發送端看見的畫面**：`你對 <接收者> 說：訊息內容`
-* **接收端看見的畫面**：`<發送者> 對你說：訊息內容`
-* **命令方塊發送時**：若由命令方塊執行，預設發送者名稱會解析為 `[@]`（例如：`[@] 對你說：歡迎來到此地圖`）
+* 必須為玩家 (Player) 實體, 支援使用目標選擇器 (如 `@a`, `@p`, `@r`).
+* 可以同時選取多個玩家. 例如使用 `@a[distance=..10]`, 系統會將私訊同時發送給半徑 10 格內的所有玩家, 而範圍外的玩家將無法看見此訊息.
+* 若使用目標選擇器選中了非玩家的實體 (如僵屍, 豬), 指令雖然可以成功執行, 但非玩家實體無法接收與顯示任何聊天資訊, 因此沒有實質意義.
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+### `message`
 
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<訊息>`（內嵌選擇器時） | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
+> 指定要發送的私人文字訊息內容.
+
+* 允許直接包含空格, 且不需要使用引號包覆整段文字.
+* 發送成功後, 發送者的聊天框會顯示: `你對 目標名稱 悄悄說: <message>`.
+* 接收者的聊天框則會顯示: `發送者名稱 對你悄悄說: <message>`.
+* 支援使用目標選擇器 (如 `@a`, `@p`). 若訊息中包含目標選擇器 (例如 `/tell Steve 請掩護 @p`), 系統會在發送時自動將其解析為對應的目標實體名稱顯示出來.
+* 私訊是一種不受距離限制的通訊方式, 只要接收對象在線上且處於同一個伺服器內 (無論身處哪個維度), 都能順利收到訊息.
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /tell](https://www.google.com/search?q=https://minecraft.wiki/w/Commands/tell)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
