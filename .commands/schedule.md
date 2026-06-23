@@ -1,76 +1,76 @@
-# `/schedule`（定時排程執行指令）
-* > 用於在指定的時間延遲（Delay）之後，自動將某個 `.mcfunction` 函數加入遊戲引擎的執行佇列中
-* > 支援將時間指定為遊戲刻（Tick）、真實秒數或遊戲天數，並具備標籤式的佇列排查與清除機制
-* > 常用於計時器建立、延遲觸發機關、週期性循環事件（配合自循環呼叫）以及非同步邏輯切分
+# /schedule
+
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="schedule"
-/schedule function <函數> <時間> [append|replace]
-/schedule clear <函數標籤或識別碼>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+  * [function](#function)
+  * [clear](#clear)
+* [資料包結構參考 (Datapack Structure)](#資料包結構參考-datapack-structure)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/schedule function <function> <time> [append|replace]
+/schedule clear <function>
 ```
 
+* `<>` = 必填, `[]` = 選填, `|` = 二擇一, `..` = 範圍 (如 `1..10`)
+
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `function` | `keyword` | - | 安排函式在指定時間後執行 |
+| `clear` | `keyword` | - | 取消已安排但尚未執行的函式任務 |
+| `<function>` | `Resource Location` | - | 欲執行的函式命名空間位置 |
+| `<time>` | `Time` | - | 延遲執行的時間長度 (需含單位) |
+| `[append\|replace]` | `enum` | `replace` | 當任務重複時的處理方式 |
+
 ---
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
+## 參數說明 (Parameters)
 
-| 參數名稱 | 功能與語義說明 |
+### `function`
+
+> 用於在指定的時間延遲後觸發特定的函式 (Function).
+
+| 值 | 說明 |
 | --- | --- |
-| `[必填]` `function` | 註冊排程關鍵字，用於將指定的函數與延遲計時器綁定並塞入引擎佇列 |
-| `[必填]` `clear` | 清除排程關鍵字，用於強行取消並移除尚未被觸發的指定延遲函數佇列 |
-| `[必填]` `<函數>` | 要在延遲結束後執行的 `.mcfunction` 命名空間識別碼（例如 `namespace:my_callback`） |
-| `[必填]` `<時間>` | 計時延遲長度，由數字搭配時間單位後綴（`t`、`s`、`d`）組成的自訂字串 |
-| `[選填]` `append` | **追加排程模式**（預設）：若佇列中已有完全相同的延遲函數，此指令會重設一個獨立的計時器，兩者並存且先後觸發 |
-| `[選填]` `replace` | **覆蓋排程模式**：若佇列中已有完全相同的延遲函數，將先前的舊計時器徹底抹除，僅保留本次註冊的最新計時器 |
-| `[必填]` `<函數標籤或識別碼>` | 要從佇列中批量抹除的函數名稱，亦可填寫指向多個函數的函數標籤（例如 `#namespace:all_timers`） |
+| `append` | 若該函式已有排程任務, 則新增一個新任務而不影響舊有的任務. |
+| `replace` | 若該函式已有排程任務, 則刪除舊任務並以新任務替換 (預設值). |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+### `clear`
 
-### 時間單位後綴 (Time Units)
+> 用於移除所有尚未執行的指定函式排程. 
 
-| 後綴符號 | 說明與轉換邏輯 |
+| 值 | 說明 |
 | --- | --- |
-| `t` | **遊戲刻 (Tick)**：底層邏輯計時器基本單位。1 遊戲刻等於 1/20 秒（若省略單位後綴，預設以此單位解析）。 |
-| `s` | **實體秒 (Seconds)**：以秒為單位計算。引擎會將其數值乘以 20 自動轉化為遊戲刻儲存。 |
-| `d` | **遊戲天 (Days)**：以 Minecraft 的一個晝夜週期為單位計算。1 遊戲天等於 24000 遊戲刻（真實時間 20 分鐘）。 |
+| `<function>` | 欲清除排程的函式路徑. 執行後所有針對該函式的 `append` 或 `replace` 任務皆會被移除. |
 
 ---
 
-## 數值規則
+## 資料包結構參考 (Datapack Structure)
 
-### 延遲數值邊界 (Delay Range)
+### 函式 (Functions)
+`/schedule` 僅能操作資料包中的函式檔案. 檔案路徑應為:
+`data/<namespace>/functions/<path>.mcfunction`
 
-| 參數 | 說明 |
-| --- | --- |
-| `<時間>` | 最小值：`0`（代表下一遊戲刻立即觸發） / 最大值：無嚴格理論上限（受 32 位元有號整數有上限 `2147483647t` 約 3.4 年制約） / 支援負數：否（不允許時間倒流） |
-
----
-
-## 核心限制與控制流佇列規範
-> `/schedule` 的執行環境掛載於全局伺服器線程中，其運行必須遵循以下特性：
-
-1. **執行脈絡丟失（Context Loss）**：
-* 當排程函數在延遲結束後被觸發時，它將**失去最初呼叫它的執行者與座標脈絡**。也就是說，該函數預設會以「伺服器主控台（Server Console）」的身份，在主世界的出生點（0, 0, 0）座標點執行。若需要特定實體或座標，必須在排程函數內部首行使用 `/execute` 重新定位。
-
-
-2. **存檔持久性**：
-* 尚未觸發的 `/schedule` 計時佇列會隨著地圖存檔一同保存（寫入 `level.dat`），即使伺服器關機重啟，計時器在重啟後依然會延續先前的剩餘時間繼續倒數。
-
-
-3. **批量抹除特性**：
-* 使用 `/schedule clear #namespace:tag` 時，只要計時佇列中的函數隸屬於該標籤組（Function Tag），不論它們各自的剩餘倒數時間為何，皆會被一次性全部清空。
-
-
+**運作邏輯說明:**
+1. 排程任務是儲存在存檔中的, 即使伺服器重啟, 剩餘的時間仍會繼續計數.
+2. 指令執行的上下文 (如執行者, 執行位置) 不會被繼承. 排程函式將以伺服器 (Server) 權限在世界出生點執行.
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+## 外部連結 (References)
 
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| `<函數>` / `<函數標籤或識別碼>` | [函數執行指令 (Function)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/function.md) |
-| 動態內容封裝 | [複合執行與條件判定指令 (Execute)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/execute.md) |
+* [Minecraft Wiki - /schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule)
+* [時間與時間單位 (Time & Duration Formats)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TimeFormats.md)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
