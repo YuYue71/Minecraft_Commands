@@ -21,7 +21,6 @@
 /time set <time>
 /time set <day|night|noon|midnight>
 /time query <daytime|gametime|day>
-
 ```
 
 * `<>` = 必填

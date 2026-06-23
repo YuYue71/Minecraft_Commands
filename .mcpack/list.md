@@ -1,81 +1,113 @@
-# 資料包編寫說明 (Data package preparation)
-## 說明
-> 每次資料包有更新必須使用 /reload 指令來重新加載資料包
+# 資料包編寫說明 (Data Pack Guide)
 
+## 基礎說明 (Basic Information)
 
-## 資料結構
+每次資料包有修改或更新內容後, 必須在遊戲內執行 `/reload` 指令來重新加載資料包, 變更才會生效.
+
+---
+
+## 目錄結構解析 (Directory Structure)
+
+本資料包採用模組化結構設計, 區分「原版觸發器」與「自訂專案邏輯」, 以確保高可讀性與擴充性.
+
 ```tree
-datapack/               # 世界資料夾內, 主要放資料包的資料夾
-└── packname/           # 資料包
-    ├── pack.mcmeta     # 資料包識別檔案 (必要)
-    ├── pack.png        # 資料包圖標 (不是很必要)
-    └── data/
-        ├── name0/      # 命名空間0
-        │   └── .../    # 放其他各種操作類別的資料夾
-        ├── name1/      # 命名空間1
-        ├── name2/      # 命名空間2
-        └── minecraft/  # 原版命名空間 (會覆蓋原版內容)
+pack_template/                  # 放置於世界存檔的 datapacks 資料夾內
+├── pack.mcmeta                 # 資料包識別與版本核心檔案 (必要)
+├── pack.png                    # 資料包圖標 (非必要)
+├── list.md                     # 本說明文件
+└── data/
+    ├── minecraft/              # 原版命名空間 (用於掛載或覆寫原版機制)
+    │   └── tags/
+    │       └── functions/
+    │           ├── load.json   # 綁定重載時觸發的函式 (/reload 觸發)
+    │           └── tick.json   # 綁定每遊戲刻觸發的函式 (20次/秒)
+    │
+    └── example/                # 自訂命名空間 (專案核心邏輯存放區)
+        ├── advancements/       # 範本: 成就與進度觸發器
+        ├── chat_type/          # 範本: 聊天格式與樣式自訂
+        ├── damage_type/        # 範本: 自訂傷害來源 (如自製魔法傷害)
+        ├── dimension/          # 範本: 自訂維度生成配置
+        ├── dimension_type/     # 範本: 維度環境參數 (亮度, 高度)
+        ├── functions/          # 核心程式碼指令區塊 (.mcfunction)
+        │   ├── init/           # 初始化: 變數宣告, 計分板建立
+        │   ├── core/           # 核心邏輯: 高頻運算與主迴圈
+        │   └── utils/          # 實用工具: 清除器 (註銷計分板與全域標籤)
+        ├── item_modifiers/     # 範本: 物品屬性修飾器 (動態修改 NBT)
+        ├── loot_tables/        # 範本: 戰利品表 (自訂掉落物, 抽獎池)
+        ├── predicates/         # 範本: 條件檢測邏輯 (複雜判斷模組化)
+        ├── recipes/            # 範本: 自訂合成表
+        ├── structures/         # 範本: 建築結構 NBT 檔案存放區
+        └── tags/               # 標籤: 將 物品, 實體, 方塊 進行歸類
+            ├── blocks/         # 範本: 標籤群組 (方塊)
+            ├── entity_types/   # 範本: 標籤群組 (實體)
+            └── items/          # 範本: 標籤群組 (物品)
+
 ```
 
 ---
 
-## 關於 pack.mcmeta 的內容
-## 該檔案是用於讓 minecraft 能夠讀取並識別為資料包的核心檔案
-> 內容示範如下
+## 核心配置檔 (pack.mcmeta)
 
-```mcmeta
-{
-    "pack": {
-        "pack_format": <版本編號>,
-        "description": "此為資料包說明"
-    }
-}
-```
+`pack.mcmeta` 是讓 Minecraft 能夠讀取並識別為資料包的核心檔案. 內部的 `pack_format` 數值必須對應當前的遊戲版本.
 
-### 版本對應編號表
-|編號|版本|
-|---|---|
-|`61`|1.21.1+|
-|`57`|1.21.0|
-|`48`|1.20.5 - 1.20.6|
-|`26`|1.20.3 - 1.20.4|
-|`18`|1.20.2|
-|`15`|1.20 - 1.20.1|
-|`12`|1.19.3 - 1.19.4|
-|`10`|1.19 - 1.19.2|
-|`8`|1.18 - 1.18.2|
-|`7`|1.17 - 1.17.1|
-|`6`|1.16.2 - 1.16.5|
-|`5`|1.15 - 1.16.1|
-|`4`|1.14 - 1.14.4|
-|`1`|1.13 - 1.13.2|
+### 版本對應編號表 (Pack Formats)
+
+| 編號 | 支援遊戲版本區間 |
+| --- | --- |
+| `61` | 1.21.1+ |
+| `57` | 1.21.0 |
+| `48` | 1.20.5 - 1.20.6 |
+| `26` | 1.20.3 - 1.20.4 |
+| `18` | 1.20.2 |
+| `15` | 1.20 - 1.20.1 |
+| `12` | 1.19.3 - 1.19.4 |
+| `10` | 1.19 - 1.19.2 |
+| `8` | 1.18 - 1.18.2 |
+| `7` | 1.17 - 1.17.1 |
+| `6` | 1.16.2 - 1.16.5 |
+| `5` | 1.15 - 1.16.1 |
+| `4` | 1.14 - 1.14.4 |
+| `1` | 1.13 - 1.13.2 |
 
 ---
 
-## 所有命名空間下可用的操作資料夾目錄
-> 對應所需創建資料夾即可
+## 命名空間替換指南 (Namespace Replacement Guide)
 
-|分類|資料夾名稱|主要功能用途|
-|---|---|---|
-|生成地形|[worldgen/](data/worldgen.md)|世界生成核心, 包含結構, 生物群系, 特徵等|
-|函式巨集|[functions/](data/functions.md)|存放 .mcfunction 指令腳本, 用於自動化執行指令|
-|修改數據|[loot_tables/](data/loot_tables.md)|修改方塊挖掘, 生物掉落物, 釣魚或寶箱內容|
-|成就進度|[advancements/](data/advancements.md)|定義成就系統, 可用於觸發特殊事件或獎勵|
-|自訂合成|[recipes/](data/recipes.md)|定義新的物品合成表（工作台、熔爐等）|
-|定義標籤|[tags/](data/tags.md)|將多種方塊, 物品或實體進行分組|
-|生成結構|[structures/](data/structures.md)|存放 .nbt 結構檔案（與 worldgen 平級）|
-|傷害類型|[damage_type/](data/damage_type.md)|定義自定義的傷害來源類型|
-|聊天訊息|[chat_type/](data/chat_type.md)|自定義聊天室訊息的顯示格式|
-|自訂維度|[dimension/](data/dimension.md)|定義新的維度|
-|維度類型|[dimension_type/](data/dimension_type.md)|定義維度的環境屬性（如亮度, 天空顏色, 高度限制）|
-|條件判斷|[predicates/](data/predicates.md)|自定義邏輯條件（如：檢測玩家背包是否有物品、時間是否為夜晚）|
-|物品修飾|[item_modifiers/](data/item_modifiers.md)|用於在指令中修改物品屬性（如修改名稱、附魔）|
+若要將預設的 `example` 修改為你自己的專案名稱 (例如 `my_project`), 必須確保以下兩步皆完成, 否則會造成路徑斷鏈與系統失效:
+
+1. **修改實體資料夾名稱:** 將 `data/example/` 重新命名為 `data/my_project/`.
+2. **修改系統觸發器 JSON:** 進入 `data/minecraft/tags/functions/` 目錄:
+    * 開啟 `load.json`, 將內部的 `"example:init/load"` 替換為 `"my_project:init/load"`.
+    * 開啟 `tick.json`, 將內部的 `"example:core/tick"` 替換為 `"my_project:core/tick"`.
+
+
+3. **修改所有函式內部呼叫:** 在所有的 `.mcfunction` 檔案內部, 若有使用 `/function example:...` 互相呼叫的指令, 皆需同步替換為新的命名空間.
+
+---
+
+## 所有操作分類與用途字典 (Operations Dictionary)
+
+| 分類 | 目錄名稱 | 主要功能用途 |
+| --- | --- | --- |
+| 函式巨集 | [`functions`](pack_template/data/example/functions/functions.md) | 存放 `.mcfunction` 指令腳本, 用於封裝並自動化執行多條指令. |
+| 修改數據 | [`loot_tables`](pack_template/data/example/loot_tables/loot_tables.md) | 修改方塊挖掘, 生物死亡掉落物, 釣魚或寶箱內容. |
+| 成就進度 | [`advancements`](pack_template/data/example/advancements/advancements.md) | 定義成就系統, 常用於在後台無聲觸發特殊事件或給予獎勵. |
+| 自訂合成 | [`recipes`](pack_template/data/example/recipes/recipes.md) | 定義新的物品合成表 (包含工作台, 熔爐, 營火, 切石機等). |
+| 定義標籤 | [`tags`](pack_template/data/example/tags/tags.md) | 定義標籤群組, 可將多種方塊, 物品或實體綁定為同一個變數名以便檢測. |
+| 生成結構 | [`structures`](pack_template/data/example/structures/structures.md) | 存放 `.nbt` 結構檔案, 可配合結構方塊或指令生成自訂建築. |
+| 傷害類型 | [`predicates`](pack_template/data/example/predicates/predicates.md) | 自定義邏輯條件 (例如: 檢測玩家背包是否有物品, 時間是否為夜晚). |
+| 聊天訊息 | [`item_modifiers`](pack_template/data/example/item_modifiers/item_modifiers.md) | 用於在指令中快速且動態地修改物品屬性 (如修改名稱, Lore, 附魔). |
+| 自訂維度 | [`damage_type`](pack_template/data/example/damage_type/damage_type.md) | 定義自訂的傷害來源與死亡提示訊息. |
+| 維度類型 | [`chat_type`](pack_template/data/example/chat_type/chat_type.md) | 自定義聊天室訊息的顯示格式與外觀. |
+| 條件判斷 | [`dimension`](pack_template/data/example/dimension/dimension.md) | 定義全新的自訂維度 (包含地形生成器設定). |
+| 物品修飾 | [`dimension_type`](pack_template/data/example/dimension_type/dimension_type.md) | 定義維度的環境與物理屬性 (如時間流速, 亮度, 高度限制, 床的爆炸與否). |
 
 ---
 
 ## 跨元素語法關聯表 (Links Matrix)
-| 關聯參數欄位 | 參引語法元件名稱 |
+
+| 關聯項目 | 外部參考連結 |
 | --- | --- |
-| 生成器 | [Data Pack Generators](https://misode.github.io/) |
-| 資料包 | [資料包管理指令 (Data package management instructions)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/datapack.md) |
-| Minecraft Wiki | [資料包](https://minecraft.fandom.com/zh/wiki/%E6%95%B0%E6%8D%AE%E5%8C%85?variant=zh-tw) |
+| Data Pack Generators | [Misode 資料包視覺化生成工具](https://misode.github.io/) |
+| 遊戲內管理指令 | [資料包管理指令 (datapack)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/datapack.md) |
+| Minecraft Wiki | [資料包 (Data Pack) 官方百科](https://minecraft.fandom.com/zh/wiki/%E6%95%B0%E6%8D%AE%E5%8C%85?variant=zh-tw) |

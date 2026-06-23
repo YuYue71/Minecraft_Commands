@@ -22,7 +22,6 @@
 /forceload remove all
 /forceload query
 /forceload query <pos>
-
 ```
 
 * `<>` = 必填, `[]` = 選填

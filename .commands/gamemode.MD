@@ -19,7 +19,6 @@
 ```commands
 /gamemode <gamemode>
 /gamemode <gamemode> [targets]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

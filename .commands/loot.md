@@ -24,7 +24,6 @@
 /loot replace entity <entities> <slot> [count] <source>
 /loot give <players> <source>
 /loot insert <pos> <source>
-
 ```
 
 * `<>` = 必填, `[]` = 選填

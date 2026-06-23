@@ -20,7 +20,6 @@
 /spectate
 /spectate <target>
 /spectate <target> <player>
-
 ```
 
 * `<>` = 必填. 若不填寫任何參數, 預設為讓執行者解除當前的附身觀察狀態.

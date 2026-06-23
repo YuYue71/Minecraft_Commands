@@ -19,7 +19,6 @@
 
 ```commands
 /give <targets> <item> [count]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

@@ -17,7 +17,6 @@
 
 ```commands
 /op <targets>
-
 ```
 
 * `<>` = 必填

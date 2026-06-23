@@ -21,7 +21,6 @@
 /stopsound <targets>
 /stopsound <targets> <source>
 /stopsound <targets> <source> <sound>
-
 ```
 
 * `<>` = 必填, `[]` = 選填 (在此指令中, 藉由省略後方參數來達成大範圍停止)

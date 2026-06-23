@@ -1,0 +1,36 @@
+[
+    {
+        "function": "minecraft:set_name",
+        "entity": "this",
+        "name": {
+            "text": "傳說之刃",
+            "color": "gold",
+            "bold": true,
+            "italic": false
+        }
+    },
+    {
+        "function": "minecraft:set_lore",
+        "entity": "this",
+        "lore": [
+            {
+                "text": "注入了資料包之力的神秘武器",
+                "color": "gray",
+                "italic": false
+            },
+            {
+                "text": "▶ 攻擊時可能觸發特殊效果",
+                "color": "red",
+                "italic": false
+            }
+        ],
+        "replace": false
+    },
+    {
+        "function": "minecraft:set_enchantments",
+        "enchantments": {
+            "minecraft:sharpness": 5,
+            "minecraft:unbreaking": 3
+        }
+    }
+]

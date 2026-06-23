@@ -17,7 +17,6 @@
 
 ```commands
 /setidletimeout <minutes>
-
 ```
 
 * `<>` = 必填

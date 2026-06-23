@@ -34,7 +34,6 @@
 /bossbar set <id> style <style>
 /bossbar set <id> value <value>
 /bossbar set <id> visible <visible>
-
 ```
 
 * `<>` = 必填, `[]` = 選填

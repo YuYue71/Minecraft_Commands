@@ -19,7 +19,6 @@
 ```commands
 /ride <target> mount <vehicle>
 /ride <target> dismount
-
 ```
 
 * `<>` = 必填

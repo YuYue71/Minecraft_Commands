@@ -28,7 +28,6 @@
 /worldborder warning distance <distance>
 /worldborder warning time <time>
 /worldborder get
-
 ```
 
 * `<>` = 必填, `[]` = 選填

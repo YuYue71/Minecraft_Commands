@@ -17,7 +17,6 @@
 
 ```commands
 /pardon-ip <target>
-
 ```
 
 * `<>` = 必填

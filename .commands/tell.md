@@ -20,7 +20,6 @@
 /tell <targets> <message>
 /msg <targets> <message>
 /w <targets> <message>
-
 ```
 
 * `<>` = 必填

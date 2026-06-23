@@ -20,7 +20,6 @@
 /setworldspawn
 /setworldspawn <pos>
 /setworldspawn <pos> <angle>
-
 ```
 
 * `<>` = 必填, `[]` = 選填

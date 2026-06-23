@@ -20,7 +20,6 @@
 
 ```commands
 /playsound <sound> <source> <targets> [pos] [volume] [pitch] [minVolume]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

@@ -22,7 +22,6 @@
 /clear [targets]
 /clear [targets] [item]
 /clear [targets] [item] [maxCount]
-
 ```
 
 * `[]` = 選填. 若不輸入任何參數, 預設將清空執行者本身背包內的所有物品.

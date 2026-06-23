@@ -22,7 +22,6 @@
 /spawnpoint [targets]
 /spawnpoint [targets] [pos]
 /spawnpoint [targets] [pos] [angle]
-
 ```
 
 * `[]` = 選填. 若不填寫任何參數, 預設將執行者當前的腳下座標與視角設為其專屬的重生點.

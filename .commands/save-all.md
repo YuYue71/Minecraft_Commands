@@ -17,7 +17,6 @@
 
 ```commands
 /save-all [flush]
-
 ```
 
 * `[]` = 選填

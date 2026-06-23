@@ -24,7 +24,6 @@
 /whitelist remove <targets>
 /whitelist list
 /whitelist reload
-
 ```
 
 * `<>` = 必填

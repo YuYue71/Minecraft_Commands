@@ -17,7 +17,6 @@
 
 ```commands
 /pardon <targets>
-
 ```
 
 * `<>` = 必填

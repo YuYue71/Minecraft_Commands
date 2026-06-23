@@ -17,7 +17,6 @@
 
 ```commands
 /deop <targets>
-
 ```
 
 * `<>` = 必填

@@ -24,7 +24,6 @@
 /particle <name> [pos] [delta] [speed] [count]
 /particle <name> [pos] [delta] [speed] [count] [force|normal]
 /particle <name> [pos] [delta] [speed] [count] [force|normal] [viewers]
-
 ```
 
 * `<>` = 必填, `[]` = 選填, `|` = 二擇一

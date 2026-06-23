@@ -22,7 +22,6 @@
 /clone <begin> <end> <destination>
 /clone <begin> <end> <destination> <masked\|replace> [cloneMode]
 /clone <begin> <end> <destination> filtered <filter> [cloneMode]
-
 ```
 
 * `<>` = 必填, `[]` = 選填, `\|` = 二擇一

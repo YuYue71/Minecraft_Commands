@@ -25,7 +25,6 @@
 /title <targets> subtitle <title>
 /title <targets> actionbar <title>
 /title <targets> times <fadeIn> <stay> <fadeOut>
-
 ```
 
 * `<>` = 必填

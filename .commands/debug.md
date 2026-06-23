@@ -20,7 +20,6 @@
 /debug start
 /debug stop
 /debug function <name>
-
 ```
 
 * `<>` = 必填

@@ -18,7 +18,6 @@
 
 ```commands
 /ban <targets> [reason]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

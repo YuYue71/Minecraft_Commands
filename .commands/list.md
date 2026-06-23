@@ -17,7 +17,6 @@
 
 ```commands
 /list [uuids]
-
 ```
 
 * `[]` = 選填

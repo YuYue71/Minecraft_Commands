@@ -19,7 +19,6 @@
 
 ```commands
 /publish [allowCommands] [gamemode] [port]
-
 ```
 
 * `[]` = 選填. 若要設定後方的參數, 前方的參數必須先被填寫.

@@ -26,7 +26,6 @@
 /attribute <target> <attribute> modifier add <uuid> <name> <value> <add\|multiply_base\|multiply>
 /attribute <target> <attribute> modifier remove <uuid>
 /attribute <target> <attribute> modifier value get <uuid> [scale]
-
 ```
 
 * `<>` = 必填, `[]` = 選填, `\|` = 二擇一

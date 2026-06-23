@@ -21,7 +21,6 @@
 ```commands
 /placefeature <feature>
 /placefeature <feature> [pos]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

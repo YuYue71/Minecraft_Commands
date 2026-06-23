@@ -17,7 +17,6 @@
 
 ```commands
 /say <message>
-
 ```
 
 * `<>` = 必填

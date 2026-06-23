@@ -19,7 +19,6 @@
 ```commands
 /gamerule <gamerule>
 /gamerule <gamerule> <value>
-
 ```
 
 * `<>` = 必填, `[]` = 選填

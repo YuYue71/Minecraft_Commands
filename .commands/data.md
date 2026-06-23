@@ -31,7 +31,6 @@
 /data remove block <pos> <path>
 /data remove entity <target> <path>
 /data remove storage <id> <path>
-
 ```
 
 * `<>` = 必填, `[]` = 選填, `\|` = 二擇一

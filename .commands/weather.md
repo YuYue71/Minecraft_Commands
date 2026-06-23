@@ -20,7 +20,6 @@
 /weather clear [duration]
 /weather rain [duration]
 /weather thunder [duration]
-
 ```
 
 * `[]` = 選填

@@ -25,7 +25,6 @@
 /teleport <targets> <location> <rotation>
 /teleport <targets> <location> facing <facingLocation>
 /teleport <targets> <location> facing entity <facingEntity> [facingAnchor]
-
 ```
 
 * `<>` = 必填, `[]` = 選填.

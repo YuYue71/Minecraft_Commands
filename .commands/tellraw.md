@@ -18,7 +18,6 @@
 
 ```commands
 /tellraw <targets> <message>
-
 ```
 
 * `<>` = 必填

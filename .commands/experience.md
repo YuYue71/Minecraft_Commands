@@ -22,7 +22,6 @@
 /experience add <targets> <amount> [levels|points]
 /experience set <targets> <amount> [levels|points]
 /experience query <targets> <levels|points>
-
 ```
 
 * `<>` = 必填, `[]` = 選填, `|` = 二擇一

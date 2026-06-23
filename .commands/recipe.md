@@ -22,7 +22,6 @@
 /recipe give <targets> *
 /recipe take <targets> <recipe>
 /recipe take <targets> *
-
 ```
 
 * `<>` = 必填, `*` = 特殊萬用字元

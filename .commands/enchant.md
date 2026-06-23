@@ -19,7 +19,6 @@
 
 ```commands
 /enchant <targets> <enchantment> [level]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

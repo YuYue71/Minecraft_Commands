@@ -27,7 +27,6 @@
 /datapack list
 /datapack list available
 /datapack list enabled
-
 ```
 
 * `<>` = 必填

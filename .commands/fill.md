@@ -22,7 +22,6 @@
 /fill <from> <to> <block>
 /fill <from> <to> <block> <destroy|hollow|keep|outline|replace>
 /fill <from> <to> <block> replace <filter>
-
 ```
 
 * `<>` = 必填, `|` = 二擇一

@@ -20,7 +20,6 @@
 ```commands
 /setblock <pos> <block>
 /setblock <pos> <block> <destroy|keep|replace>
-
 ```
 
 * `<>` = 必填

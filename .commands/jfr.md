@@ -18,7 +18,6 @@
 ```commands
 /jfr start
 /jfr stop
-
 ```
 
 * `/jfr` 指令不需要額外參數, 僅接受啟動與停止的枚舉字串.

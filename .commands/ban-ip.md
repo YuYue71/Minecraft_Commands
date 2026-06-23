@@ -17,7 +17,6 @@
 
 ```commands
 /ban-ip <target> [reason]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

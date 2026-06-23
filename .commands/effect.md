@@ -23,7 +23,6 @@
 ```commands
 /effect clear <targets> [effect]
 /effect give <targets> <effect> [duration] [amplifier] [hideParticles]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

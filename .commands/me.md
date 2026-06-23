@@ -17,7 +17,6 @@
 
 ```commands
 /me <action>
-
 ```
 
 * `<>` = 必填

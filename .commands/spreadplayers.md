@@ -21,7 +21,6 @@
 ```commands
 /spreadplayers <center> <spreadDistance> <maxRange> <respectTeams> <targets>
 /spreadplayers <center> <spreadDistance> <maxRange> under <maxHeight> <respectTeams> <targets>
-
 ```
 
 * `<>` = 必填

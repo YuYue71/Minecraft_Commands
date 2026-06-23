@@ -23,7 +23,6 @@
 /item block <pos> <slot> modify <modifier>
 /item entity <targets> <slot> replace <item> [count]
 /item entity <targets> <slot> modify <modifier>
-
 ```
 
 * `<>` = 必填, `[]` = 選填

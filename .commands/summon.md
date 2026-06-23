@@ -21,7 +21,6 @@
 /summon <entity>
 /summon <entity> [pos]
 /summon <entity> [pos] [nbt]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

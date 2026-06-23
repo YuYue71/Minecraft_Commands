@@ -24,7 +24,6 @@
 /place jigsaw <pool> <target> <max_depth> <pos>
 /place structure <structure> [pos]
 /place template <template> [pos] [rotation] [mirror] [integrity] [seed]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

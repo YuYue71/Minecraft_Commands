@@ -30,7 +30,6 @@
 /advancement grant <targets> from <advancement>
 /advancement grant <targets> until <advancement>
 /advancement grant <targets> through <advancement>
-
 ```
 
 * `<>` = 必填, `[]` = 選填

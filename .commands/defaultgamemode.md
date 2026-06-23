@@ -17,7 +17,6 @@
 
 ```commands
 /defaultgamemode <mode>
-
 ```
 
 * `<>` = 必填

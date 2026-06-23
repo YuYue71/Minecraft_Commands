@@ -18,7 +18,6 @@
 
 ```commands
 /kick <targets> [reason]
-
 ```
 
 * `<>` = 必填, `[]` = 選填

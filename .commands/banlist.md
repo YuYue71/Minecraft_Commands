@@ -17,7 +17,6 @@
 
 ```commands
 /banlist [type]
-
 ```
 
 * `[]` = 選填

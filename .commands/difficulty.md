@@ -17,7 +17,6 @@
 
 ```commands
 /difficulty [difficulty]
-
 ```
 
 * `[]` = 選填. 若不輸入任何參數, 僅執行 `/difficulty` 則為查詢當前的遊戲難度.
