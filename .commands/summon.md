@@ -1,117 +1,76 @@
-# `/summon`（召喚實體）
+# `/summon`
 
-* > 在指定位置生成實體
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
-## 語法結構 (Syntax)
+---
 
-```commands id="summon"
-/summon <實體ID> <座標> <生物NBT>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [entity](#entity)
+    * [pos](#pos)
+    * [nbt](#nbt)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/summon <entity>
+/summon <entity> [pos]
+/summon <entity> [pos] [nbt]
+
 ```
 
-## 參數與引數拆解 (Arguments)
+* `<>` = 必填, `[]` = 選填
 
-| 參數名稱      | 功能與語義說明  |
-| --------- | -------- |
-| `[必填]` `<實體ID>`  | 要生成的實體類型 |
-| `[選填]` `<座標>`    | 生成位置     |
-| `[選填]` `<生物NBT>` | 實體附加資料   |
-
----
-
-## 參數枚舉列表 (Parameter Enumeration)
-
-### 實體ID
-
-| 參數                           | 說明    |
-| ---------------------------- | ----- |
-| `minecraft:allay`            | 悅靈    |
-| `minecraft:armadillo`        | 犰狳    |
-| `minecraft:axolotl`          | 美西螈   |
-| `minecraft:bat`              | 蝙蝠    |
-| `minecraft:bee`              | 蜜蜂    |
-| `minecraft:blaze`            | 烈焰使者  |
-| `minecraft:bogged`           | 沼骸    |
-| `minecraft:breeze`           | 旋風人   |
-| `minecraft:camel`            | 駱駝    |
-| `minecraft:cat`              | 貓     |
-| `minecraft:cave_spider`      | 洞穴蜘蛛  |
-| `minecraft:chicken`          | 雞     |
-| `minecraft:cod`              | 鱈魚    |
-| `minecraft:cow`              | 牛     |
-| `minecraft:creeper`          | 苦力怕   |
-| `minecraft:dolphin`          | 海豚    |
-| `minecraft:donkey`           | 驢     |
-| `minecraft:drowned`          | 溺屍    |
-| `minecraft:elder_guardian`   | 远古守卫者 |
-| `minecraft:enderman`         | 終界使者  |
-| `minecraft:endermite`        | 終界蟎   |
-| `minecraft:evoker`           | 喚魔者   |
-| `minecraft:fox`              | 狐狸    |
-| `minecraft:frog`             | 青蛙    |
-| `minecraft:ghast`            | 地獄幽靈  |
-| `minecraft:giant`            | 巨人    |
-| `minecraft:glow_squid`       | 發光魷魚  |
-| `minecraft:goat`             | 山羊    |
-| `minecraft:guardian`         | 守衛者   |
-| `minecraft:hoglin`           | 豬布獸   |
-| `minecraft:horse`            | 馬     |
-| `minecraft:husk`             | 尸殼    |
-| `minecraft:illusioner`       | 幻術師   |
-| `minecraft:iron_golem`       | 鐵魔像   |
-| `minecraft:llama`            | 羊駝    |
-| `minecraft:magma_cube`       | 岩漿史萊姆 |
-| `minecraft:mooshroom`        | 蘑菇牛   |
-| `minecraft:mule`             | 騾     |
-| `minecraft:ocelot`           | 豹貓    |
-| `minecraft:panda`            | 熊貓    |
-| `minecraft:parrot`           | 鸚鵡    |
-| `minecraft:phantom`          | 幻翼    |
-| `minecraft:pig`              | 豬     |
-| `minecraft:piglin`           | 豬布林   |
-| `minecraft:piglin_brute`     | 豬布林蠻兵 |
-| `minecraft:pillager`         | 掠奪者   |
-| `minecraft:polar_bear`       | 北極熊   |
-| `minecraft:pufferfish`       | 河豚    |
-| `minecraft:rabbit`           | 兔子    |
-| `minecraft:ravager`          | 劫掠獸   |
-| `minecraft:salmon`           | 鮭魚    |
-| `minecraft:sheep`            | 綿羊    |
-| `minecraft:shulker`          | 潛影貝   |
-| `minecraft:silverfish`       | 蠹蟲    |
-| `minecraft:skeleton`         | 骷髏    |
-| `minecraft:skeleton_horse`   | 骷髏馬   |
-| `minecraft:slime`            | 史萊姆   |
-| `minecraft:sniffer`          | 嗅探獸   |
-| `minecraft:snow_golem`       | 雪傀儡   |
-| `minecraft:spider`           | 蜘蛛    |
-| `minecraft:squid`            | 魷魚    |
-| `minecraft:stray`            | 流浪者   |
-| `minecraft:strider`          | 熾足獸   |
-| `minecraft:tadpole`          | 蝌蚪    |
-| `minecraft:trader_llama`     | 商人羊駝  |
-| `minecraft:tropical_fish`    | 熱帶魚   |
-| `minecraft:turtle`           | 海龜    |
-| `minecraft:vex`              | 伏守靈   |
-| `minecraft:villager`         | 村民    |
-| `minecraft:vindicator`       | 衛道士   |
-| `minecraft:wandering_trader` | 流浪商人  |
-| `minecraft:warden`           | 監守者   |
-| `minecraft:witch`            | 女巫    |
-| `minecraft:wither`           | 凋零    |
-| `minecraft:wither_skeleton`  | 凋零骷髏  |
-| `minecraft:wolf`             | 狼     |
-| `minecraft:zoglin`           | 豬殭獸   |
-| `minecraft:zombie`           | 殭屍    |
-| `minecraft:zombie_horse`     | 殭屍馬   |
-| `minecraft:zombie_villager`  | 殭屍村民  |
-| `minecraft:zombified_piglin` | 殭屍豬布林 |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<entity>` | `string` | - | 欲生成的實體 ID |
+| `[pos]` | `vec3` | 執行者當前位置 | 欲生成實體的三維座標 |
+| `[nbt]` | `nbt` | - | 欲賦予新實體的自訂 NBT 標籤資料 |
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+## 參數說明 (Parameters)
 
-| 關聯參數欄位    | 參引語法元件名稱                                                                   |
-| --------- | -------------------------------------------------------------------------- |
-| `<座標>`    | [空間座標系統全指南（Coordinates）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)              |
-| `<目標>`    | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md)       |
-| `<生物NBT>` | [生物NBT（Entity NBT Structure）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/entity_nbt.md) |
+### `entity`
+
+> 指定要生成的具體實體種類.
+
+* 必須輸入標準的實體資源位置 (如 `minecraft:zombie`, `minecraft:creeper`).
+* 可以生成絕大多數的活動生物, 掉落物, 投擲物, 載具與特殊實體 (如閃電 `minecraft:lightning_bolt`).
+* 無法透過此指令生成玩家 (`minecraft:player`), 因為玩家實體僅能透過真實玩家連線登入來產生.
+
+---
+
+### `pos`
+
+> 指定實體生成的空間位置.
+
+* 包含三個軸向 (X, Y, Z) 的座標數值.
+* 支援絕對座標與相對座標 (`~`, `^`).
+* 若未填寫此參數, 實體預設會直接重疊生成於執行此指令的玩家, 實體或命令方塊的當前中心座標上.
+* 系統會盡可能將實體安全地放置, 但若指定的座標直接位於實體方塊內部, 生物實體生成後可能會立刻受到窒息傷害.
+
+---
+
+### `nbt`
+
+> 允許在實體生成時, 直接賦予其特定的屬性或狀態資料.
+
+* 必須為標準的 NBT 複合標籤格式 (Compound Tag), 也就是由大括號 `{}` 包覆的鍵值對 (例如 `{NoAI:1b, Glowing:1b}`).
+* 透過此參數, 可以製作出極具客製化的實體. 例如: 裝備全套鑽石甲的骷髏, 預先被點燃的 TNT, 騎著蜘蛛的苦力怕 (透過 `Passengers` 標籤), 或是永不消失的掉落物.
+* 若 NBT 格式錯誤或包含了該實體不支援的標籤, 指令仍可能會成功執行並生成實體, 但無效的標籤將會被系統自動忽略.
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /summon](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/summon)
+* [實體 ID (Entity IDs)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Entity_IDs.md)
+* [座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Coordinates.md)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
+* [實體 NBT 矩陣 (Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
