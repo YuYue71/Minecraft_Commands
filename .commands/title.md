@@ -1,79 +1,95 @@
-# `/title`（螢幕標題指令）
-* > 用於在指定玩家的螢幕正中央或動作列（Actionbar）顯示大型的 JSON 格式自訂文字
-* > 可自由控制標題的淡入、保持與淡出時間，並支援色彩、加粗、變數與目標選擇器動態解析
-* > 常用於地圖章節切換、特殊區域提示、RPG 任務達成公告與伺服器核心系統警告
+# `/title`
+
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="title"
-/title <目標> <操作> <JSON訊息>
-/title <目標> times <淡入> <保持> <淡出>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [操作類型 (Action Types)](#操作類型-action-types)
+    * [targets](#targets)
+    * [title (JSON 文本)](#title-json-文本)
+    * [times (時間參數)](#times-時間參數)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/title <targets> clear
+/title <targets> reset
+/title <targets> title <title>
+/title <targets> subtitle <title>
+/title <targets> actionbar <title>
+/title <targets> times <fadeIn> <stay> <fadeOut>
+
 ```
 
+* `<>` = 必填
+
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `clear` / `reset` / `title` / `subtitle` / `actionbar` / `times` | `enum` | - | 決定要對標題執行的具體操作 |
+| `<targets>` | `entity` | - | 欲顯示或清除標題的目標玩家 |
+| `<title>` | `json` | - | 欲顯示的 JSON 文本標題內容 |
+| `<fadeIn>` | `time` | `10t` | 標題淡入畫面所需的持續時間 |
+| `<stay>` | `time` | `70t` | 標題在畫面上完全清晰停留的時間 |
+| `<fadeOut>` | `time` | `20t` | 標題淡出至消失所需的持續時間 |
+
 ---
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
+## 參數說明 (Parameters)
 
-| 參數名稱 | 功能與語義說明 |
+### `操作類型 (Action Types)`
+
+> 決定 `/title` 指令具體要更新畫面的哪個區塊, 或是要執行清除與時間設定.
+
+| 值 | 說明 |
 | --- | --- |
-| `[必填]` `<目標>` | 指定要接收或控制標題的目標玩家 |
-| `[必填]` `<操作>` | 指定標題的控制行為（例如設定大標題、副標題、清除或時間參數） |
-| `[選填]` `<JSON訊息>` | 填入符合 Minecraft Raw JSON 文字元件規範的字串（適用於 `title`、`subtitle`、`actionbar` 操作） |
-| `[選填]` `<淡入>` | 標題由完全透明到完全顯示所花費的時間（單位為遊戲刻） |
-| `[選填]` `<保持>` | 標題完全顯示並停留在大螢幕上的時間（單位為遊戲刻） |
-| `[選填]` `<淡出>` | 標題由完全顯示到完全消失所花費的時間（單位為遊戲刻） |
+| `title` | 在目標畫面的正中央顯示主標題. 若之前已設定了 `subtitle`, 則副標題會與主標題同時出現在畫面上. |
+| `subtitle` | 設定或更新副標題的文字內容. 注意: 副標題**必須**在觸發 `title` 顯示時才會被一併渲染出來, 單獨發送 `subtitle` 是不會有任何畫面效果的. |
+| `actionbar` | 在目標畫面的快捷列 (物品欄) 上方顯示小字體的狀態文字. 此區塊的文字不受 `times` 淡入淡出時間的控制, 固定有自己的顯示邏輯與時長. |
+| `times` | 自訂標題的顯示節奏. 執行後, 該時間設定會寫入玩家資料中, 之後所有發送給該玩家的標題皆會套用此自訂的淡入, 停留, 淡出時間. |
+| `clear` | 立刻清除目標畫面上當前正在顯示的主標題與副標題. 不會重置 `times` 的自訂時間設定. |
+| `reset` | 立刻清除目標畫面上的標題, 並將標題的 `times` 設定 (淡入, 停留, 淡出) 強制恢復為系統預設值 (10, 70, 20 遊戲刻). |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+### `targets`
 
-### 操作
+> 指定哪些玩家的客戶端畫面上會出現標題文字.
 
-| 參數 | 說明 |
-| --- | --- |
-| `title` | 在螢幕正中央發送主標題（字體最大，通常伴隨副標題一起出現） |
-| `subtitle` | 設定副標題文字（字體較小，位於主標題下方。注意：單獨執行此操作不會直接顯示，必須在隨後執行 `title` 時才會一同浮現） |
-| `actionbar` | 在快捷鍵欄位（Hotbar）正上方發送單行小字標題（常用於即時狀態更新，不阻擋玩家視野） |
-| `times` | 設定標題的淡入、保持、淡出時間軸 |
-| `clear` | 立即清除指定玩家螢幕上正在顯示的標題文字，但保留時間軸設定 |
-| `reset` | 立即清除當前標題文字，並將淡入、保持、淡出時間軸重置為系統預設值（10刻/70刻/20刻） |
+* 必須為玩家 (Player) 實體, 支援使用目標選擇器 (如 `@a`, `@p`, `@r`).
+* 可以同時選取多個玩家. 系統會將設計好的標題同步發送給所有被選中的玩家.
+* 標題與音效相同, 渲染完全由玩家的客戶端獨立處理, 因此必須精確選擇玩家. 若選擇了非玩家實體 (如 `@e[type=zombie]`), 指令將無法生效.
 
 ---
 
-## 數值規則
+### `title (JSON 文本)`
 
-### 時間（適用於 times 操作）
+> 決定標題或快捷列文字的具體內容與視覺設計.
 
-| 參數 | 說明 |
-| --- | --- |
-| `<淡入>` | 最小值：0 / 最大值：2147483647 / 預設值：10 / 支援負數：否 |
-| `<保持>` | 最小值：0 / 最大值：2147483647 / 預設值：70 / 支援負數：否 |
-| `<淡出>` | 最小值：0 / 最大值：2147483647 / 預設值：20 / 支援負數：否 |
+* 必須輸入嚴格的 JSON 文本元件格式 (例如 `{"text":"Game Over","color":"red","bold":true}`).
+* 與 `/tellraw` 類似, 支援各種進階格式, 且能在 JSON 中綁定計分板分數 (`score`) 或是目標選擇器 (`selector`), 讓不同玩家看到的標題文字內容根據自身的資料動態改變 (例如顯示各玩家獨自的剩餘時間).
 
 ---
 
-## 運作邏輯與覆蓋規則
+### `times (時間參數)`
 
-### 副標題 (subtitle) 的連動限制
+> 設定文字特效的時間長度, 可接受附帶單位的時間格式.
 
-若要同時完整顯示主標題與副標題，必須依據嚴格的執行順序進行。如果先執行 `title` 後執行 `subtitle`，則副標題只會在下一次主標題被觸發時才會顯示。
-
-1. `/_title @a subtitle {"text":"第二章：古老遺跡","color":"gray"}_`（先快取副標題內容）
-2. `/_title @a title {"text":"任務達成！","color":"gold","bold":true}_`（觸發主標題，此時副標題會一同渲染至螢幕）
-
-### 時間軸控制範例
-
-若需要標題以極快的速度閃爍提示，不帶任何淡入淡出效果，可在發送標題前先修正時間參數（1 秒 = 20 刻）：
-
-* `/_title @a times 0 40 0_`（設定無淡入、保持 2 秒、無淡出）
+* `<fadeIn>`, `<stay>`, `<fadeOut>` 這三個參數必須同時填寫.
+* 輸入的數值支援時間單位字尾 (Time Formats). 若不加上任何字尾, 系統預設以「遊戲刻 (Ticks, 1/20 秒)」為單位. 例如輸入 `60` 等同於 3 秒.
+* 亦可直接加上 `s` (秒) 或 `d` (遊戲日) 作為單位, 例如 `/title @a times 1s 5s 2s`.
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+## 外部連結 (References)
 
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| `<目標>` | [目標選擇器 (Target Selectors)](https://www.google.com/search?q=https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<JSON訊息>` | [文本NBT標籤](https://github.com/YuYue71/Minecraft_Commands/blob/main/.data_structures/nbt_legacy/text_components_legacy.md) |
+* [Minecraft Wiki - /title](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/title)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
+* [JSON 文本元件 (Raw JSON Text Components)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/json_text.md)
+* [時間與時間單位 (Time & Duration Formats)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TimeFormats.md)

@@ -1,123 +1,129 @@
-# `/attribute`（屬性修改指令）
-* > 用於查詢、修改或重置實體（玩家或生物）的底層基礎屬性數值
-* > 可為屬性添加修飾符（Modifier）以達成動態增減最大生命值、移動速度、攻擊力或擊退抗性等效果
-* > 常用於 RPG 地圖製作、特殊裝備技能設計、職業系統與關卡動態平衡調整
+# `/attribute`
+
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="attribute"
-/attribute <目標> <屬性名稱> get
-/attribute <目標> <屬性名稱> base get <縮放比例>
-/attribute <目標> <屬性名稱> base set <數值>
-/attribute <目標> <屬性名稱> modifier add <UUID> <名稱> <數值> <運算模式>
-/attribute <目標> <屬性名稱> modifier remove <UUID>
-/attribute <目標> <屬性名稱> modifier value get <UUID> <縮放比例>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [target 與 attribute](#target-與-attribute)
+    * [操作類型 (Operations)](#操作類型-operations)
+    * [scale (縮放比例)](#scale-縮放比例)
+    * [modifier 運算模式 (Modifier Operations)](#modifier-運算模式-modifier-operations)
+* [原版實體屬性 (Attributes) 完整清單](#原版實體屬性-attributes-完整清單)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/attribute <target> <attribute> get [scale]
+/attribute <target> <attribute> base get [scale]
+/attribute <target> <attribute> base set <value>
+/attribute <target> <attribute> modifier add <uuid> <name> <value> <add\|multiply_base\|multiply>
+/attribute <target> <attribute> modifier remove <uuid>
+/attribute <target> <attribute> modifier value get <uuid> [scale]
+
 ```
 
----
+* `<>` = 必填, `[]` = 選填, `\|` = 二擇一
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
-
-| 參數名稱 | 功能與語義說明 |
-| --- | --- |
-| `[必填]` `<目標>` | 指定要操作屬性的目標實體（通常為單一玩家或特定生物實體） |
-| `[必填]` `<屬性名稱>` | 指定要管理的 Minecraft 內建實體屬性識別碼（Attribute ID） |
-| `[必填]` `get` | 查詢該屬性最終計算完成的總數值（包含所有修飾符作用後的結果） |
-| `[必填]` `base` | 進入該屬性的基礎值（Base Value）管理模式 |
-| `[必填]` `modifier` | 進入該屬性的修飾符（Modifier）動態堆疊管理模式 |
-| `[必填]` `<UUID>` | 修飾符的唯一識別碼（由四組連字號分隔的十六進位制數組組成，用於識別特定疊加效果） |
-| `[必填]` `<名稱>` | 自訂該修飾符的內部文字名稱，用於程式碼內核或除錯標記 |
-| `[必填]` `<數值>` | 要設定的基礎屬性值，或是修飾符要加減乘除的變量值 |
-| `[必填]` `<運算模式>` | 指定修飾符對屬性數值的底層數學公式計算邏輯 |
-| `[選填]` `<縮放比例>` | 查詢數值時的乘數放大係數（預設為 1.0，若設定為 100 則可將小數點數值轉為百分比整數顯示） |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<target>` | `entity` | - | 欲查詢或修改屬性的目標實體 |
+| `<attribute>` | `string` | - | 欲操作的特定實體屬性 ID |
+| `get` / `base` / `modifier` | `enum` | - | 決定對該屬性執行的操作分支 |
+| `[scale]` | `float` | `1.0` | 查詢數值時的乘算放大倍率 |
+| `<value>` | `float` | - | 欲設定的基礎數值或修飾符數值 |
+| `<uuid>` | `string` | - | 修飾符的唯一識別碼 (UUID) |
+| `<name>` | `string` | - | 修飾符的自訂名稱 (標籤文字) |
+| `<add|multiply_base|multiply>` | `enum` | - | 修飾符對屬性數值的具體數學運算方式 |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+## 參數說明 (Parameters)
 
-### 屬性名稱
+### `target` 與 `attribute`
 
-#### 1. 通用基礎與核心物理屬性 (Generic Physics & Core)
+> 指定要修改哪個實體的哪項基礎能力值.
 
-| 參數 | 說明 |
-| --- | --- |
-| `generic.max_health` | 最大生命值（決定實體的心形血量上限） |
-| `generic.max_absorption` | 最大吸收護盾值（實體可額外獲得的金黃色吸收心形護盾上限） |
-| `generic.movement_speed` | 移動速度（基礎移動步速，數值微調即會對奔跑速度產生巨大影響） |
-| `generic.scale` | 實體渲染比例（動態放大或縮小生物的肉體碰撞箱與外觀尺寸） |
-| `generic.gravity` | 重力加速度（控制實體下落的加速度與受重力牽引的墜落速率） |
-| `generic.step_height` | 踏步高度（實體不需要跳躍即可直接走上去的垂直方塊高度，例如 1.0 代表能走上一格高的台階） |
-| `generic.jump_strength` | 跳躍強度（主要用於馬匹等特定實體的跳躍垂直高度與拋物線計算） |
-| `generic.knockback_resistance` | 擊退抗性（數值介於 0.0 至 1.0 之間，1.0 代表完全免疫任何物理擊退效果） |
-
-#### 2. 通用作戰與防禦屬性 (Generic Combat & Defense)
-
-| 參數 | 說明 |
-| --- | --- |
-| `generic.attack_damage` | 攻擊傷害（徒手或基礎肉搏攻擊造成的原始傷害點數） |
-| `generic.attack_knockback` | 攻擊擊退力（攻擊目標時賦予對方的物理擊退格數強度） |
-| `generic.attack_speed` | 攻擊速度（決定攻擊冷卻條、蓄力槽恢復的速率快慢） |
-| `generic.armor` | 防禦值（實體的基礎護甲點數，等同於裝備防具獲得的防禦線） |
-| `generic.armor_toughness` | 護甲韌性（抵禦高額單次爆發傷害的韌性值，減少護甲被破甲的公式衰減） |
-
-#### 3. 環境與環境傷害互動屬性 (Environment Interaction)
-
-| 參數 | 說明 |
-| --- | --- |
-| `generic.fall_damage_multiplier` | 墜落傷害倍率（動態調整該實體摔落時所受傷害的百分比係數） |
-| `generic.safe_fall_distance` | 安全墜落格數（實體在高空落下時，不會受到任何傷害的基礎緩衝高度） |
-| `generic.burning_time_multiplier` | 燃燒時間倍率（影響實體著火後，火焰持續灼燒的時間縮放比例） |
-| `generic.explosion_knockback_resistance` | 爆炸擊退抗性（抵抗來自 TNT、床或環境爆炸產生的物理衝擊波位移強度） |
-| `generic.oxygen_bonus` | 額外含氧量（影響實體在水下呼吸槽消耗完畢前，所能額外維持的溺水緩衝時間） |
-| `generic.water_movement_efficiency` | 水中移動效率（控制實體在水流或深海中移動時的阻力衰減率） |
-
-#### 4. 玩家專屬核心屬性 (Player Exclusive)
-
-| 參數 | 說明 |
-| --- | --- |
-| `player.block_break_speed` | 方塊破壞速度（玩家徒手或使用工具挖掘、砍伐方塊時的底層效率速率） |
-| `player.block_interaction_range` | 方塊互動距離（玩家放置方塊、點擊箱子、拉動拉桿的最大格數範圍距離） |
-| `player.entity_interaction_range` | 實體互動距離（玩家左鍵攻擊怪物、右鍵對村民交易、餵食動物的最大格數格距） |
-| `player.mining_efficiency` | 挖掘效率附加值（直接疊加在工具附魔效率之外的底層採礦速率） |
-| `player.sneaking_speed` | 潛行移動速度（玩家按下 Shift 蹲下移動時的步速占正常走路速度的比例） |
-| `player.submerged_mining_speed` | 水下挖掘速度（調整玩家頭部沒入水中時，挖掘方塊速度被強行降速的修正係數） |
-| `player.sweeping_damage_ratio` | 橫掃傷害比例（使用劍進行橫掃千軍攻擊時，對周圍副目標造成的傷害百分比強度） |
-| `generic.luck` | 幸運值（影響開啟戰利品箱、釣魚時獲得高級稀有寶物的機率權重） |
-
-#### 5. 生物與特定實體屬性 (Entity & Mob Specific)
-
-| 參數 | 說明 |
-| --- | --- |
-| `generic.follow_range` | 生物追蹤半徑（判定敵對生物發現並追擊玩家的格數範圍） |
-| `generic.flying_speed` | 飛行速度（鸚鵡、蜜蜂、幻翼等具備飛行能力實體在空中的移動速率） |
-| `generic.spawn_reinforcements_chance` | 召喚援兵機率（殭屍專屬屬性，受到傷害時在周圍黑暗處憑空生成額外殭屍的機率） |
+* `<target>`: 必須為單一實體. 支援使用目標選擇器 (如 `@p`, `@e[limit=1]`). 若選擇器匹配到多個實體, 指令將會執行失敗並報錯.
+* `<attribute>`: 必須輸入標準的實體屬性資源位置 (如 `minecraft:generic.max_health`). 各種生物擁有的屬性不同, 若對目標使用其不具備的屬性 (例如修改殭屍的馬匹跳躍力), 指令亦會失效.
 
 ---
 
-### 運算模式
+### `操作類型 (Operations)`
 
-| 參數 | 說明 |
+> 決定指令是要讀取數值, 覆寫基礎數值, 還是透過修飾符 (Modifier) 進行動態增減.
+
+| 值 | 說明 |
 | --- | --- |
-| `add_value` | 加算模式（模式0）：直接將引數中的數值加到基礎屬性上。公式：`基礎值 + 修飾符數值` |
-| `add_multiplied_base` | 基礎倍率乘算模式（模式1）：將修飾符數值乘以基礎值後再加算。公式：`基礎值 * (1 + 修飾符數值)` |
-| `add_multiplied_total` | 總值乘算模式（模式2）：將之前所有運算完畢的總和，乘以該修飾符的變量。公式：`當前總值 * (1 + 修飾符數值)` |
+| `get` | 獲取目標該屬性的「最終計算總值」 (包含所有修飾符, 藥水效果與裝備加成). |
+| `base get` | 僅獲取目標該屬性的「基礎數值」 (不受任何裝備或藥水影響的原始值). |
+| `base set` | 強制覆寫目標該屬性的「基礎數值」. |
+| `modifier add` | 為該屬性新增一個獨立的數值修飾符. 必須指定一組不會與現有修飾符衝突的 `<uuid>` (格式如 `1111-222-333-444-5555`), 並給予名稱與運算規則. |
+| `modifier remove` | 根據 `<uuid>` 移除指定的修飾符. |
+| `modifier value get` | 讀取指定 `<uuid>` 修飾符的具體數值. |
 
 ---
 
-## 數值規則
+### `scale (縮放比例)`
 
-### 基礎值與修飾符數值
+> 解決遊戲指令系統無法回傳小數點的問題.
 
-| 參數 | 說明 |
-| --- | --- |
-| `<數值>` | 最小值：依據特定屬性而定（多數屬性最小值為 0.0，部分如防禦值上限與縮放有各自安全邊界） / 最大值：1024.0（部分屬性如 scale、max_health 之絕對邊界依引擎核心設定） / 支援負數：是（例如將攻擊力加算負值可達成實體弱化效果） |
+* 當使用 `get` 相關操作時, 遊戲在聊天框或計分板中只能回傳「整數」.
+* 許多屬性值 (如移動速度 `0.1`) 遠小於 1, 直接獲取會回傳 `0`.
+* 透過填寫 `[scale]` (例如輸入 `100`), 系統會將原本的數值乘上此倍率後再輸出 (即 `0.1 * 100 = 10`), 方便後續利用計分板進行精確運算.
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+### `modifier 運算模式 (Modifier Operations)`
 
-| 關聯參數欄位 | 參引語法元件名稱 |
+> 決定新增的修飾符是如何與現有數值進行數學交互的.
+
+| 值 | 說明 |
 | --- | --- |
-| `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
+| `add` | 加法運算. 直接將 `<value>` 加到屬性的總值上. 例如基礎攻擊力 2, 加上 `value=3` 的修飾符, 總攻擊力變為 5. |
+| `multiply_base` | 基礎乘法. 將屬性的「基礎值」乘上 `<value>`, 再將結果加進總值中. 若有多個同類修飾符, 它們只會基於最原始的基礎值進行計算, 彼此之間互不相乘 (相加後再疊加). |
+| `multiply` | 總值乘法. 結算完所有 `add` 與 `multiply_base` 後, 將當前的「暫時總值」乘上 `(1 + <value>)`. 若有多個同類修飾符, 它們會以指數形式互相乘算疊加 (利滾利). |
+
+---
+
+## 原版實體屬性 (Attributes) 完整清單
+
+> 適用於 1.20.4 版本的 `<attribute>` 參數. 輸入時可省略 `minecraft:` 前綴. (註: 1.20.5+ 新增之屬性不包含於此列表)
+
+### 通用屬性 (Generic Attributes)
+
+| 屬性 ID | 說明 | 適用對象 | 合法數值範圍 |
+| --- | --- | --- | --- |
+| `generic.max_health` | **最大生命值**. 決定實體的血量上限. | 所有活動生物 | `1.0` .. `1024.0` |
+| `generic.movement_speed` | **移動速度**. 影響地面的步行或奔跑速度. | 所有活動生物 | `0.0` .. `1024.0` |
+| `generic.attack_damage` | **攻擊傷害**. 基礎近戰攻擊所造成的傷害點數. | 玩家與敵對生物 | `0.0` .. `2048.0` |
+| `generic.attack_speed` | **攻擊速度**. 決定武器揮擊與傷害冷卻的恢復率. | 玩家與部分生物 | `0.0` .. `1024.0` |
+| `generic.attack_knockback` | **攻擊擊退力**. 攻擊時對目標造成的基礎擊退距離. | 玩家與敵對生物 | `0.0` .. `5.0` |
+| `generic.armor` | **護甲防禦值**. 減少受到的物理傷害. | 所有活動生物 | `0.0` .. `30.0` |
+| `generic.armor_toughness` | **護甲韌性**. 抵抗高額單次傷害帶來的穿甲效果. | 所有活動生物 | `0.0` .. `20.0` |
+| `generic.knockback_resistance` | **擊退抗性**. 抵抗被攻擊時擊退的機率 (`1.0` 為完全免疫). | 所有活動生物 | `0.0` .. `1.0` |
+| `generic.follow_range` | **索敵範圍**. 怪物主動察覺並追蹤目標的半徑距離. | 具備 AI 的生物 | `0.0` .. `2048.0` |
+| `generic.flying_speed` | **飛行速度**. 專屬飛行生物或鞘翅的動能速度. | 飛行生物與玩家 | `0.0` .. `1024.0` |
+| `generic.luck` | **幸運值**. 影響戰利品表 (如釣魚, 開箱) 的高品質掉落率. | 玩家 | `-1024.0` .. `1024.0` |
+| `generic.max_absorption` | **最大傷害吸收量**. 決定黃色護盾血量的上限 (1.20.2 新增). | 所有活動生物 | `0.0` .. `2048.0` |
+
+### 特定生物屬性 (Specific Attributes)
+
+| 屬性 ID | 說明 | 適用對象 | 合法數值範圍 |
+| --- | --- | --- | --- |
+| `horse.jump_strength` | **跳躍力**. 決定騎乘時長按空白鍵的最高跳躍強度. | 馬, 驢, 騾 | `0.0` .. `2.0` |
+| `zombie.spawn_reinforcements` | **增援機率**. 受到攻擊時在周圍召喚新殭屍的機率. | 殭屍變種 | `0.0` .. `1.0` |
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /attribute](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/attribute)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
