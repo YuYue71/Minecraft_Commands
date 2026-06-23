@@ -1,76 +1,63 @@
-# `/trigger`（觸發器激活指令）
-* > 用於允許非管理員玩家（無 OP 權限者）手動修改自身在特定計分項（準則必須為 `trigger`）中的分數
-* > 屬於計分板系統（Scoreboard）的安全性延伸，提供安全的、受控的「玩家與後端指令系統」互動管道
-* > 常用於 RPG 地圖的玩家自選技能選單、傳送門確認按鈕、玩家投票系統以及客製化非管理員 UI 點擊反饋
+# /trigger
+
+> **分類:** `指令` | **權限等級:** `0` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="trigger"
-/trigger <計分項>
-/trigger <計分項> add <值>
-/trigger <計分项> set <值>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+  * [objective](#objective)
+  * [操作模式 (add|set)](#操作模式-addset)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/trigger <objective>
+/trigger <objective> add <value>
+/trigger <objective> set <value>
 ```
 
+* `<>` = 必填, `[]` = 選填, `|` = 二擇一, `..` = 範圍 (如 `1..10`)
+
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<objective>` | `string` | - | 欲修改的觸發器計分項目名稱 |
+| `add` | `keyword` | - | 將數值累加至目前的計分值 |
+| `set` | `keyword` | - | 將計分值設置為指定的數值 |
+| `<value>` | `int` | - | 欲增加或設置的整數數值 |
+
 ---
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
+## 參數說明 (Parameters)
 
-| 參數名稱 | 功能與語義說明 |
+### `objective`
+
+> 指定一個判別標準 (Criteria) 為 `trigger` 的計分項目. 非管理員玩家僅能透過此指令修改被授權的觸發器項目.
+
+| 限制條件 | 說明 |
 | --- | --- |
-| `[必填]` `<計分項>` | 目標計分項目的唯一識別名稱字串。**注意：該計分項的底層註冊準則必須嚴格為 `trigger**`，否則玩家執行時會直接報錯拒絕。 |
-| `[選填]` `add` | 遞增模式關鍵字，在玩家當前的觸發器分數上，疊加指定的常數數值 |
-| `[選填]` `set` | 覆寫模式關鍵字，直接將玩家當前的觸發器分數強制修改、同步為指定的固定常數 |
-| `[必填]` `<值>` | 要寫入或加算的具體整數值（若省略 `add` 或 `set` 模式且未填寫數值，系統預設以 `add 1` 邏輯解析） |
+| 判別標準 | 該項目的 Criteria 必須設定為 `trigger`. |
+| 啟用狀態 | 必須先由管理員執行 `/scoreboard players enable <player> <objective>` 啟用該玩家的觸發權限. |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+### 操作模式 (add\|set)
 
-### 觸發器操作模式 (Trigger Modes)
+> 定義如何修改觸發器數值. 若僅輸入 `/trigger <objective>`, 則預設執行 `add 1`.
 
-| 參數組合 | 說明與引擎底層行為 |
+| 值 | 說明 |
 | --- | --- |
-| `/trigger <計分項>` | **快捷遞增**：等同於執行 `/trigger <計分項> add 1`。將玩家在該計分項的分數直接 +1，並**立即使該觸發器對該玩家失效（Unassigned狀態）**。 |
-| `/trigger <計分項> add <值>` | **增減算代入**：將玩家當前在該項目的分數加上 `<值>`（可傳入負數進行減算），隨後立即收回該玩家的觸發器權限。 |
-| `/trigger <計分項> set <值>` | **絕對值賦值**：不論玩家原先分數為何，直接覆寫為 `<值>`，隨後立即收回該玩家的觸發器權限。 |
+| `add` | 執行加法運算. 將 `<value>` 加入當前分數. |
+| `set` | 執行賦值運算. 將當前分數替換為 `<value>`. |
 
 ---
 
-## 數值規則
+## 外部連結 (References)
 
-### 1. 分數與邊界值 (Value Range)
-
-| 參數 | 說明 |
-| --- | --- |
-| `<值>` | 最小值：`-2147483648` / 最大值：`2147483647`（嚴格遵循標準 32 位元有號整數上限） / 支援負數：是 |
-
----
-
-## 核心權限控制與狀態流轉規範
-> `/trigger` 的核心價值在於「權限的動態釋放與回收」，其運行必須嚴格遵循以下引擎底層生命週期：
-
-1. **啟用狀態制約（Enabled Status）**：
-* 剛建立的 `trigger` 計分項，預設對所有玩家皆處於「**停用 (Disabled)**」狀態。如果玩家此時盲目執行 `/trigger`，引擎會報錯：`You cannot trigger this objective yet`。
-* 管理員或後端系統必須預先透過控制端（如命令方塊或定時函數）執行 `/scoreboard players enable <玩家> <計分項>`，該玩家才能合法執行一次 `/trigger`。
-
-
-2. **「單次消耗性」機制（One-Time Use）**：
-* 一旦玩家成功執行了 `/trigger` 指令（不論是透過 `set`、`add` 還是快捷模式），遊戲引擎在更新分數的**同一個遊戲刻內，會立刻將該玩家的該觸發器狀態自動重置為「停用 (Disabled)」**。
-* 若玩家想要再次觸發，後端指令系統必須重新為其執行 `enable` 授權。
-
-
-3. **無資料自動補 0**：
-* 若某玩家在該計分項中從未有過分數紀錄（分數為空值 NaN），當他執行 `/trigger <計分項> add 5` 時，引擎會自動將其初始分數視為 `0`，並將其最終分數更新為 `5`。
-
-
-
----
-
-## 跨元素語法關聯表 (Links Matrix)
-
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| 權限開放前置 | [計分板管理子指令 (Scoreboard Players Enable)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/scoreboard.md) |
-| 後端邏輯捕捉 | [複合執行與條件判定指令 (Execute If Score)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/execute.md) 用於偵測玩家觸發分數變更並執行後續反射動作 |
+* [Minecraft Wiki - /trigger](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/trigger)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
