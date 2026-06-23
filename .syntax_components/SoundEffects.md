@@ -10,7 +10,7 @@
     * [環境與系統類](#環境與系統類)
     * [方塊與互動類](#方塊與互動類)
     * [實體與生物類](#實體與生物類)
-* [外部連結](https://www.google.com/search?q=%23%E5%A4%96%E9%83%A8%E9%80%A3%E7%B5%90-references)
+* [外部連結](#外部連結)
 
 ---
 
@@ -453,3 +453,9 @@
 | `entity.zombie_villager.cure` | 對殭屍村民餵食金蘋果開始淨化轉化的虛弱顫抖聲 |
 | `entity.zombified_piglin.ambient` | 殭屍豬布林地獄常態豬叫吼聲 |
 | `entity.zombified_piglin.angry` | 攻擊一隻殭屍豬布林後導致全體同胞暴怒的集體狂吼聲 |
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - 音效](https://minecraft.fandom.com/zh/wiki/%E5%A3%B0%E9%9F%B3?variant=zh-tw)
