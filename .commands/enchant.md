@@ -1,87 +1,73 @@
-# `/enchant`（附魔指令）
+# /enchant
 
-* > 用於對玩家手持物品施加附魔效果
-* > 只能作用於主手物品
-* > 可直接指定附魔種類與等級
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
-## 語法結構 (Syntax)
+---
 
-```commands id="enchant0"
-/enchant <目標> <附魔> <等級>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [targets](#targets)
+    * [enchantment](#enchantment)
+    * [level](#level)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/enchant <targets> <enchantment> [level]
+
 ```
 
----
+* `<>` = 必填, `[]` = 選填
 
-## 參數與引數拆解 (Arguments)
-
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
-
-| 參數名稱          | 功能與語義說明  |
-| ------------- | -------- |
-| `[必填]` `<目標>` | 指定要附魔的玩家 |
-| `[必填]` `<附魔>` | 指定附魔 ID  |
-| `[選填]` `<等級>` | 指定附魔等級   |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<targets>` | `entity` | - | 欲進行附魔的目標玩家或實體 |
+| `<enchantment>` | `string` | - | 欲賦予的附魔類型 ID |
+| `[level]` | `int` | `1` | 欲賦予的附魔等級 |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+## 參數說明 (Parameters)
 
-### 附魔（Java Edition 1.20.4 全部可用）
+### `targets`
 
-| 參數                                | 說明   |
-| --------------------------------- | ---- |
-| `minecraft:protection`            | 保護   |
-| `minecraft:fire_protection`       | 火焰保護 |
-| `minecraft:feather_falling`       | 摔落保護 |
-| `minecraft:blast_protection`      | 爆炸保護 |
-| `minecraft:projectile_protection` | 射擊保護 |
-| `minecraft:respiration`           | 水下呼吸 |
-| `minecraft:aqua_affinity`         | 水下挖掘 |
-| `minecraft:thorns`                | 荊棘   |
-| `minecraft:depth_strider`         | 深海漫遊 |
-| `minecraft:frost_walker`          | 冰霜行者 |
-| `minecraft:soul_speed`            | 靈魂疾行 |
-| `minecraft:swift_sneak`           | 潛行迅捷 |
-| `minecraft:sharpness`             | 鋒利   |
-| `minecraft:smite`                 | 不死剋星 |
-| `minecraft:bane_of_arthropods`    | 戰蟲剋星 |
-| `minecraft:knockback`             | 擊退   |
-| `minecraft:fire_aspect`           | 火焰附加 |
-| `minecraft:looting`               | 掠奪   |
-| `minecraft:sweeping_edge`         | 橫掃之刃 |
-| `minecraft:efficiency`            | 效率   |
-| `minecraft:silk_touch`            | 絲綢之觸 |
-| `minecraft:unbreaking`            | 耐久   |
-| `minecraft:fortune`               | 幸運   |
-| `minecraft:power`                 | 力量   |
-| `minecraft:punch`                 | 擊退弓  |
-| `minecraft:flame`                 | 火焰弓  |
-| `minecraft:infinity`              | 無限   |
-| `minecraft:luck_of_the_sea`       | 海之幸運 |
-| `minecraft:lure`                  | 魚餌   |
-| `minecraft:loyalty`               | 忠誠   |
-| `minecraft:impaling`              | 穿刺   |
-| `minecraft:riptide`               | 激流   |
-| `minecraft:channeling`            | 引雷   |
-| `minecraft:multishot`             | 多重射擊 |
-| `minecraft:piercing`              | 穿透   |
-| `minecraft:quick_charge`          | 快速裝填 |
-| `minecraft:mending`               | 修補   |
-| `minecraft:vanishing_curse`       | 消失詛咒 |
-| `minecraft:binding_curse`         | 綁定詛咒 |
+> 決定要為誰手持的物品加上附魔.
+
+* 目標實體 (通常為玩家) 必須在主手 (Main Hand) 持有可接受該附魔的物品.
+* 支援使用目標選擇器 (如 `@p`, `@a`, `@e`).
+* 若目標未手持任何物品, 或手持的物品與該附魔類型不相容 (例如嘗試將鋒利附魔在鎬上), 則指令將會執行失敗.
 
 ---
 
-### 等級
+### `enchantment`
 
-| 參數     | 說明                         |
-| ------ | -------------------------- |
-| `<等級>` | 最小值：1 / 最大值：32767 / 支援負數：否 |
+> 指定欲賦予的附魔種類.
+
+* 必須輸入標準的附魔資源位置 (如 `minecraft:sharpness`).
+* 與 `/give` 搭配 NBT 直接給予超規格裝備的狀況不同, `/enchant` 會嚴格檢查並遵守遊戲常規生存模式的附魔規則.
+* 包含附魔衝突機制 (如無限與修補無法共存) 與物品適用性皆無法透過此指令強制繞過. 若目標物品已有互相衝突的附魔, 指令會直接報錯失敗.
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+### `level`
 
-| 關聯參數欄位 |                                                                                                                            |
-| ------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
+> 設定該附魔的等級數值.
+
+* 允許輸入一個大於 `0` 的有效整數.
+* 設定的數值不能超過該附魔在常規生存模式下允許的最高等級上限 (例如鋒利最高限制為 `5`, 掠奪最高限制為 `3`).
+* 若不填寫此參數, 系統預設會給予等級 `1` 的附魔.
+* 若有特殊需求想突破原版等級上限 (如產生鋒利 `1000` 的鑽石劍), 必須改用 `/give` 配合 NBT 標籤生成物品, 或是使用 `/data` 修改實體的背包數據, 無法單靠 `/enchant` 達成.
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /enchant](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/enchant)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
+* [附魔類型 ID (Enchantments)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Enchantments.md)
