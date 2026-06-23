@@ -1,19 +1,43 @@
-# `/save-on`（開啟自動儲存指令）
+# /save-on
 
-* > 用於重新啟用世界的自動儲存機制
-* > 開啟後世界變更會正常寫入磁碟
-* > 通常與 `/save-off` 搭配使用
-
-## 語法結構 (Syntax)
-
-```commands id="b6k2vz"
-/save-on
-```
+> **分類:** `指令` | **權限等級:** `4` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `false`
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+## 目錄
 
-| 關聯參數欄位 | 參引語法元件名稱 |
-| ------ | -------- |
-| [`/save-off`](save-off.md) | 關閉自動儲存指令 |
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/save-on
+
+```
+
+* 此指令不需要任何額外參數.
+
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| (無) | - | - | 重新啟用伺服器的自動存檔機制 |
+
+---
+
+## 參數說明 (Parameters)
+
+> 恢復世界資料寫入硬碟.
+
+* 執行此指令後, 伺服器會恢復原有的週期性背景存檔機制 (通常為每 5 分鐘自動儲存一次).
+* 通常在備份腳本執行完畢, 或是 `/save-off` 狀態下的伺服器維護工作結束後執行, 以確保伺服器資料能正常持續保存.
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /save-on](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/save#save-on)
+* [/save-all](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/save-all.md)
+* [/save-off](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/save-off.md)
