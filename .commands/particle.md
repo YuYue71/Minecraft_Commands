@@ -85,7 +85,7 @@
 
 ## 外部連結 (References)
 
-* [Minecraft Wiki - /particle](https://www.google.com/search?q=https://minecraft.wiki/w/Commands/particle)
+* [Minecraft Wiki - /particle](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/particle)
 * [粒子效果 ID (Particle Effects)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ParticleEffects.md)
 * [粒子特殊參數 (Particle Extra Arguments)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ParticleExtraArguments.md)
 * [座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)
