@@ -1,524 +1,95 @@
-# `/playsound`（播放音效指令）
-* > 用於對指定玩家播放特定的遊戲內音效或自訂聲音
-* > 可自由調整音效的聲道分類、播放中心位置、音量大小、音高頻率以及最小音量
-* > 常用於地圖製作、劇情動畫、動態環境氛圍營造與特殊事件提示
+# /playsound
+
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="playsound"
-/playsound <聲音名稱> <聲道> <目標> <座標> <音量> <音高> <最小音量>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [sound 與 source](#sound-與-source)
+    * [targets 與 pos](#targets-與-pos)
+    * [volume, pitch 與 minVolume](#volume-pitch-與-minvolume)
+* [原版音效來源頻道 (Sound Sources) 清單](#原版音效來源頻道-sound-sources-清單)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/playsound <sound> <source> <targets> [pos] [volume] [pitch] [minVolume]
+
 ```
 
----
+* `<>` = 必填, `[]` = 選填
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
-
-| 參數名稱 | 功能與語義說明 |
-| --- | --- |
-| `[必填]` `<聲音名稱>` | 指定要播放的聲音識別碼（Sound ID） |
-| `[必填]` `<聲道>` | 指定聲音所屬的音量分類管道（會受到玩家自身音量設定的影響） |
-| `[必填]` `<目標>` | 指定要接收並聽到該音效的玩家 |
-| `[選填]` `<座標>` | 指定聲音在三維世界中的發聲源中心位置 |
-| `[選填]` `<音量>` | 設定聲音的播放強度（決定聲音大小與最大可聽見半徑） |
-| `[選填]` `<音高>` | 設定聲音的播放頻率（調整音調的高低與速度） |
-| `[選填]` `<最小音量>` | 當玩家超出正常可聽見半徑時，該聲音播放的最低基礎音量 |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<sound>` | `string` | - | 欲播放的音效 ID (資源位置) |
+| `<source>` | `enum` | - | 決定音效播放的聲音分類頻道 |
+| `<targets>` | `entity` | - | 欲聽見音效的目標玩家 |
+| `[pos]` | `vec3` | 執行者當前位置 | 聲音發出的三維中心點座標 |
+| `[volume]` | `float` | `1.0` | 聲音的播放音量與傳播半徑倍率 |
+| `[pitch]` | `float` | `1.0` | 聲音的音調與播放速度 (0.0..2.0) |
+| `[minVolume]` | `float` | `0.0` | 距離過遠時的最低保障音量 (0.0..1.0) |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+## 參數說明 (Parameters)
 
-### 聲道
+### `sound` 與 `source`
 
-| 參數 | 說明 |
-| --- | --- |
-| `master` | 主音量 |
-| `music` | 音樂 |
-| `record` | 唱片機/音箱 |
-| `weather` | 天氣 |
-| `block` | 方塊 |
-| `hostile` | 敵對生物 |
-| `neutral` | 中立生物 |
-| `player` | 玩家 |
-| `ambient` | 環境音效 |
-| `voice` | 語音 |
+> 指定要播放什麼聲音, 以及它歸屬於遊戲設定中的哪個音量頻道.
+
+* `<sound>`: 必須輸入標準的音效資源位置 (如 `minecraft:entity.zombie.ambient`, `minecraft:block.bell.use`). 若有安裝客戶端資源包 (Resource Pack), 亦可輸入自訂的音效 ID.
+* `<source>`: 決定此聲音對應玩家「選項 > 音效設定」中的哪個拉桿. 若玩家將該頻道的音量拉至 0%, 則無論指令如何設定, 玩家皆無法聽見此聲音.
 
 ---
 
-### 聲音名稱（環境與系統類）
+### `targets` 與 `pos`
 
-| 參數 | 說明 |
-| --- | --- |
-| `ambient.cave` | 洞穴環境恐怖音效 |
-| `ambient.basalt_deltas.additions` | 玄武岩三角洲環境偶發音效 |
-| `ambient.basalt_deltas.loop` | 玄武岩三角洲環境背景環繞音 |
-| `ambient.basalt_deltas.mood` | 玄武岩三角洲環境情緒音效 |
-| `ambient.crimson_forest.additions` | 緋紅森林環境偶發音效 |
-| `ambient.crimson_forest.loop` | 緋紅森林環境背景環繞音 |
-| `ambient.crimson_forest.mood` | 緋紅森林環境情緒音效 |
-| `ambient.nether_wastes.additions` | 地獄荒漠環境偶發音效 |
-| `ambient.nether_wastes.loop` | 地獄荒漠環境背景環繞音 |
-| `ambient.nether_wastes.mood` | 地獄荒漠環境情緒音效 |
-| `ambient.soul_sand_valley.additions` | 靈魂沙谷環境偶發音效 |
-| `ambient.soul_sand_valley.loop` | 靈魂沙谷環境背景環繞音 |
-| `ambient.soul_sand_valley.mood` | 靈魂沙谷環境情緒音效 |
-| `ambient.warped_forest.additions` | 詭異森林環境偶發音效 |
-| `ambient.warped_forest.loop` | 詭異森林環境背景環繞音 |
-| `ambient.warped_forest.mood` | 詭異森林環境情緒音效 |
-| `ambient.underwater.enter` | 進入水下的音效 |
-| `ambient.underwater.exit` | 離開水下的音效 |
-| `ambient.underwater.loop` | 水下環境背景環繞音 |
-| `ambient.underwater.loop.additions` | 水下環境偶發微調音效 |
-| `ambient.underwater.loop.additions.rare` | 水下環境罕見偶發音效 |
-| `ambient.underwater.loop.additions.ultra_rare` | 水下環境極罕見偶發音效 |
-| `ui.button.click` | 點擊 UI 按鈕的標準咔噠聲 |
-| `ui.loom.select_pattern` | 織布機選擇圖案音效 |
-| `ui.loom.take_result` | 從織布機取出成品音效 |
-| `ui.cartography_table.take_result` | 從製圖桌取出成品音效 |
-| `ui.stonecutter.take_result` | 從切石機取出成品音效 |
-| `ui.toast.challenge_complete` | 挑戰類進度完成的彈出提示音 |
-| `ui.toast.in` | 提示框彈出音效 |
-| `ui.toast.out` | 提示框縮回音效 |
+> 決定誰能聽見聲音, 以及聲音是從哪裡傳來的.
+
+* `<targets>`: 只能是玩家 (Player) 實體. 支援使用目標選擇器 (如 `@a`, `@p`). 只有符合條件的玩家客戶端會接收到播放聲音的封包, 其他玩家完全聽不見.
+* `[pos]`: 聲音發生的立體聲來源位置. 支援絕對座標與相對座標 (`~`, `^`). 此座標會與玩家的當前位置計算出 3D 環繞音效 (如左耳或右耳聽見).
 
 ---
 
-### 聲音名稱（方塊與互動類）
+### `volume`, `pitch` 與 `minVolume`
 
-| 參數 | 說明 |
-| --- | --- |
-| `block.anvil.break` | 鐵砧損壞碎裂聲 |
-| `block.anvil.destroy` | 鐵砧徹底毀壞聲 |
-| `block.anvil.fall` | 鐵砧掉落著地聲 |
-| `block.anvil.hit` | 物品撞擊鐵砧聲 |
-| `block.anvil.land` | 鐵砧著地砸落聲 |
-| `block.anvil.place` | 放置鐵砧聲 |
-| `block.anvil.step` | 在鐵砧上行走的聲音 |
-| `block.anvil.use` | 使用鐵砧修復或命名聲 |
-| `block.barrel.close` | 關閉木桶聲 |
-| `block.barrel.open` | 開啟木桶聲 |
-| `block.beacon.activate` | 烽火台啟動聲 |
-| `block.beacon.ambient` | 烽火台常態環境音 |
-| `block.beacon.deactivate` | 烽火台關閉聲 |
-| `block.beacon.power_select` | 選擇烽火台增益效果聲 |
-| `block.bell.use` | 敲擊鐘聲 |
-| `block.bell.resonate` | 鐘聲餘音共鳴聲 |
-| `block.blastfurnace.fire_crackle` | 高爐燃燒劈啪聲 |
-| `block.brewing_stand.brew` | 釀造台正在釀造的冒泡聲 |
-| `block.bubble_column.bubble_pop` | 氣泡柱氣泡破裂聲 |
-| `block.bubble_column.ambient_underwater` | 水下氣泡柱常態音 |
-| `block.bubble_column.whirlpool_inside` | 進入漩渦氣泡柱內部音 |
-| `block.campfire.crackle` | 營火燃燒劈啪聲 |
-| `block.chest.close` | 關閉箱子聲 |
-| `block.chest.locked` | 箱子被鎖住無法開啟聲 |
-| `block.chest.open` | 開啟箱子聲 |
-| `block.chiseled_bookshelf.insert` | 放置書本至雕刻書架聲 |
-| `block.chiseled_bookshelf.pickup` | 從雕刻書架拿取書本聲 |
-| `block.chorus_flower.death` | 爆裂紫菘花枯萎聲 |
-| `block.chorus_flower.grow` | 爆裂紫菘花生長聲 |
-| `block.composter.empty` | 清空堆肥桶聲 |
-| `block.composter.fill` | 對堆肥桶投入碎屑聲 |
-| `block.composter.fill_success` | 堆肥桶成功升級骨粉聲 |
-| `block.composter.ready` | 堆肥桶骨粉製作完成聲 |
-| `block.conduit.activate` | 潮湧核心啟用聲 |
-| `block.conduit.ambient` | 潮湧核心常態環境音 |
-| `block.conduit.ambient.short` | 潮湧核心常態短脈衝音 |
-| `block.conduit.attack.target` | 潮湧核心攻擊敵對生物聲 |
-| `block.conduit.deactivate` | 潮湧核心關閉聲 |
-| `block.copper.break` | 破壞銅方塊聲 |
-| `block.copper.step` | 在銅方塊上行走聲 |
-| `block.copper.place` | 放置銅方塊聲 |
-| `block.copper.hit` | 撞擊銅方塊聲 |
-| `block.copper_bulb.turn_on` | 銅燈亮起時的咔噠聲 |
-| `block.copper_bulb.turn_off` | 銅燈熄滅時的咔噠聲 |
-| `block.crafter.craft` | 自動工作台進行合成聲 |
-| `block.crafter.fail` | 自動工作台合成失敗卡住聲 |
-| `block.dispenser.dispense` | 發射器發射成功聲 |
-| `block.dispenser.fail` | 發射器發射失敗（空殼聲） |
-| `block.dispenser.launch` | 發射器拋出投擲物聲 |
-| `block.enchantment_table.the_book_blasphemy` | 附魔台書本翻頁聲 |
-| `block.end_portal.spawn` | 終界傳送門框架啟動聲 |
-| `block.end_portal_frame.fill` | 放入終界之眼至傳送門框架聲 |
-| `block.ender_chest.close` | 關閉終界箱聲 |
-| `block.ender_chest.open` | 開啟終界箱聲 |
-| `block.fence_gate.close` | 關閉圍籬門聲 |
-| `block.fence_gate.open` | 開啟圍籬門聲 |
-| `block.fire.ambient` | 火焰燃燒常態音 |
-| `block.fire.extinguish` | 火焰被熄滅的嗤嗤聲 |
-| `block.furnace.fire_crackle` | 熔爐燃燒劈啪聲 |
-| `block.glass.break` | 玻璃碎裂聲 |
-| `block.glass.step` | 在玻璃上行走聲 |
-| `block.grass.break` | 破壞草方塊聲 |
-| `block.grass.step` | 在草地或樹葉上行走聲 |
-| `block.grindstone.use` | 使用砂輪聲 |
-| `block.heavy_core.break` | 破壞沉重核心聲 |
-| `block.heavy_core.step` | 在沉重核心上行走聲 |
-| `block.iron_door.close` | 鐵門關閉聲 |
-| `block.iron_door.open` | 鐵門開啟聲 |
-| `block.iron_trapdoor.close` | 鐵活板門關閉聲 |
-| `block.iron_trapdoor.open` | 鐵活板門開啟聲 |
-| `block.ladder.break` | 破壞梯子聲 |
-| `block.ladder.step` | 爬梯子聲 |
-| `block.lantern.break` | 破壞燈籠聲 |
-| `block.lantern.place` | 放置燈籠聲 |
-| `block.lava.ambient` | 岩漿常態冒泡聲 |
-| `block.lava.extinguish` | 岩漿遇水凝固的嗤嗤聲 |
-| `block.lava.pop` | 岩漿噴濺火星聲 |
-| `block.lever.click` | 拉動拉桿聲 |
-| `block.lodestone.break` | 破壞磁石聲 |
-| `block.lodestone.place` | 放置磁石聲 |
-| `block.metal.break` | 破壞金屬方塊聲 |
-| `block.metal.step` | 在金屬方塊上行走聲 |
-| `block.nether_bricks.break` | 破壞地獄磚聲 |
-| `block.nether_bricks.step` | 在地獄磚上行走聲 |
-| `block.nether_wood.break` | 破壞地獄木材聲 |
-| `block.netherite_block.break` | 破壞獄髓方塊聲 |
-| `block.note_block.basedrum` | 音箱：大鼓（下方為石頭類方塊） |
-| `block.note_block.bass` | 音箱：貝斯（下方為木頭類方塊） |
-| `block.note_block.bell` | 音箱：金屬鐘（下方為金塊） |
-| `block.note_block.chime` | 音箱：管鐘（下方為冰類方塊） |
-| `block.note_block.cow_bell` | 音箱：牛鈴（下方為靈魂沙） |
-| `block.note_block.didgeridoo` | 音箱：迪吉里杜管（下方為南瓜） |
-| `block.note_block.flute` | 音箱：長笛（下方為黏土） |
-| `block.note_block.guitar` | 音箱：吉他（下方為羊毛） |
-| `block.note_block.harp` | 音箱：豎琴（下方為普通方塊/空氣） |
-| `block.note_block.hat` | 音箱：腳踏鈸（下方為沙類方塊） |
-| `block.note_block.iron_xylophone` | 音箱：鐵琴（下方為鐵塊） |
-| `block.note_block.snare` | 音箱：小鼓（下方為礫石） |
-| `block.note_block.xylophone` | 音箱：木琴（下方為骨頭方塊） |
-| `block.note_block.bit` | 音箱：8位元電子音（下方為翡翠方塊） |
-| `block.note_block.banjo` | 音箱：班卓琴（下方為乾草捆） |
-| `block.note_block.pleading` | 音箱：求饒音（下方為不祥試煉生怪磚） |
-| `block.piston.contract` | 活塞收回聲 |
-| `block.piston.extend` | 活塞推出聲 |
-| `block.portal.ambient` | 地獄門常態幽冥音效 |
-| `block.portal.travel` | 穿過地獄門時的空間扭曲聲 |
-| `block.portal.trigger` | 地獄門被點燃瞬間聲 |
-| `block.powder_snow.break` | 破壞細雪聲 |
-| `block.powder_snow.step` | 在細雪中行走聲 |
-| `block.pumpkin.carve` | 剪裁南瓜頭聲 |
-| `block.redstone_torch.burnout` | 紅石火把燒壞熄滅聲 |
-| `block.respawn_anchor.ambient` | 重生錨能量常態流動聲 |
-| `block.respawn_anchor.charge` | 對重生錨充能螢光石聲 |
-| `block.respawn_anchor.deplete` | 觸發重生錨消耗能量聲 |
-| `block.respawn_anchor.set_spawn` | 點擊重生錨設定重生點聲 |
-| `block.sculk.break` | 破壞幽匿方塊聲 |
-| `block.sculk.charge` | 幽匿電荷蔓延傳導聲 |
-| `block.sculk_catalyst.bloom` | 幽匿催化器吸收經驗開花聲 |
-| `block.sculk_sensor.clicking` | 幽匿感應器接收振動咔噠聲 |
-| `block.sculk_sensor.clicking_stop` | 幽匿感應器解除接收狀態聲 |
-| `block.sculk_shrieker.shriek` | 幽匿尖叫體發出刺耳尖叫聲 |
-| `block.shulker_box.close` | 關閉潛影盒聲 |
-| `block.shulker_box.open` | 開啟潛影盒聲 |
-| `block.slime_block.break` | 破壞史萊姆方塊聲 |
-| `block.slime_block.fall` | 掉落摔在史萊姆方塊上的反彈聲 |
-| `block.slime_block.step` | 在史萊姆方塊上行走黏膩聲 |
-| `block.smithing_table.use` | 使用鍛造台聲 |
-| `block.smoker.smoke` | 煙燻食物冒煙聲 |
-| `block.spore_blossom.break` | 破壞孢子花聲 |
-| `block.stone.break` | 破壞石頭方塊聲 |
-| `block.stone.step` | 在石頭上行走聲 |
-| `block.sweet_berry_bush.break` | 破壞甜漿果叢聲 |
-| `block.sweet_berry_bush.pick_berries` | 採集甜漿果聲 |
-| `block.trial_spawner.ambient` | 試煉生怪磚周圍能量流動常態音 |
-| `block.trial_spawner.spawn_item` | 試煉密室生怪磚彈出獎勵物品聲 |
-| `block.trial_spawner.detect_player` | 試煉生怪磚偵測到玩家加入挑戰聲 |
-| `block.trial_spawner.eject_item` | 試煉生怪磚冷卻結束噴出寶物聲 |
-| `block.tripwire.attach` | 絆線與絆線鉤連接成功聲 |
-| `block.tripwire.click` | 踩中絆線觸發聲 |
-| `block.tripwire.detach` | 絆線斷開/剪斷聲 |
-| `block.vault.insert_item` | 將試煉鑰匙插入寶庫聲 |
-| `block.vault.reject_item` | 寶庫拒絕重複使用的鑰匙聲 |
-| `block.vault.open_shutter` | 寶庫鐵捲門開啟轉動聲 |
-| `block.vault.eject_item` | 寶庫噴出挑戰獎勵聲 |
-| `block.vine.break` | 破壞藤蔓聲 |
-| `block.water.ambient` | 水流常態流動音 |
-| `block.wood.break` | 破壞木頭方塊聲 |
-| `block.wood.step` | 在木板上行走聲 |
-| `block.wool.break` | 破壞羊毛方塊聲 |
-| `block.wool.step` | 在羊毛上行走消音聲 |
+> 精確控制聲音的物理表現與衰減邏輯.
+
+* `[volume]`: 設定聲音的音量. 正常值為 `0.0` 到 `1.0`. 若輸入大於 `1.0` 的數值, 距離聲源極近時的最高音量並不會突破 100%, 而是會**按比例擴大聲音的傳播半徑** (預設傳播半徑為 `16 * volume` 格).
+* `[pitch]`: 設定聲音的音高與播放速度, 有效範圍為 `0.0` 到 `2.0`. 小於 `1.0` 時聲音會變得低沉且緩慢, 大於 `1.0` 時聲音會變得尖銳且急促.
+* `[minVolume]`: 當玩家處於聲音的正常傳播半徑之外時, 強制給予的最小音量. 若設為 `1.0`, 則該玩家無論距離聲源多遠, 都能以 100% 的音量聽見該聲音, 非常適合用於製作無視距離的全伺服器音效廣播.
 
 ---
 
-### 聲音名稱（實體與生物類）
+## 原版音效來源頻道 (Sound Sources) 清單
 
-| 參數 | 說明 |
-| --- | --- |
-| `entity.allay.ambient_with_item` | 悅靈拿著物品時的叫聲 |
-| `entity.allay.ambient_without_item` | 悅靈空手時的叫聲 |
-| `entity.allay.death` | 悅靈死亡音效 |
-| `entity.allay.hurt` | 悅靈受傷音效 |
-| `entity.allay.item_thrown` | 悅靈將物品丟向玩家聲 |
-| `entity.allay.item_taken` | 拿走悅靈手上物品聲 |
-| `entity.armadillo.ambient` | 犰狳常態活動聲 |
-| `entity.armadillo.death` | 犰狳死亡音效 |
-| `entity.armadillo.hurt` | 犰狳受傷音效 |
-| `entity.armadillo.roll` | 犰狳縮成一團滾動聲 |
-| `entity.armadillo.unroll` | 犰狳伸展恢復原狀聲 |
-| `entity.arrow.hit` | 箭矢射中固體方塊聲 |
-| `entity.arrow.hit_player` | 箭矢射中玩家或生物的肉體聲 |
-| `entity.arrow.shoot` | 弓箭射出瞬間聲 |
-| `entity.axolotl.ambient` | 美西螈常態叫聲 |
-| `entity.axolotl.death` | 美西螈死亡音效 |
-| `entity.axolotl.hurt` | 美西螈受傷音效 |
-| `entity.axolotl.splash` | 美西螈跳入水中的水花聲 |
-| `entity.axolotl.swim` | 美西螈在水中游泳聲 |
-| `entity.bat.ambient` | 蝙蝠常態吱吱聲 |
-| `entity.bat.death` | 蝙蝠死亡音效 |
-| `entity.bat.hurt` | 蝙蝠受傷音效 |
-| `entity.bat.loop` | 蝙蝠飛行時拍打翅膀聲 |
-| `entity.bee.ambient` | 蜜蜂常態飛行嗡嗡聲 |
-| `entity.bee.death` | 蜜蜂死亡音效 |
-| `entity.bee.hurt` | 蜜蜂受傷音效 |
-| `entity.bee.loop` | 蜜蜂憤怒時的快速嗡嗡聲 |
-| `entity.bee.pollinate` | 蜜蜂採蜜聲 |
-| `entity.bee.sting` | 蜜蜂螫人瞬間聲 |
-| `entity.blaze.ambient` | 烈焰使者呼吸與燃燒常態音 |
-| `entity.blaze.burn` | 烈焰使者被水傷害的嗤嗤聲 |
-| `entity.blaze.death` | 烈焰使者死亡金屬散落聲 |
-| `entity.blaze.hurt` | 烈焰使者受傷撞擊聲 |
-| `entity.blaze.shoot` | 烈焰使者發射火球聲 |
-| `entity.boat.paddle_land` | 船在地面上划動聲 |
-| `entity.boat.paddle_water` | 船在水面上划動划水聲 |
-| `entity.bogged.ambient` | 沼骸常態骨頭摩擦聲 |
-| `entity.bogged.death` | 沼骸散落死亡聲 |
-| `entity.bogged.hurt` | 沼骸受傷沉悶聲 |
-| `entity.bogged.shear` | 用剪刀剪下沼骸頭上蘑菇聲 |
-| `entity.breeze.ambient` | 旋風人移動突風常態音 |
-| `entity.breeze.death` | 旋風人風元素消散死亡聲 |
-| `entity.breeze.hurt` | 旋風人受到物理撞擊聲 |
-| `entity.breeze.shoot` | 旋風人發射風彈瞬間聲 |
-| `entity.breeze.slide` | 旋風人在地面上高速滑行聲 |
-| `entity.camel.ambient` | 駱駝低沉咆哮常態音 |
-| `entity.camel.death` | 駱駝死亡倒地聲 |
-| `entity.camel.hurt` | 駱駝受傷悲鳴聲 |
-| `entity.camel.sit` | 駱駝坐下聲 |
-| `entity.camel.stand` | 駱駝站起聲 |
-| `entity.cat.ambient` | 貓常態喵喵聲 |
-| `entity.cat.death` | 貓死亡慘叫聲 |
-| `entity.cat.hurt` | 貓受傷尖叫聲 |
-| `entity.cat.beg_for_food` | 貓討食的連續喵叫聲 |
-| `entity.cat.hiss` | 貓遇到危險發出的哈氣威嚇聲 |
-| `entity.cat.purr` | 貓感到安心時的呼嚕聲 |
-| `entity.cat.purreow` | 貓睡醒時的呼嚕喵聲 |
-| `entity.cave_spider.ambient` | 洞穴蜘蛛常態嘶吼聲 |
-| `entity.chicken.ambient` | 雞常態咯咯聲 |
-| `entity.chicken.egg` | 雞下蛋聲 |
-| `entity.cod.ambient` | 鱈魚在水中吐氣泡與翻滾聲 |
-| `entity.cow.ambient` | 牛常態哞哞聲 |
-| `entity.cow.milk` | 幫牛擠牛奶聲 |
-| `entity.creeper.death` | 苦力怕死亡悶響 |
-| `entity.creeper.hurt` | 苦力怕受傷打擊聲 |
-| `entity.creeper.primed` | 苦力怕即將爆炸的嘶嘶引信聲 |
-| `entity.dolphin.ambient` | 海豚常態口哨超音波聲 |
-| `entity.dolphin.attack` | 海豚發動撞擊聲 |
-| `entity.dolphin.death` | 海豚死亡音效 |
-| `entity.dolphin.eat` | 餵食海豚聲 |
-| `entity.dolphin.hurt` | 海豚受傷悲鳴聲 |
-| `entity.dolphin.jump` | 海豚躍出水面落水聲 |
-| `entity.donkey.ambient` | 驢子常態叫聲 |
-| `entity.dragon_fireball.explode` | 終界龍火球著地爆炸聲 |
-| `entity.drowned.ambient` | 突變殭屍/溺屍水底沉悶吼叫聲 |
-| `entity.drowned.shoot` | 溺屍擲出三叉戟聲 |
-| `entity.egg.throw` | 投擲雞蛋聲 |
-| `entity.elder_guardian.ambient` | 遠古守衛者低沉射線常態音 |
-| `entity.elder_guardian.curse` | 遠古守衛者施加挖掘疲勞詛咒鬼臉聲 |
-| `entity.ender_dragon.ambient` | 終界龍拍打翅膀振翅聲 |
-| `entity.ender_dragon.death` | 終界龍死亡震撼咆哮（全世界廣播聲） |
-| `entity.ender_dragon.growl` | 終界龍常態怒吼聲 |
-| `entity.ender_dragon.hurt` | 終界龍受到傷害慘叫聲 |
-| `entity.ender_dragon.flap` | 終界龍巨大翅膀揮動風壓聲 |
-| `entity.ender_eye.death` | 終界之眼碎裂破滅聲 |
-| `entity.ender_eye.launch` | 拋出終界之眼引路聲 |
-| `entity.enderman.ambient` | 終界使者常態低沉呢喃聲 |
-| `entity.enderman.death` | 終界使者死亡尖叫聲 |
-| `entity.enderman.hurt` | 終界使者受傷高頻叫聲 |
-| `entity.enderman.scream` | 玩家直視終界使者時其發怒的刺耳狂吼聲 |
-| `entity.enderman.teleport` | 終界使者瞬間移動的撕裂空間聲 |
-| `entity.endermite.ambient` | 終界蟎常態爬行沙沙聲 |
-| `entity.evoker.ambient` | 喚魔者常態低吟聲 |
-| `entity.evoker.cast_spell` | 喚魔者準備施法的神祕咒語聲 |
-| `entity.evoker.prepare_attack` | 喚魔者召喚尖牙前的預備音效 |
-| `entity.evoker.prepare_summon` | 喚魔者召喚威克斯幻翼前的預備音效 |
-| `entity.evoker_fangs.attack` | 地底冒出喚魔者尖牙合攏咬碎聲 |
-| `entity.experience_orb.pickup` | 玩家拾取經驗值球的叮噹聲 |
-| `entity.firework_rocket.blast` | 煙火火箭空中大爆炸聲 |
-| `entity.firework_rocket.launch` | 煙火火箭發射沖天破空聲 |
-| `entity.firework_rocket.twinkle` | 煙火碎屑在空中閃爍劈啪聲 |
-| `entity.fishing_bobber.retrieve` | 收回收線釣魚浮標聲 |
-| `entity.fishing_bobber.splash` | 魚咬鉤浮標沉入水中的水花聲 |
-| `entity.fishing_bobber.throw` | 拋出釣魚線浮標聲 |
-| `entity.fox.ambient` | 狐狸常態鳴叫聲 |
-| `entity.fox.screaming` | 狐狸夜晚特有的恐怖尖叫聲 |
-| `entity.frog.ambient` | 青蛙常態呱呱聲 |
-| `entity.frog.tongue` | 青蛙吐出舌頭捕食聲 |
-| `entity.frog.eat` | 青蛙吞食史萊姆/岩漿怪聲 |
-| `entity.ghast.ambient` | 惡魂常態空靈哭泣叫聲 |
-| `entity.ghast.death` | 惡魂死亡慘烈嚎叫聲 |
-| `entity.ghast.hurt` | 惡魂受傷尖叫聲 |
-| `entity.ghast.shoot` | 惡魂口吐火球的尖銳發射聲 |
-| `entity.glow_squid.ambient` | 螢光魷魚常態發光空靈音 |
-| `entity.goat.ambient` | 山羊常態咩咩聲 |
-| `entity.goat.screaming.ambient` | 尖叫山羊罕見的擬人化恐怖尖叫聲 |
-| `entity.goat.ram_impact` | 山羊全力衝撞到固體方塊的巨響聲 |
-| `entity.guardian.ambient` | 守衛者常態摩擦射線聲 |
-| `entity.guardian.attack` | 守衛者發動雷射鎖定充能音 |
-| `entity.hoglin.ambient` | 豬獸常態沉悶哼叫聲 |
-| `entity.horse.ambient` | 馬常態嘶鳴聲 |
-| `entity.horse.breathe` | 馬喘氣與噴氣聲 |
-| `entity.horse.gallop` | 馬全速奔跑的連續蹄鐵聲 |
-| `entity.husk.ambient` | 屍殼沙漠殭屍乾燥粗糙的吼叫聲 |
-| `entity.illusioner.ambient` | 幻術師常態潛伏聲 |
-| `entity.iron_golem.attack` | 鐵人/鐵魔像揮舞手臂將敵人拋起聲 |
-| `entity.iron_golem.damage` | 鐵魔像生命值過低身上鐵甲裂開的金屬脆裂聲 |
-| `entity.iron_golem.death` | 鐵魔像齒輪解體死亡散落聲 |
-| `entity.iron_golem.hurt` | 鐵魔像受傷沉重金屬撞擊聲 |
-| `entity.iron_golem.repair` | 用鐵錠修復鐵魔像的金屬敲擊聲 |
-| `entity.item.break` | 工具、武器或防具耐久度歸零碎裂聲 |
-| `entity.item.pickup` | 物品被吸入玩家背包的啵一聲 |
-| `entity.item_frame.add_item` | 將物品放入物品展示框聲 |
-| `entity.item_frame.break` | 物品展示框被打碎聲 |
-| `entity.item_frame.remove_item` | 從物品展示框取下物品聲 |
-| `entity.item_frame.rotate_item` | 旋轉展示框內物品聲 |
-| `entity.leash_knot.break` | 拴繩結斷開碎裂聲 |
-| `entity.leash_knot.place` | 將拴繩綁在柵欄上聲 |
-| `entity.lightning_bolt.impact` | 雷電擊中地面瞬間的毀滅性爆炸聲 |
-| `entity.lightning_bolt.thunder` | 閃電過後天空中產生的巨大雷鳴聲 |
-| `entity.llama.ambient` | 羊駝常態啐口水與哼叫聲 |
-| `entity.magma_cube.ambient` | 岩漿怪跳動常態濕黏聲 |
-| `entity.magma_cube.squish` | 岩漿怪著地擠壓聲 |
-| `entity.mooshroom.suspicious_milk` | 拿碗對迷幻菇牛擠出迷幻燉湯聲 |
-| `entity.mule.ambient` | 騾子常態叫聲 |
-| `entity.ocelot.ambient` | 豹貓常態叫聲 |
-| `entity.painting.break` | 畫作被拆下碎裂聲 |
-| `entity.panda.ambient` | 貓熊常態幼嫩哼聲 |
-| `entity.panda.sneeze` | 貓熊寶寶打噴嚏震撼周圍聲 |
-| `entity.parrot.ambient` | 鸚鵡常態模仿周圍怪物的叫聲 |
-| `entity.phantom.ambient` | 幻翼天空中盤旋的刺耳尖叫聲 |
-| `entity.phantom.swoop` | 幻翼向下俯衝攻擊玩家的破風聲 |
-| `entity.pig.ambient` | 豬常態哼哼聲 |
-| `entity.piglin.ambient` | 豬布林常態貪婪交流聲 |
-| `entity.piglin.admiring_item` | 豬布林端詳檢查金錠時的滿足聲 |
-| `entity.piglin_brute.ambient` | 豬布林蠻兵憤怒暴躁的常態喘息聲 |
-| `entity.pillager.ambient` | 掠奪者常態低語聲 |
-| `entity.player.attack.crit` | 玩家發動跳躍暴擊的清脆破空聲 |
-| `entity.player.attack.knockback` | 玩家發動擊退攻擊的沉悶重擊聲 |
-| `entity.player.attack.sweep` | 玩家使用劍發動橫掃千軍的巨大劍氣聲 |
-| `entity.player.death` | 玩家不幸陣亡的音效 |
-| `entity.player.hurt` | 玩家受到傷害時的痛苦悶哼聲 |
-| `entity.player.level_up` | 玩家等級提升的清脆叮噹聲 |
-| `entity.polar_bear.ambient` | 北極熊低沉警告咆哮聲 |
-| `entity.puffer_fish.blow_out` | 河豚洩氣縮小聲 |
-| `entity.puffer_fish.blow_up` | 河豚受到驚嚇膨脹變大刺起聲 |
-| `entity.rabbit.ambient` | 兔子常態微弱叫聲 |
-| `entity.ravager.ambient` | 劫掠獸巨型野獸般的沉重呼吸聲 |
-| `entity.ravager.roar` | 劫掠獸受到盾牌反彈後發出的強力擊退咆哮聲 |
-| `entity.salmon.ambient` | 鮭魚在水中拍打尾巴聲 |
-| `entity.sheep.ambient` | 羊常態綿羊叫聲 |
-| `entity.sheep.shear` | 用剪刀剪除羊毛的咔嚓聲 |
-| `entity.shulker.ambient` | 潛影貝常態外殼上下移動音 |
-| `entity.shulker.shoot` | 潛影貝發射追蹤導引彈聲 |
-| `entity.shulker_bullet.hit` | 潛影貝導引彈擊中目標產生漂浮狀態聲 |
-| `entity.silverfish.ambient` | 蠹蟲常態刺耳爬行聲 |
-| `entity.skeleton.ambient` | 骷髏弓箭手全身骨頭碰撞卡拉聲 |
-| `entity.skeleton_horse.ambient` | 骷髏馬常態空靈骨架叫聲 |
-| `entity.slime.ambient` | 史萊姆跳躍軟泥黏稠聲 |
-| `entity.sniffer.ambient` | 嗅探獸巨大古老吸氣嗅聞聲 |
-| `entity.snow_golem.shoot` | 雪人發射雪球瞬間聲 |
-| `entity.snowball.throw` | 投擲雪球聲 |
-| `entity.spider.ambient` | 蜘蛛常態摩擦節肢與吐絲聲 |
-| `entity.splash_potion.break` | 噴濺藥水、滯留藥水砸中地面碎裂擴散聲 |
-| `entity.squid.ambient` | 魷魚水中前進噴水聲 |
-| `entity.stray` | 流浪者流浪骷髏乾燥破裂的骨頭碰撞聲 |
-| `entity.strider.ambient` | 熾足獸岩漿上漫步的顫抖呼氣聲 |
-| `entity.tadpole.grow` | 蝌蚪長大進化成青蛙聲 |
-| `entity.tnt.primed` | 炸藥 TNT 被點燃引信的極速嘶嘶聲 |
-| `entity.totem_of_undying.use` | 不死圖騰被觸發、金光護體重獲新生的神聖音效 |
-| `entity.turtle.egg_crack` | 海龜蛋開始碎裂產生裂紋聲 |
-| `entity.turtle.egg_hatch` | 小海龜破殼孵化誕生聲 |
-| `entity.vex.ambient` | 伏守靈/威克斯穿牆穿梭常態尖銳音 |
-| `entity.villager.ambient` | 村民常態兩手抱胸嗯嗯交流聲 |
-| `entity.villager.celebrate` | 襲擊過後村民歡呼放煙火喜悅聲 |
-| `entity.villager.no` | 村民拒絕交易或感到不滿的搖頭嗯嗯聲 |
-| `entity.villager.trade` | 村民開啟交易面板或交易成功聲 |
-| `entity.villager.work_armorer` | 盔甲師在盔甲座前工作的金屬敲擊聲 |
-| `entity.villager.work_butcher` | 屠夫在切肉檯工作的沉悶聲 |
-| `entity.villager.work_cartographer` | 製圖師在製圖桌前翻閱地圖聲 |
-| `entity.villager.work_cleric` | 牧師在釀造台前研磨藥草冒泡聲 |
-| `entity.villager.work_farmer` | 農夫在堆肥桶翻動殘渣聲 |
-| `entity.villager.work_fisherman` | 漁夫在木桶整理漁獲聲 |
-| `entity.villager.work_fletcher` | 制箭師在制箭桌前削木聲 |
-| `entity.villager.work_leatherworker` | 皮匠在鍋爐前揉製皮革聲 |
-| `entity.villager.work_librarian` | 圖書管理員在講台前翻閱書本聲 |
-| `entity.villager.work_mason` | 石匠在切石機前切石喀嚓聲 |
-| `entity.villager.work_shepherd` | 牧羊人在織布機前拉動梭子聲 |
-| `entity.villager.work_toolsmith` | 工具匠在砂輪機前打磨金屬火花聲 |
-| `entity.villager.work_weaponsmith` | 武器匠在鐵砧前鍛造武器沉重打鐵聲 |
-| `entity.vindicator.ambient` | 衛道士常態充滿敵意的粗魯低吼聲 |
-| `entity.wandering_trader.ambient` | 流浪商人常態低語交流聲 |
-| `entity.warden.ambient` | 監守者深淵沉悶呼吸常態音 |
-| `entity.warden.agitated` | 監守者憤怒值累積鎖定目標狂吼聲 |
-| `entity.warden.heartbeat` | 監守者胸口靈魂核心劇烈跳動的心跳聲 |
-| `entity.warden.sonic_boom` | 監守者施展遠程音波衝擊波的撕裂音 |
-| `entity.warden.dig` | 監守者潛入地下消失不見的遁地聲 |
-| `entity.warden.emerge` | 監守者從地底爬出地面的震撼破土聲 |
-| `entity.witch.ambient` | 女巫常態狡黠邪惡的咯咯笑聲 |
-| `entity.witch.drink` | 女巫大口喝下治療或抗火藥水聲 |
-| `entity.witch.throw` | 女巫向玩家投擲負面藥水聲 |
-| `entity.wither.ambient` | 凋零怪常態三個頭顱呼吸低吟音 |
-| `entity.wither.death` | 凋零怪死亡全世界天空變色大迴響聲 |
-| `entity.wither.hurt` | 凋零怪骨架受到重擊受傷聲 |
-| `entity.wither.shoot` | 凋零怪發射黑色或藍色凋零頭顱空襲聲 |
-| `entity.wither.spawn` | 凋零怪誕生充能完畢產生毀滅大爆炸聲 |
-| `entity.wither_skeleton.ambient` | 凋零骷髏地獄高大骨架行走碰撞聲 |
-| `entity.wolf.ambient` | 狼/未馴服狗常態呼吸聲 |
-| `entity.wolf.growl` | 狼受到激怒對玩家狂吠低吼警告聲 |
-| `entity.wolf.howl` | 狼對著夜空群體長嘯嚎叫聲 |
-| `entity.wolf.shake` | 狼全身濕透後在岸上用力甩乾身體的水珠摩擦聲 |
-| `entity.zoglin.ambient` | 豬殭獸變異殭屍豬常態瘋狂咆哮聲 |
-| `entity.zombie.ambient` | 殭屍常態低沉沉悶的呃啊吼叫聲 |
-| `entity.zombie.attack_wooden_door` | 殭屍瘋狂搥打木門的巨大震動聲 |
-| `entity.zombie.break_wooden_door` | 殭屍成功將木門徹底砸碎破壞聲 |
-| `entity.zombie.converted_to_drowned` | 殭屍在水中溺水太久轉化為溺屍的氣泡解體聲 |
-| `entity.zombie_horse.ambient` | 殭屍馬常態腐爛嘶鳴聲 |
-| `entity.zombie_villager.ambient` | 殭屍村民帶有村民鼻音的特殊殭屍吼叫聲 |
-| `entity.zombie_villager.cure` | 對殭屍村民餵食金蘋果開始淨化轉化的虛弱顫抖聲 |
-| `entity.zombified_piglin.ambient` | 殭屍豬布林地獄常態豬叫吼聲 |
-| `entity.zombified_piglin.angry` | 攻擊一隻殭屍豬布林後導致全體同胞暴怒的集體狂吼聲 |
+> 對應 `<source>` 參數, 完全映射遊戲內的音效設定頻道.
+
+| 音效來源 ID | 遊戲設定對應名稱 | 說明 |
+| --- | --- | --- |
+| `master` | 主音量 | 不受任何特定分類限制, 僅受主音量拉桿控制. |
+| `music` | 音樂 | 用於背景音樂. |
+| `record` | 唱片機/音符盒 | 用於音樂唱片與音符盒發出的聲音. |
+| `weather` | 天氣 | 用於雨聲, 雷聲等自然氣候音效. |
+| `block` | 方塊 | 用於放置, 破壞, 踩踏方塊等聲音. |
+| `hostile` | 敵對生物 | 用於殭屍, 骷髏等怪物發出的聲音. |
+| `neutral` | 友善生物 | 用於豬, 牛, 羊等被動或中立生物發出的聲音. |
+| `player` | 玩家 | 用於玩家受傷, 攻擊, 飲食等聲音. |
+| `ambient` | 環境/光影 | 用於洞穴音效與環境氛圍聲音. |
+| `voice` | 語音/旁白 | 用於文字轉語音旁白功能的獨立頻道. |
 
 ---
 
-## 數值規則
+## 外部連結 (References)
 
-### 座標
-
-| 參數 | 說明 |
-| --- | --- |
-| `<數值>` | 最小值 -30000000 最大值 30000000 是否支援負數 是 |
-
-### 音量
-
-| 參數 | 說明 |
-| --- | --- |
-| `<數值>` | 最小值 0.0 最大值 無限制 是否支援負數 否 預設值 1.0 註：大於 1.0 時不會增加用戶端喇叭音量，而是擴大可聽見的格數半徑（音量值乘 16 格） |
-
-### 音高
-
-| 參數 | 說明 |
-| --- | --- |
-| `<數值>` | 最小值 0.0 最大值 2.0 是否支援負數 否 預設值 1.0 註：數值越低聲音越低沉緩慢，數值越高聲音越尖銳快速 |
-
-### 最小音量
-
-| 參數 | 說明 |
-| --- | --- |
-| `<數值>` | 最小值 0.0 最大值 1.0 是否支援負數 否 預設值 0.0 註：設定後，即使目標玩家遠遠超出聲音正常範圍，依然能以該衰減比例在雙耳聽到此音效 |
-
----
-
-## 跨元素語法關聯表 (Links Matrix)
-
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| `<目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<座標>` | [空間座標系統全指南 (Coordinates)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md) |
+* [Minecraft Wiki - /playsound](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/playsound)
+* [音效 ID (Sound effects)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/SoundEffects.md)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
+* [座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
