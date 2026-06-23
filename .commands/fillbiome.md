@@ -1,93 +1,76 @@
-# `/fillbiome`（生物群系填充）
+# /fillbiome
 
-* > 修改指定區域的生物群系
-* > 影響天氣、生成、生態與環境表現
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
-## 語法結構 (Syntax)
+---
 
-```commands id="fillbiome"
-/fillbiome <起始座標> <結束座標> <生物群系ID>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [from 與 to](#from-與-to)
+    * [biome](#biome)
+    * [replace 與 filter](#replace-與-filter)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/fillbiome <from> <to> <biome>
+/fillbiome <from> <to> <biome> replace <filter>
+
 ```
 
-## 參數與引數拆解 (Arguments)
+* `<>` = 必填
 
-| 參數名稱       | 功能與語義說明  |
-| ---------- | -------- |
-| `<起始座標>`   | 區域第一個角落  |
-| `<結束座標>`   | 區域第二個角落  |
-| `<生物群系ID>` | 要設定的生物群系 |
-
----
-
-## 參數枚舉列表 (Parameter Enumeration)
-
-### 生物群系ID
-
-| 參數                                  | 說明     |
-| ----------------------------------- | ------ |
-| `minecraft:plains`                  | 平原     |
-| `minecraft:sunflower_plains`        | 向日葵平原  |
-| `minecraft:forest`                  | 森林     |
-| `minecraft:flower_forest`           | 花林     |
-| `minecraft:birch_forest`            | 樺木森林   |
-| `minecraft:dark_forest`             | 黑森林    |
-| `minecraft:old_growth_birch_forest` | 老樺木森林  |
-| `minecraft:old_growth_pine_taiga`   | 老松針林   |
-| `minecraft:old_growth_spruce_taiga` | 老雲杉針葉林 |
-| `minecraft:taiga`                   | 針葉林    |
-| `minecraft:snowy_taiga`             | 雪地針葉林  |
-| `minecraft:savanna`                 | 熱帶草原   |
-| `minecraft:savanna_plateau`         | 高原熱帶草原 |
-| `minecraft:windswept_savanna`       | 風蝕熱帶草原 |
-| `minecraft:jungle`                  | 叢林     |
-| `minecraft:sparse_jungle`           | 稀疏叢林   |
-| `minecraft:bamboo_jungle`           | 竹林     |
-| `minecraft:desert`                  | 沙漠     |
-| `minecraft:badlands`                | 惡地     |
-| `minecraft:wooded_badlands`         | 林地惡地   |
-| `minecraft:eroded_badlands`         | 侵蝕惡地   |
-| `minecraft:swamp`                   | 沼澤     |
-| `minecraft:mangrove_swamp`          | 紅樹林沼澤  |
-| `minecraft:beach`                   | 海灘     |
-| `minecraft:snowy_beach`             | 雪地海灘   |
-| `minecraft:stony_shore`             | 岩石海岸   |
-| `minecraft:river`                   | 河流     |
-| `minecraft:frozen_river`            | 冰封河流   |
-| `minecraft:ocean`                   | 海洋     |
-| `minecraft:cold_ocean`              | 冷海洋    |
-| `minecraft:frozen_ocean`            | 冰封海洋   |
-| `minecraft:lukewarm_ocean`          | 溫暖海洋   |
-| `minecraft:warm_ocean`              | 熱帶海洋   |
-| `minecraft:deep_ocean`              | 深海     |
-| `minecraft:deep_cold_ocean`         | 冷深海    |
-| `minecraft:deep_frozen_ocean`       | 冰封深海   |
-| `minecraft:deep_lukewarm_ocean`     | 溫暖深海   |
-| `minecraft:the_void`                | 虛空     |
-| `minecraft:meadow`                  | 草甸     |
-| `minecraft:grove`                   | 林地山谷   |
-| `minecraft:snowy_slopes`            | 雪坡     |
-| `minecraft:frozen_peaks`            | 冰封山峰   |
-| `minecraft:jagged_peaks`            | 鋸齒山峰   |
-| `minecraft:stony_peaks`             | 石峰     |
-| `minecraft:lush_caves`              | 繁茂洞穴   |
-| `minecraft:dripstone_caves`         | 滴水石洞穴  |
-| `minecraft:deep_dark`               | 深暗之域   |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<from>` | `vec3` | - | 欲更改生態域的起始對角座標 |
+| `<to>` | `vec3` | - | 欲更改生態域的結束對角座標 |
+| `<biome>` | `string` | - | 欲填入的新生態域 ID |
+| `replace` | `enum` | - | 啟用特定生態域替換模式 |
+| `<filter>` | `string` | - | 欲被替換掉的特定生態域 ID 或標籤 |
 
 ---
 
-## 數值規則
+## 參數說明 (Parameters)
 
-### 座標
+### `from` 與 `to`
 
-| 參數     | 說明                                  |
-| ------ | ----------------------------------- |
-| `<數值>` | 最小值 -30000000 最大值 30000000 是否支援負數 是 |
+> 定義要進行生態域變更的三維空間範圍.
+
+* `<from>` 與 `<to>` 定義了一個長方體區域. 這兩個座標為長方體的對角線頂點, 輸入順序不影響實際框選的體積.
+* 支援絕對座標與相對座標 (`~`, `^`).
+* 注意: 遊戲底層的生態域資料是依據 `4x4x4` 的方塊區塊 (Biome 3D Array) 來進行儲存與運算的, 而非單一獨立方塊. 因此實際發生變更的邊界會自動對齊至最接近該座標的 4 倍數網格, 不一定會完美貼合輸入的精確邊緣方塊.
+* 預設情況下, 單次指令框選的最大體積上限為 32768 個方塊 (可透過遊戲規則 `commandModificationBlockLimit` 進行更改).
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+### `biome`
 
-| 關聯參數欄位   | 參引語法元件名稱                                                                                                            |
-| -------- | ------------------------------------------------------------------------------------------------------------------- |
-| `<起始座標>` | [空間座標系統全指南（Coordinates）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md) |
-| `<結束座標>` | [空間座標系統全指南（Coordinates）](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md) |
+> 指定欲用來覆蓋該區域的新生態域種類.
+
+* 必須輸入標準的生態域資源位置 (如 `minecraft:plains`, `minecraft:badlands`).
+* 執行成功後, 該區域內與生態域相關的環境特徵 (如草地與樹葉的顏色, 水的顏色, 降雨或降雪狀態, 以及生物自然生成的種類) 將會立即改變為新生態域的設定.
+* 此指令僅改變環境屬性數據, 不會憑空生成或替換任何實體方塊 (例如將平原改為沙漠, 原本的泥土與草徑並不會變成沙子).
+
+---
+
+### `replace` 與 `filter`
+
+> 用於精準過濾要被替換的目標生態域.
+
+* `replace`: 動作宣告字元, 代表進入條件替換模式.
+* `<filter>`: 允許指定單一的生態域 (如 `minecraft:ocean`) 或生態域標籤 (如 `#minecraft:is_forest`).
+* 執行時, 系統只會挑選區域內符合此 `<filter>` 條件的網格進行替換, 其餘不符合的生態域將原封不動. 常用於將大範圍內的一種特定地貌轉化為另一種, 而不干擾周遭的其他環境.
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /fillbiome](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/fillbiome?variant=zh-tw)
+* [座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
+* [生態域 ID (Biome IDs)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Biome_IDs.md)
