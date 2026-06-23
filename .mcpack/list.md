@@ -11,37 +11,61 @@
 本資料包採用模組化結構設計, 區分「原版觸發器」與「自訂專案邏輯」, 以確保高可讀性與擴充性.
 
 ```tree
-pack_template/                  # 放置於世界存檔的 datapacks 資料夾內
-├── pack.mcmeta                 # 資料包識別與版本核心檔案 (必要)
-├── pack.png                    # 資料包圖標 (非必要)
-├── list.md                     # 本說明文件
-└── data/
-    ├── minecraft/              # 原版命名空間 (用於掛載或覆寫原版機制)
-    │   └── tags/
-    │       └── functions/
-    │           ├── load.json   # 綁定重載時觸發的函式 (/reload 觸發)
-    │           └── tick.json   # 綁定每遊戲刻觸發的函式 (20次/秒)
-    │
-    └── example/                # 自訂命名空間 (專案核心邏輯存放區)
-        ├── advancements/       # 範本: 成就與進度觸發器
-        ├── chat_type/          # 範本: 聊天格式與樣式自訂
-        ├── damage_type/        # 範本: 自訂傷害來源 (如自製魔法傷害)
-        ├── dimension/          # 範本: 自訂維度生成配置
-        ├── dimension_type/     # 範本: 維度環境參數 (亮度, 高度)
-        ├── functions/          # 核心程式碼指令區塊 (.mcfunction)
-        │   ├── init/           # 初始化: 變數宣告, 計分板建立
-        │   ├── core/           # 核心邏輯: 高頻運算與主迴圈
-        │   └── utils/          # 實用工具: 清除器 (註銷計分板與全域標籤)
-        ├── item_modifiers/     # 範本: 物品屬性修飾器 (動態修改 NBT)
-        ├── loot_tables/        # 範本: 戰利品表 (自訂掉落物, 抽獎池)
-        ├── predicates/         # 範本: 條件檢測邏輯 (複雜判斷模組化)
-        ├── recipes/            # 範本: 自訂合成表
-        ├── structures/         # 範本: 建築結構 NBT 檔案存放區
-        └── tags/               # 標籤: 將 物品, 實體, 方塊 進行歸類
-            ├── blocks/         # 範本: 標籤群組 (方塊)
-            ├── entity_types/   # 範本: 標籤群組 (實體)
-            └── items/          # 範本: 標籤群組 (物品)
-
+├── data                                    # 資料包的主要內容目錄
+│   ├── example                             # 自訂專案命名空間 (可替換為專案名稱)
+│   │   ├── advancements                    # 成就與進度觸發器目錄
+│   │   │   ├── advancements.md             # 成就進度系統開發說明文件
+│   │   │   └── template.json               # 成就進度設定檔範本
+│   │   ├── chat_type                       # 聊天格式與樣式自訂目錄
+│   │   │   ├── chat_type.md                # 聊天格式系統開發說明文件
+│   │   │   └── template.json               # 聊天格式設定檔範本
+│   │   ├── damage_type                     # 自訂傷害來源目錄 (如自製魔法傷害)
+│   │   │   ├── damage_type.md              # 傷害類型系統開發說明文件
+│   │   │   └── template.json               # 傷害類型設定檔範本
+│   │   ├── dimension                       # 自訂維度生成配置目錄
+│   │   │   ├── dimension.md                # 維度生成系統開發說明文件
+│   │   │   └── template.json               # 維度配置設定檔範本
+│   │   ├── dimension_type                  # 維度環境參數目錄 (亮度, 高度, 天空顏色等)
+│   │   │   ├── dimension_type.md           # 維度參數系統開發說明文件
+│   │   │   └── template.json               # 維度環境參數設定檔範本
+│   │   ├── functions                       # 核心程式碼指令區塊 (.mcfunction)
+│   │   │   ├── core                        # 核心邏輯目錄 (高頻運算與主迴圈)
+│   │   │   │   └── tick.mcfunction         # 每遊戲刻觸發的常駐指令腳本
+│   │   │   ├── init                        # 初始化目錄 (變數宣告, 計分板建立)
+│   │   │   │   └── load.mcfunction         # 系統重載時觸發的初始化腳本
+│   │   │   ├── utils                       # 實用工具目錄 (如系統清理器)
+│   │   │   │   └── uninstall.mcfunction    # 徹底移除專案殘留變數的清理腳本
+│   │   │   ├── functions.md                # 函式系統開發說明文件
+│   │   │   └── second_tick.mcfunction      # 降頻處理的秒級觸發腳本範本
+│   │   ├── item_modifiers                  # 物品屬性修飾器目錄 (動態修改 NBT, 附魔等)
+│   │   │   ├── item_modifiers.md           # 物品修飾器系統開發說明文件
+│   │   │   └── template.json               # 物品修飾設定檔範本
+│   │   ├── loot_tables                     # 戰利品表目錄 (自訂掉落物, 寶箱內容, 抽獎池)
+│   │   │   ├── loot_tables.md              # 戰利品表系統開發說明文件
+│   │   │   └── template.json               # 戰利品表設定檔範本
+│   │   ├── predicates                      # 條件檢測邏輯目錄 (將複雜判斷獨立模組化)
+│   │   │   ├── predicates.md               # 條件檢測系統開發說明文件
+│   │   │   └── template.json               # 條件檢測設定檔範本
+│   │   ├── recipes                         # 自訂合成表目錄 (工作台, 熔爐, 切石機等)
+│   │   │   ├── recipes.md                  # 合成表系統開發說明文件
+│   │   │   └── template.json               # 合成表設定檔範本
+│   │   ├── structures                      # 建築結構檔案存放區
+│   │   │   ├── structures.md               # 結構系統開發說明文件
+│   │   │   └── template.json               # 結構配置設定檔範本 (實體結構通常為 .nbt)
+│   │   └── tags                            # 標籤群組目錄 (將多種目標歸類為同一變數)
+│   │       ├── blocks                      # 方塊標籤目錄
+│   │       │   └── template.json           # 方塊標籤設定檔範本
+│   │       ├── entity_types                # 實體標籤目錄
+│   │       │   └── template.json           # 實體標籤設定檔範本
+│   │       ├── items                       # 物品標籤目錄
+│   │       │   └── template.json           # 物品標籤設定檔範本
+│   │       └── tags.md                     # 標籤系統開發說明文件
+│   └── minecraft                           # 原版命名空間 (用於掛載或覆寫原版機制)
+│       └── tags                            # 原版標籤目錄
+│           └── functions                   # 原版系統函式觸發器標籤
+│               ├── load.json               # 綁定重載時自動執行的自訂函式清單
+│               └── tick.json               # 綁定每遊戲刻自動執行的自訂函式清單
+└── pack.mcmeta                             # 資料包識別與版本核心設定檔 (必要)
 ```
 
 ---
