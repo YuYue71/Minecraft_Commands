@@ -59,5 +59,5 @@
 
 ## 外部連結 (References)
 
-* [Minecraft Wiki - /tell|/msg|/w](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/msg?variant=zh-tw)
+* [Minecraft Wiki - /tell | /msg | /w](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/msg?variant=zh-tw)
 * [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
