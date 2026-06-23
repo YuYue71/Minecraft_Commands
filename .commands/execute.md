@@ -1,198 +1,118 @@
-# `/execute`（複合執行與條件判定指令）
-* > 用於變更指令的執行主體、執行座標、朝向角度與維度空間，或在特定條件成立時才觸發後續指令
-* > 支援多個子指令（Modifiers / Conditionals）進行鏈式無縫串接，是巨集控制、邏輯閘運算與實體行為控制的核心
-* > 常用於高階地圖機制、實體碰撞偵測、動態座標偏移、計分板數值對比與函數（Function）流程控制
+# /execute
+
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="execute"
-/execute <修飾子指令> <後續鏈式或 run 指令>
-/execute run <基礎指令>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+  * [修飾子指令 (Modifiers)](#修飾子指令-modifiers)
+  * [條件子指令 (Conditionals)](#條件子指令-conditionals)
+  * [儲存子指令 (Store)](#儲存子指令-store)
+* [資料包結構參考 (Datapack Structure)](#資料包結構參考-datapack-structure)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/execute <subcommand> <...> run <command>
+/execute <subcommand> <...> <subcommand> <...>
 ```
 
----
+* `<>` = 必填, `[]` = 選填, `|` = 二擇一, `..` = 範圍 (如 `1..10`)
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
-
-| 參數名稱 | 功能與語義說明 |
-| --- | --- |
-| `[必填]` `run` | 終端執行子指令，標記條件與環境修飾完畢，後面直接銜接要正式執行的常規指令 |
-| `[必填]` `<修飾子指令>` | 用於動態改變執行環境（如執行者、座標、角度、儲存值）或進行邏輯判定的子指令片段 |
-| `[必填]` `<基礎指令>` | 最終在調校後的環境下被觸發的標準 Minecraft 指令（如 `/tp`、`/setblock` 等） |
-| `[必填]` `<目標>` / `<源目標>` | 指定要作為執行主體、座標參照物或分數對比來源的目標實體選擇器 |
-| `[必填]` `<座標>` / `<起始>` / `<結束>` / `<目的地>` | 三維空間中的精確世界座標（支援絕對座標、相對座標 `~` 與局部座標 `^`） |
-| `[必填]` `<朝向角度>` | 由水平偏航角（表達東西南北）與垂直俯仰角（表達上下看）組成的旋轉弧度值 |
-| `[必填]` `<錨點>` | 實體肉體上的特定垂直基準點，用於局部座標偏移或視線朝向定位 |
-| `[必填]` `<地形結構>` | 引擎底層註冊的高度圖類型，用於將座標垂直對齊到特定地形表面 |
-| `[必填]` `<維度名稱>` | 遊戲內註冊的世界空間識別碼，用於跨越不同維度計算相對位置 |
-| `[必填]` `<生態系名稱>` | 遊戲底層註冊的生物群落識別碼（Biome ID），用於環境判定 |
-| `[必填]` `<方塊ID>` | 世界中的方塊命名空間識別碼（Block ID），支援附加方塊狀態（Block States）與 NBT |
-| `[必填]` `<比對模式>` | 指定多方塊區域複製對比時，是否將空氣方塊納入嚴格比對的行為模式 |
-| `[必填]` `<資料夾>` / `<資料夾名稱>` | 全域獨立儲存空間的命名空間識別碼（Storage ID），用於跨地圖變數管理 |
-| `[必填]` `<路徑>` | NBT 資料結構內部的特定標籤節點節點路徑，支援層級點號與陣列索引 |
-| `[必填]` `<計分項>` / `<源計分項>` | 計分板系統中已註冊的具體計分目標名稱（Objective） |
-| `[必填]` `<對比符號>` | 用於數學邏輯判定的關係運算子（如大於、小於、等於） |
-| `[必填]` `<值範圍>` | 由常數或雙點號組成的分數區間，用於判定分數是否在指定邊界內 |
-| `[必填]` `<血條ID>` | 透過指令建立的自訂 Boss 血條唯一識別碼（Bossbar ID） |
-| `[必填]` `<屬性>` | Boss 血條中可被外部指令動態覆寫變更的數據欄位 |
-| `[必填]` `<資料型態>` | 將執行結果儲存至 NBT 時，強行指定的二進位資料儲存格式（NBT Type） |
-| `[必填]` `<縮放比例>` | 數據寫入或讀取時的乘數放大/縮小係數，用於處理小數與整數轉換 |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<subcommand>` | `enum` | - | 指定 execute 的子指令類型 |
+| `<command>` | `command` | - | 最終執行的指令本體 |
 
 ---
 
-## 參數枚舉列表 (Parameter Enumeration)
+## 參數說明 (Parameters)
 
-### 1. 環境修飾類子指令 (Modifiers)
+### 修飾子指令 (Modifiers)
 
-| 子指令語法 | 功能與詳細說明 |
+> 用於變換或偏移指令的執行上下文 (Execution Context).
+
+| 值 | 說明 |
 | --- | --- |
-| `as <目標>` | **變更執行主體**：將指令的執行者（`@s`）切換為指定實體，但不改變原本的執行座標與維度。 |
-| `at <目標>` | **變更執行座標與角度**：將指令的執行中心座標、朝向角度、所在維度完全同步為指定實體的當前狀態。 |
-| `facing <座標>` | **設定執行朝向（指定點）**：強行修正當前執行的朝向角度，使其精確面朝世界中的某組三維座標點。 |
-| `facing entity <目標> <錨點>` | **設定執行朝向（指定實體）**：強行修正朝向角度，使其面朝指定實體的特定身體部位（錨點）。 |
-| `rotated <朝向角度>` | **自訂偏航角與俯仰角**：直接將執行的旋轉角度覆蓋為指定的水平偏航角（Yaw）與垂直俯仰角（Pitch）。 |
-| `rotated as <目標>` | **複製實體朝向**：將執行的朝向角度完全同步為指定目標實體的當前朝向。 |
-| `positioned <座標>` | **絕對/相對座標偏移**：將執行的中心座標強行更換為指定的空間位置，不影響執行主體與朝向。 |
-| `positioned as <目標>` | **複製實體位置**：將執行的中心座標強行更換為指定目標實體的當前位置座標。 |
-| `positioned over <地形結構>` | **垂直高度對齊**：將當前執行座標的 Y 軸（高度），強行拉伸或壓縮至指定地形結構的表面最高點。 |
-| `in <維度名稱>` | **跨空間維度變更**：將執行環境轉移至指定維度，並自動依據維度比例計算對應的乘切座標（如主世界與地獄的 8:1 轉換）。 |
-| `anchored <錨點>` | **局部座標錨定**：變更實體局部座標（`^ ^ ^`）的基準原點，決定以眼睛或雙腳位置為出發點。 |
+| `as <target>` | 更改執行者 (Executor). 不改變位置, 朝向或維度. |
+| `at <target>` | 將執行位置, 朝向與維度同步為指定實體. |
+| `align <axes>` | 將座標對齊至方塊格中心. 軸可為 `x`, `y`, `z` 的組合. |
+| `anchored <eyes\|feet>` | 設置視線錨點為眼睛 (Eyes) 或腳部 (Feet). |
+| `facing <pos>` | 使執行朝向指向特定空間座標點. |
+| `facing entity <target> <anchor>` | 使執行朝向指向特定實體的眼睛或腳部. |
+| `in <dimension>` | 切換執行的維度 (Dimension). |
+| `on <relation>` | (1.19.4+) 根據實體關係定位 (如 `vehicle`, `passengers`, `owner`). |
+| `positioned <pos>` | 更改執行座標 (Position) 為特定位置. |
+| `positioned as <target>` | 將執行座標同步為指定實體的位置. |
+| `rotated <rot>` | 更改執行朝向 (Rotation). |
+| `rotated as <target>` | 將執行朝向同步為指定實體的朝向. |
+| `summon <entity>` | (1.20.2+) 生成一個新實體並將其設為後續指令的執行者與位置. |
 
 ---
 
-### 2. 條件判定類子指令 (Conditionals)
-> 包含 `if`（當條件成立時執行）與 `unless`（當條件不成立時執行），兩者語法完全對稱。
+### 條件子指令 (Conditionals)
 
-| 子指令語法 | 判定成立條件說明 |
+> `if` 為條件成立時繼續執行, `unless` 為條件不成立時繼續執行.
+
+| 值 | 說明 |
 | --- | --- |
-| `if/unless biome <座標> <生態系名稱>` | 檢查指定空間座標點所屬的生態系是否與目標相符。 |
-| `if/unless block <座標> <方塊ID>` | 檢查指定空間座標點上的方塊是否為特定方塊（支援檢查方塊狀態標籤）。 |
-| `if/unless blocks <起始> <結束> <目的地> <比對模式>` | 比對兩組三維區域內的方塊排列佈局與資料是否完全一致。 |
-| `if/unless data block <座標> <路徑>` | 檢查指定方塊實體內部是否存在特定的 NBT 資料標籤節點。 |
-| `if/unless data entity <目標> <路徑>` | 檢查指定實體底層是否存在特定的 NBT 資料標籤節點。 |
-| `if/unless data storage <資料夾> <路徑>` | 檢查全域獨立儲存空間（Storage）內是否存在指定的資料節點。 |
-| `if/unless dimension <維度名稱>` | 檢查當前指令執行的環境是否位於指定的維度空間中。 |
-| `if/unless entity <目標>` | 檢查遊戲世界中是否存在符合該目標選擇器條件的實體（至少 1 個即成立）。 |
-| `if/unless loaded <座標>` | 檢查指定的空間座標點當前是否已被伺服器或核心完全加載（處於活動區塊中）。 |
-| `if/unless score <目標> <計分項> <對比符號> <源目標> <源計分項>` | **動態分數對比**：動態交叉比對兩組實體在計分板上的數值關係。 |
-| `if/unless score <目標> <計分項> matches <值範圍>` | **固定分數區間判定**：檢查特定實體的分數是否落在指定的常數範圍區間之內。 |
+| `block <pos> <block>` | 檢查指定位置是否為特定方塊 (支援方塊狀態). |
+| `blocks <start> <end> <destination> <all\|masked>` | 比較兩個區域內的方塊是否完全匹配. |
+| `data <source> <path>` | 檢查特定 NBT 路徑是否存在或符合特定數值. |
+| `entity <target>` | 檢查是否存在至少一個符合條件的實體. |
+| `predicate <predicate>` | 檢查指定謂詞 (Predicate) 的 JSON 條件是否成立 (需資料包). |
+| `score <target> <objective> <operator> <source> <objective>` | 比較兩個計分板數值. |
+| `score <target> <objective> matches <range>` | 檢查計分板數值是否在指定區間內. |
+| `loaded <pos>` | 檢查指定座標所在的區塊 (Chunk) 是否已載入. |
+| `function <function>` | (1.20+) 執行函式並根據其傳回值決定條件 (0 為失敗). |
 
 ---
 
-### 3. 數值回傳與儲存子指令 (Store)
-> 用於擷取後續指令執行後的數據（如成功次數或回傳查詢值），並直接灌入計分板、NBT 或全域儲存空間。
+### 儲存子指令 (Store)
 
-| 子指令語法 | 資料儲存對接點說明 |
+> 將後續指令的執行結果值 (Result) 或成功次數 (Success) 儲存至特定位置.
+
+| 值 | 說明 |
 | --- | --- |
-| `store result/success block <座標> <路徑> <資料型態> <縮放比例>` | 將結果存入指定座標之方塊實體的 NBT 節點內。 |
-| `store result/success entity <目標> <路徑> <資料型態> <縮放比例>` | 將結果存入指定目標實體的 NBT 節點內（無法修改玩家）。 |
-| `store result/success storage <資料夾> <路徑> <資料型態> <縮放比例>` | 將結果存入全域獨立儲存空間的指定路徑中。 |
-| `store result/success bossbar <血條ID> <屬性>` | 將結果存入自訂 Boss 血條（Bossbar）的當前值（Value）或最大值（Max）。 |
-| `store result/success score <目標> <計分項>` | 將結果直接寫入指定實體在計分板上的特定計分欄位中。 |
+| `result` | 儲存指令的實際傳回值. |
+| `success` | 儲存指令的成功次數 (1 為成功, 0 為失敗). |
+
+**儲存目標 (Storage Targets):**
+
+| 目標類型 | 語法結構 | 說明 |
+| --- | --- | --- |
+| `score` | `<target> <objective>` | 存入計分板 (Scoreboard). |
+| `block` | `<pos> <path> <type> <scale>` | 存入方塊實體 (Block Entity) NBT. |
+| `entity` | `<target> <path> <type> <scale>` | 存入實體 (Entity) NBT. |
+| `storage` | `<id> <path> <type> <scale>` | 存入全域儲存空間 (Command Storage). |
 
 ---
 
-### 4. 參數之枚舉參數值表
+## 資料包結構參考 (Datapack Structure)
 
-#### 實體身體錨點 (Anchor Points)
+### 謂詞 (Predicates)
+若使用 `if predicate`, 資源檔案路徑應為:
+`data/<namespace>/predicates/<name>.json`
 
-| 參數 | 說明 |
-| --- | --- |
-| `eyes` | 實體的眼睛中心點位置（通常為視線發射源基準） |
-| `feet` | 實體的雙腳著地點位置（實體的絕對基準座標點） |
-
-#### 地形結構 (Heightmaps)
-
-| 參數 | 說明 |
-| --- | --- |
-| `world_surface` | 世界的最表層（包含任何非空氣方塊，如樹葉、火把、最高固體方塊） |
-| `motion_blocking` | 阻擋運動的地形表層（包含固體方塊、液體水與岩漿，忽略草叢與火把） |
-| `motion_blocking_no_leaves` | 阻擋運動且忽略樹葉的地形表層（常用於跳過樹冠直接定位地表） |
-| `ocean_floor` | 海洋底部表層（非固體方塊除外，直接穿過水層定位到最底部的海床固體方塊） |
-
-#### 空間維度名稱 (Dimensions)
-
-| 參數 | 說明 |
-| --- | --- |
-| `minecraft:overworld` | 主世界（常規世界） |
-| `minecraft:the_nether` | 地獄（下界） |
-| `minecraft:the_end` | 終界（末地） |
-
-#### 區域方塊比對模式 (Blocks Comparison Modes)
-
-| 參數 | 說明 |
-| --- | --- |
-| `all` | 嚴格模式：兩個區域內的所有方塊（包含空氣方塊）必須完全一模一樣。 |
-| `masked` | 忽略空氣模式：只比對源區域內非空氣的方塊，目的地對應位置若是空氣則直接跳過比對。 |
-
-#### 分數對比符號 (Score Operators)
-
-| 參數 | 說明 |
-| --- | --- |
-| `<` | 小於 |
-| `<=` | 小於或等於 |
-| `=` | 等於 |
-| `>` | 大於 |
-| `>=` | 大於或等於 |
-
-#### 儲存數據模式 (Store Modes)
-
-| 參數 | 說明 |
-| --- | --- |
-| `result` | 數據回傳值：儲存後續指令回傳的具體執行數值（例如 `/data get` 讀出的數值、查詢的分數、清除了多少個物品）。 |
-| `success` | 成功狀態碼：儲存後續指令是否執行成功。成功存入 `1`，失敗則存入 `0`。 |
-
-#### Boss 血條修改屬性 (Bossbar Properties)
-
-| 參數 | 說明 |
-| --- | --- |
-| `value` | 血條的當前數值欄位 |
-| `max` | 血條的最大上限數值欄位 |
-
-#### NBT 資料儲存型態 (Data Types)
-
-| 參數 | 說明 |
-| --- | --- |
-| `byte` | 1 位元有號整數 |
-| `short` | 2 位元有號整數 |
-| `int` | 4 位元有號整數 |
-| `long` | 8 位元有號整數 |
-| `float` | 單精度浮點數 |
-| `double` | 雙精度浮點數 |
+### 函式 (Functions)
+若使用 `run function` 或 `if function`, 資源檔案路徑應為:
+`data/<namespace>/functions/<name>.mcfunction`
 
 ---
 
-## 數值規則
+## 外部連結 (References)
 
-### 朝向角度 (Rotations)
-
-| 參數 | 說明 |
-| --- | --- |
-| `<水平偏航角>` | 最小值 -180.0 最大值 180.0 是否支援負數 是 預設值 0.0（正南為 0，正西為 90，正北為 180/-180，正東為 -90） |
-| `<垂直俯仰角>` | 最小值 -90.0 最大值 90.0 是否支援負數 是 預設值 0.0（正下為 90，水平為 0，正上為 -90） |
-
-### 分數常數判定範圍 (Score Matches)
-
-| 參數 | 說明 |
-| --- | --- |
-| `<整數>` | 精確等於該特定分數。 |
-| `<整數>..` | 大於或等於該整數分數（上限為 2147483647）。 |
-| `..<整數>` | 小於或等於該整數分數（下限為 -2147483648）。 |
-| `<低值>..<高值>` | 介於低值與高值之間的閉區間範圍（包含兩端點數值）。 |
-
-### 儲存縮放比例 (Store Scale)
-
-| 參數 | 說明 |
-| --- | --- |
-| `<數值>` | 最小值：無限制（不可為 0.0） / 最大值：無限制 / 支援負數：是 / 預設值：1.0 / 註：將取得的執行數值先乘以該係數後，再精確寫入目標 NBT 欄位。 |
-
----
-
-## 跨元素語法關聯表 (Links Matrix)
-
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| `<目標>` / `<源目標>` | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<座標>` / `<起始>` / `<結束>` / `<目的地>` | [空間座標系統全指南 (Coordinates)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md) |
+* [Minecraft Wiki - /execute](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/execute)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
+* [座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
+* [方塊狀態與標籤 (Block States & Tags)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/BlockStates_or_Tags.md)
+* [實體 ID (Entity IDs)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Entity_IDs.md)
+* [實體 NBT 矩陣 (Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
+* [方塊實體 NBT 矩陣 (Block Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
