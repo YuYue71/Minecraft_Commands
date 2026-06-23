@@ -1,0 +1,10 @@
+{
+    "pack": {
+        "pack_format": 26,
+        "supported_formats": {
+            "min_inclusive": 18,
+            "max_inclusive": 48
+        },
+        "description": "RandomNumbers - 全域動態亂數引擎\n相容版本: 1.20.2+\n作者:幽月YuYue"
+    }
+}

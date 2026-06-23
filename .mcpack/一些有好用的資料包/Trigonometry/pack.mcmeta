@@ -1,0 +1,10 @@
+{
+    "pack": {
+        "pack_format": 26,
+        "supported_formats": {
+            "min_inclusive": 18,
+            "max_inclusive": 48
+        },
+        "description": "Trigonometry - 核心三角函數查表庫 (放大1000倍)\n相容版本: 1.20.2+\n作者:幽月YuYue"
+    }
+}
