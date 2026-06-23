@@ -15,7 +15,7 @@
 
 ## 語法 (Syntax)
 
-```text
+```commands
 /jfr start
 /jfr stop
 
