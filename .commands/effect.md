@@ -33,7 +33,7 @@
 | `clear` / `give` | `enum` | - | 決定要清除還是給予狀態效果 |
 | `<targets>` | `entity` | - | 欲改變狀態效果的目標實體 |
 | `[effect]` / `<effect>` | `string` | 所有效果 | 欲操作的狀態效果 ID |
-| `[duration]` | `int|string` | `30` | 效果持續的時間 |
+| `[duration]` | `int\|string` | `30` | 效果持續的時間 |
 | `[amplifier]` | `int` | `0` | 效果的等級倍率 |
 | `[hideParticles]` | `boolean` | `false` | 是否隱藏效果產生的粒子與右上角圖示 |
 
