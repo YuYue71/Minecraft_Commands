@@ -16,7 +16,7 @@
 
 ## 語法 (Syntax)
 
-```text
+```commands
 /debug start
 /debug stop
 /debug function <name>
