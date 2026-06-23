@@ -119,3 +119,9 @@
     * `[實體 NBT 矩陣 (Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)`
     * `[方塊實體 NBT 矩陣 (Block Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)`
     * `[物品 NBT 矩陣 (Items)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)`
+
+
+7. 無外部組件映射之窮舉處理原則 (Inline Exhaustive List Fallback):
+   - 觸發條件: 當指令包含需要列舉的特定 ID, 參數或資料清單 (如進度 ID, 遊戲規則等), 且該項目 **不在** 第 6 項「全域系統自動映射」的外部連結清單中時.
+   - 處理動作: 絕對不可要求讀者自行去 Wiki 查詢或僅提供零星範例。必須直接在該指令文件的 `參數說明` 下方，新增一個獨立區塊 (例如 `## 原版 [項目名稱] 清單`).
+   - 排版要求: 必須將所有原版資料使用高密度的「分類標題 (###)」與「Markdown 矩陣表格」進行歸納排版, 確保清單完整, 直觀且無冗餘贅字.
