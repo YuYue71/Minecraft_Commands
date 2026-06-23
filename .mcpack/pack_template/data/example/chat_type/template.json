@@ -1,0 +1,20 @@
+{
+    "chat": {
+        "translation_key": "chat.type.text",
+        "parameters": [
+            "sender",
+            "content"
+        ],
+        "style": {
+            "color": "gray",
+            "italic": false
+        }
+    },
+    "narration": {
+        "translation_key": "chat.type.text.narrate",
+        "parameters": [
+            "sender",
+            "content"
+        ]
+    }
+}
