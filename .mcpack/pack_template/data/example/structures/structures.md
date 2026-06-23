@@ -28,7 +28,7 @@ data/<namespace>/structures/[子資料夾]/<檔案名稱>.nbt
 * `<namespace>` = 命名空間 (如 `minecraft`, `example`)
 * `[子資料夾]` = 開發者自訂的分類目錄 (選填)
 * `<檔案名稱>` = 決定遊戲內調用該結構的 ID 名稱
-* 遊戲內調用格式為: `<namespace>:[子資料夾/]<檔案名稱>` (例如 `example:houses/small_shack`)
+* 遊戲內調用格式為: `<namespace>:[子資料夾]/<檔案名稱>` (例如 `example:houses/small_shack`)
 
 ---
 
