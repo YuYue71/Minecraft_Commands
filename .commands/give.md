@@ -67,6 +67,7 @@
 ## 外部連結 (References)
 
 * [Minecraft Wiki - /give](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/give)
+* [Minecraft Wiki - 方塊物品ID](https://zh.minecraft.wiki/w/Java%E7%89%881.13/%E6%89%81%E5%B9%B3%E5%8C%96#%E6%96%B9%E5%9D%97%E5%92%8C%E7%89%A9%E5%93%81ID)
 * [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
 * [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
 * [物品 NBT 矩陣 (Items)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
