@@ -1,59 +1,49 @@
-# `/teammsg`（隊伍訊息指令）
-* > 用於向執行指令者當前所屬隊伍的所有成員發送私密訊息
-* > 只有與發送者處於同一個 Scoreboard 隊伍（Team）的玩家才能看見該訊息
-* > 常用於多人對抗地圖、PVP 競賽、團隊副本內部的指令自動化溝通與戰術通報
+# /teammsg
+
+> **分類:** `指令` | **權限等級:** `0` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="teammsg"
-/teammsg <訊息>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [message](#message)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/teammsg <message>
+
 ```
 
----
+* `<>` = 必填. 此指令具備簡寫別名 `/tm`, 兩者功能與語法完全相同.
 
-## 縮寫別名 (Aliases)
-
-```commands id="tm"
-/tm <訊息>
-
-```
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `<message>` | `string` | - | 欲發送給同隊隊伍成員的訊息內容 |
 
 ---
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
+## 參數說明 (Parameters)
 
-| 參數名稱 | 功能與語義說明 |
-| --- | --- |
-| `[必填]` `<訊息>` | 要發送給同隊成員的文字內容。若執行者當下未加入任何隊伍，指令將拒絕執行並拋出錯誤提示 |
+### `message`
 
----
+> 指定要發送給同一個計分板隊伍 (Scoreboard Team) 玩家的專屬文字訊息.
 
-## 參數枚舉列表 (Parameter Enumeration)
-
-### 訊息
-
-| 參數 | 說明 |
-| --- | --- |
-| `<文字內容>` | 自由輸入的純文字字串，支援包含空格的多個單字 |
-| `<目標選擇器>` | 支援在訊息中嵌入目標選擇器（例如輸入 `目前擊殺目標為 @p`，執行時會自動將 `@p` 解析為符合條件的玩家名稱） |
+* 允許直接包含空格, 且不需要使用引號包覆整段文字.
+* 發送後, 只有與執行者處於相同隊伍的玩家才能在聊天框中看見此訊息, 其他隊伍或無隊伍的玩家完全無法察覺.
+* 訊息的顯示格式通常會帶有隊伍前綴 (例如 `[隊伍名稱] <發送者名稱> 訊息內容`), 並且會自動套用該隊伍所設定的專屬顏色 (Team Color).
+* 若執行此指令的實體或玩家本身並未加入任何隊伍, 系統將會直接回傳錯誤提示 (您不在任何隊伍中), 且訊息不會被發送.
+* 支援使用目標選擇器 (如 `@a`, `@p`). 若訊息中包含目標選擇器 (例如 `/teammsg 請掩護 @p`), 系統會在發送時自動將其解析為對應的目標實體名稱顯示出來.
+* 在快速節奏的小遊戲或 PvP 戰鬥中, 玩家可以直接使用別名指令 `/tm <message>` 來進行團隊溝通, 以節省打字時間.
 
 ---
 
-## 運作邏輯與邊界行為
+## 外部連結 (References)
 
-### 執行限制與規則
-
-* **隊伍依賴性**：執行此指令的實體（玩家或經由 `execute as` 指定的實體）必須已加入某個 Scoreboard 隊伍。若無隊伍，系統會回傳錯誤訊息。
-* **命令方塊限制**：若由命令方塊或伺服器主控台直接執行此指令，由於其本身不屬於任何隊伍，除非透過 `/execute as <玩家> run teammsg <訊息>` 進行身分偽裝，否則無法直接發送。
-* **文字格式化**：接收到的隊伍訊息在聊天欄中通常會帶有特殊的隊伍前後綴（例如 `[隊伍名稱] <玩家名> 訊息內容`），且文字顏色會自動匹配該隊伍所設定的代表顏色。
-
----
-
-## 跨元素語法關聯表 (Links Matrix)
-
-| 關聯參數欄位 | 參引語法元件名稱 |
-| --- | --- |
-| `<訊息>`（內嵌選擇器時） | [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<訊息>` | [聊天與文本系統 (Chat and Text System)](https://www.google.com/search?q=https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/chat_system.md) |
+* [Minecraft Wiki - /teammsg](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/teammsg)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
