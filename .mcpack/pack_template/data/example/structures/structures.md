@@ -6,14 +6,14 @@
 
 ## 目錄
 
-* [目錄路徑](#)
-* [核心結構](#)
-* [節點說明](#)
-    * [size (尺寸)](#)
-    * [blocks (方塊列表)](#)
-    * [palette (調色盤)](#)
-    * [entities (實體)](#)
-* [外部連結](#)
+* [目錄路徑](#目錄路徑-directory--path)
+* [核心結構](#核心結構-core-structure)
+* [節點說明](#節點說明-node-explanations)
+    * [size (尺寸)](#size)
+    * [blocks (方塊列表)](#blocks-list)
+    * [palette (調色盤)](#palette-list)
+    * [entities (實體)](#entities-list)
+* [外部連結](#外部連結-references)
 
 ---
 
