@@ -11,7 +11,7 @@
 * [節點說明](#節點說明-node-explanations)
     * [指令與語法](#指令與語法)
     * [巨集系統 (Macros)](#巨集系統-macros)
-* [外部連結](#)
+* [外部連結](#外部連結-references)
 
 ---
 
@@ -91,4 +91,4 @@ $give @s $(item){Count:1}
 * [實體 NBT 矩陣 (Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
 * [方塊實體 NBT 矩陣 (Block Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
 * [物品 NBT 矩陣 (Items)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
-* [/function](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/function.md)
+* [函式指令 (function)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/function.md)
