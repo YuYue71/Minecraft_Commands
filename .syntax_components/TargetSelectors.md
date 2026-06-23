@@ -74,3 +74,4 @@
 ## 外部連結 (References)
 
 * [Minecraft Wiki - 目標選擇器](https://minecraft.fandom.com/zh/wiki/%E7%9B%AE%E6%A0%87%E9%80%89%E6%8B%A9%E5%99%A8?variant=zh-tw)
+* [實體 ID (Entity IDs)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/Entity_IDs.md)
