@@ -133,3 +133,11 @@
 8. 管道符號跳脫原則 (Pipe Character Escaping):
    - 觸發條件: 當需要在 Markdown 表格的儲存格內部顯示垂直線 `|` 時 (例如表示二擇一的參數 `[A|B]`).
    - 處理動作: 必須強制使用反斜線進行跳脫, 寫成 `\|` (例如 `[A\|B]`), 絕對不可直接輸出純 `|`, 以防止表格渲染結構損毀.
+
+
+9. 資料包引用與結構說明原則 (Datapack Reference Rules):
+   - 觸發條件: 當指令的參數涉及依賴資料包 (Datapack) 定義的動態資源 (如 Loot Tables, Recipes, Advancements, Predicates, Item Modifiers, Functions 等) 時.
+   - 處理動作: 
+     1. 必須在參數表的「說明」欄位內明確標註「需透過資料包定義」.
+     2. 必須在該指令文件內部 (`## 外部連結` 的上方), 新增一個獨立的 `## 資料包結構參考 (Datapack Structure)` 區塊.
+   - 排版要求: 在該獨立區塊內, 必須列出該資源在資料包中的「標準目錄路徑」 (例如 `data/<namespace>/loot_tables/`), 並提供其 JSON 檔案的核心結構範例或關鍵節點說明, 以確保讀者能確實理解如何建立該資源.
