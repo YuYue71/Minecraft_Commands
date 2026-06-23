@@ -1,116 +1,128 @@
-# `/bossbar`（魔王血條控制指令）
-* > 用於建立、修改、刪除或查詢自訂的魔王血條（Bossbar）
-* > 可動態調整血條的顏色、外觀樣式、數值與可見性
-* > 常用於地圖製作、RPG 伺服器與小遊戲內建的視覺提示
+# `/bossbar`
 
-
+> **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.20.4` | **命令方塊:** `true`
 
 ---
 
-## 語法結構 (Syntax)
-```commands id="bossbar0"
-/bossbar <操作> <識別碼> <屬性> <值>
+## 目錄
+
+* [語法](#語法-syntax)
+* [參數說明](#參數說明-parameters)
+    * [動作類型 (add, get, list, remove, set)](#動作類型-add-get-list-remove-set)
+    * [id 與 name](#id-與-name)
+    * [set 分支參數設定](#set-分支參數設定)
+* [原版 Bossbar 顏色清單](#原版-bossbar-顏色清單)
+* [原版 Bossbar 樣式清單](#原版-bossbar-樣式清單)
+* [外部連結](#外部連結-references)
+
+---
+
+## 語法 (Syntax)
+
+```commands
+/bossbar add <id> <name>
+/bossbar get <id> max
+/bossbar get <id> players
+/bossbar get <id> value
+/bossbar get <id> visible
+/bossbar list
+/bossbar remove <id>
+/bossbar set <id> color <color>
+/bossbar set <id> max <max>
+/bossbar set <id> name <name>
+/bossbar set <id> players [players]
+/bossbar set <id> style <style>
+/bossbar set <id> value <value>
+/bossbar set <id> visible <visible>
+
 ```
 
----
+* `<>` = 必填, `[]` = 選填
 
-## 參數與引數拆解 (Arguments)
-> 詳細解構語法中出現的每一個變數之填寫規範與底層資料型態
-
-| 參數名稱 | 功能與語義說明 |
-| --- | --- |
-| `[必填]` `<操作>` | 指定魔王血條的管理動作 |
-| `[必填]` `<識別碼>` | 該魔王血條的唯一命名空間 ID |
-| `[選填]` `<屬性>` | 在變更屬性模式下，指定要修改的血條設定項 |
-| `[選填]` `<值>` | 根據操作或屬性所填入的對應設定數值或內容 |
-
----
-
-## 參數枚舉列表 (Parameter Enumeration)
-
-### 操作
-
-| 參數 | 說明 |
-| --- | --- |
-| `add` | 建立一個新的魔王血條 |
-| `remove` | 刪除一個現存的魔王血條 |
-| `list` | 列出當前所有已建立的魔王血條 |
-| `get` | 查詢指定魔王血條的特定數值設定 |
-| `set` | 修改指定魔王血條的各項屬性值 |
+| 參數 / 欄位 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `add` / `get` / `list` / `remove` / `set` | `enum` | - | 決定對自訂 Bossbar 執行的操作類型 |
+| `<id>` | `string` | - | 指定 Bossbar 的命名空間與唯一 ID |
+| `<name>` | `json` | - | Bossbar 顯示的標題文字 |
+| `max` / `players` / `value` / `visible` | `enum` | - | `get` 或 `set` 操作的屬性分支 |
+| `color` / `style` / `name` | `enum` | - | `set` 操作的樣式設定分支 |
+| `<color>` | `enum` | `white` | Bossbar 的視覺顏色 |
+| `<style>` | `enum` | `progress` | Bossbar 的分段刻度樣式 |
+| `<max>` | `int` | `100` | Bossbar 的最大值 (必須大於 0) |
+| `<value>` | `int` | `0` | Bossbar 的當前值 |
+| `<visible>` | `boolean` | `true` | 是否顯示此 Bossbar |
+| `[players]` | `entity` | 無 | 能看見此 Bossbar 的目標玩家 |
 
 ---
 
-### 屬性（僅在 set 操作時使用）
+## 參數說明 (Parameters)
 
-| 參數 | 說明 |
+### `動作類型 (add, get, list, remove, set)`
+
+> 決定要對自訂 Bossbar 執行何種操作.
+
+| 值 | 說明 |
 | --- | --- |
-| `color` | 變更血條的文字與條體顏色 |
-| `max` | 設定血條的最大上限值 |
-| `name` | 修改血條顯示的中文名稱（支援 JSON 文本） |
-| `players` | 指定哪些玩家可以看見這個血條 |
-| `style` | 變更血條的分段外觀樣式 |
-| `value` | 設定血條當前的數值（當前血量） |
-| `visible` | 控制血條是否對指定玩家顯示（可見性） |
+| `add` | 建立一個全新的 Bossbar. 建立時必須指定 ID 與顯示名稱. |
+| `get` | 獲取現有 Bossbar 的特定屬性數值 (如當前血量). 這些數值可以被指令方塊或資料包捕捉並用於後續運算. |
+| `list` | 於聊天框中列出當前世界內所有已建立的自訂 Bossbar ID. |
+| `remove` | 完全刪除一個已存在的 Bossbar. |
+| `set` | 針對已存在的 Bossbar, 修改其外觀, 數值或可見性等屬性. |
 
 ---
 
-### 屬性值：color（顏色）
+### `id` 與 `name`
 
-| 參數 | 說明 |
-| --- | --- |
-| `blue` | 藍色 |
-| `green` | 綠色 |
-| `pink` | 粉紅色 |
-| `purple` | 紫色 |
-| `red` | 紅色（預設值） |
-| `white` | 白色 |
-| `yellow` | 黃色 |
+> 定義 Bossbar 的系統代碼與玩家看到的標題文字.
+
+* `id`: 作為系統識別該 Bossbar 的唯一代碼. 必須符合標準的資源位置格式 (如 `minecraft:custom_boss`). 在自訂建立時通常可省略前綴直接寫 `custom_boss`, 系統會自動將其歸類為 `minecraft:custom_boss`.
+* `name`: 顯示在 Bossbar 上方的文字標題. 此欄位完全支援 JSON 文本元件格式, 允許自訂顏色, 粗體斜體, 甚至插入分數與多國語言 (例如 `{"text":"最終決戰","color":"red","bold":true}`).
 
 ---
 
-### 屬性值：style（樣式）
+### `set 分支參數設定`
 
-| 參數 | 說明 |
-| --- | --- |
-| `progress` | 連續的不分段血條（預設值） |
-| `notched_6` | 分為 6 段的血條 |
-| `notched_10` | 分為 10 段的血條 |
-| `notched_12` | 分為 12 段的血條 |
-| `notched_20` | 分為 20 段的血條 |
+> 使用 `set` 指令時, 可以修改的具體屬性項目.
 
----
-
-### 屬性值：visible（可見性）
-
-| 參數 | 說明 |
-| --- | --- |
-| `true` | 設定為顯示（可見） |
-| `false` | 設定為隱藏（不可見） |
+* `color`: 更改 Bossbar 本身的顏色.
+* `style`: 更改 Bossbar 的刻度與視覺分段樣式 (常見於不同階段的 Boss 戰).
+* `max`: 設定血條的上限值 (代表 100% 滿血時的數值). 預設為 100.
+* `value`: 設定血條當前的數值. 當此數值等於 `max` 時, 血條將呈現全滿狀態; 數值為 0 時則為空血.
+* `visible`: 切換該 Bossbar 的顯示狀態. 若設為 `false`, 即使玩家被加入到顯示名單內也無法看見該血條.
+* `players`: 指定哪些玩家可以看見這條 Bossbar. 支援目標選擇器 (如 `@a`, `@p`). 若執行 `/bossbar set <id> players` 且不填寫任何玩家參數, 則等同於清空顯示名單, 不會有任何玩家看見.
 
 ---
 
-### 識別碼 與 屬性值：name
+## 原版 Bossbar 顏色清單
 
-| 參數 | 說明 |
-| --- | --- |
-| `<namespace:id>` | 唯一識別碼，格式為 `命名空間:英文識別碼`（例如 `mymap:boss_dragon`） |
-| `<文字內容>` | 支援包含顏色、粗體等屬性的 Raw JSON 文本結構（例如 `{"text":"終界使者","color":"purple"}`） |
+### 顏色 (Color)
 
----
-
-## 數值規則
-
-### 最大值 與 當前值 (max / value)
-
-| 參數 | 說明 |
-| --- | --- |
-| `<數值>` | 最小值：0 / 最大值：2147483647 / 支援負數：否 / 預設最大值：100 / 預設當前值：0 |
+| 顏色 ID | 說明 | 顏色 ID | 說明 |
+| --- | --- | --- | --- |
+| `blue` | 藍色 | `green` | 綠色 |
+| `pink` | 粉紅色 | `purple` | 紫色 |
+| `red` | 紅色 | `white` | 白色 (預設值) |
+| `yellow` | 黃色 |  |  |
 
 ---
 
-## 跨元素語法關聯表 (Links Matrix)
+## 原版 Bossbar 樣式清單
 
-| 關聯參數欄位 | 參引語法元件名稱 |
+### 樣式 (Style)
+
+| 樣式 ID | 說明 |
 | --- | --- |
-| `<值>`（當屬性為 players 時） | [目標選擇器 (Target Selectors)](https://www.google.com/search?q=https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/target_selectors.md) |
-| `<值>`（當屬性為 name 時） | [Raw JSON 文本 NBT 格式 (Legacy Text Component)](https://www.google.com/search?q=https%3A%2F%2Fgithub.com%2FYuYue71%2FMinecraft_Commands%2Fblob%2Fmain%2F.data_structures%2Fnbt_legacy%2Ftext_components_legacy.md) |
+| `progress` | 連續無分段的進度條 (預設值) |
+| `notched_6` | 分為 6 個格段的血條 |
+| `notched_10` | 分為 10 個格段的血條 |
+| `notched_12` | 分為 12 個格段的血條 |
+| `notched_20` | 分為 20 個格段的血條 |
+
+---
+
+## 外部連結 (References)
+
+* [Minecraft Wiki - /bossbar](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/bossbar)
+* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
+* [JSON 文本元件 (Raw JSON Text Components)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/json_text.md)
+* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
