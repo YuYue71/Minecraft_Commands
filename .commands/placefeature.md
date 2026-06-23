@@ -1,4 +1,4 @@
-# `/placefeature`
+# /placefeature
 
 > **分類:** `指令` | **權限等級:** `2` | **適用版本:** `JE ≤ 1.19.2` | **命令方塊:** `true`
 > **[!] 棄用警告 (Deprecation Notice):** 此指令已於 Java Edition 1.19.3 被完全移除, 並整併入全新的 `/place` 指令中. 若您的伺服器或製圖環境為 1.19.3 或更高版本, 請改為使用 `/place feature <feature> [pos]`.
