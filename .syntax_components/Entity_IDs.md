@@ -110,3 +110,5 @@
 ## 外部連結 (References)
 
 * [Minecraft Wiki - 實體ID](https://minecraft.fandom.com/zh/wiki/Java%E7%89%88%E6%95%B0%E6%8D%AE%E5%80%BC/%E5%AE%9E%E4%BD%93ID?variant=zh-tw)
+* [實體生成 (summon)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/summon.md)
+* [實體 NBT](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
