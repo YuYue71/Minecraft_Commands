@@ -7,10 +7,10 @@
 ## 目錄
 
 * [附魔類型](#附魔類型-id-enchantments)
-    * [裝備與防具附魔](https://www.google.com/search?q=%23)
-    * [近戰武器附魔](https://www.google.com/search?q=%23)
-    * [遠程武器附魔](https://www.google.com/search?q=%23)
-    * [工具與通用附魔](https://www.google.com/search?q=%23)
+    * [裝備與防具附魔](#裝備與防具附魔-armor)
+    * [近戰武器附魔](#近戰武器附魔-melee-weapons)
+    * [遠程武器附魔](#遠程武器附魔-ranged-weapons)
+    * [工具與通用附魔](#工具與通用附魔-tools--general)
 * [外部連結](#外部連結-references)
 
 ---

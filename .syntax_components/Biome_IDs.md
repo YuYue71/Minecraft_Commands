@@ -5,15 +5,15 @@
 
 ## 目錄
 
-* [主世界 - 溫帶與平原 (Overworld: Temperate)](https://www.google.com/search?q=%23)
-* [主世界 - 森林與叢林 (Overworld: Forests)](https://www.google.com/search?q=%23)
-* [主世界 - 乾旱與沙漠 (Overworld: Dry)](https://www.google.com/search?q=%23)
-* [主世界 - 寒帶與雪地 (Overworld: Cold)](https://www.google.com/search?q=%23)
-* [主世界 - 山崖與地貌 (Overworld: Mountains)](https://www.google.com/search?q=%23)
-* [主世界 - 水域與海岸 (Overworld: Oceans & Shores)](https://www.google.com/search?q=%23)
-* [主世界 - 洞穴與地底 (Overworld: Caves)](https://www.google.com/search?q=%23)
-* [幽冥 (The Nether)](https://www.google.com/search?q=%23)
-* [終界 (The End)](https://www.google.com/search?q=%23)
+* [主世界 - 溫帶與平原 (Overworld: Temperate)](#主世界---溫帶與平原-overworld-temperate)
+* [主世界 - 森林與叢林 (Overworld: Forests)](#主世界---森林與叢林-overworld-forests)
+* [主世界 - 乾旱與沙漠 (Overworld: Dry)](#主世界---乾旱與沙漠-overworld-dry)
+* [主世界 - 寒帶與雪地 (Overworld: Cold)](#主世界---寒帶與雪地-overworld-cold)
+* [主世界 - 山崖與地貌 (Overworld: Mountains)](#主世界---山崖與地貌-overworld-mountains)
+* [主世界 - 水域與海岸 (Overworld: Oceans & Shores)](#主世界---水域與海岸-overworld-oceans--shores)
+* [主世界 - 洞穴與地底 (Overworld: Caves)](#主世界---洞穴與地底-overworld-caves)
+* [地獄 (The Nether)](#地獄-the-nether)
+* [終界 (The End)](#終界-the-end)
 
 ---
 
@@ -81,7 +81,7 @@
 | `dripstone_caves` | 鐘乳石洞 | `lush_caves` | 繁茂洞穴 |
 | `deep_dark` | 幽暗深淵 |  |  |
 
-### 幽冥 (The Nether)
+### 地獄 (The Nether)
 
 | 生態域 ID | 說明 | 生態域 ID | 說明 |
 | --- | --- | --- | --- |

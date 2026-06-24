@@ -12,6 +12,7 @@
 * [敵對生物標籤](#敵對生物標籤-hostile-mobs)
 * [載具與非生物物件標籤](#載具與非生物物件標籤-vehicles--objects)
     * [盔甲座 Pose 結構](#盔甲座-pose-結構)
+    * [展示實體 Transformation 結構](#展示實體-transformation-結構)
 * [外部連結](#外部連結-references)
 
 ---
@@ -20,25 +21,20 @@
 
 ```snbt
 {
-    id: "minecraft:villager",
-    VillagerData: {
-        level: 2,
-        profession: "minecraft:cleric",
-        type: "minecraft:plains"
+    id: "minecraft:block_display",
+    block_state: {
+        Name: "minecraft:diamond_block",
+        Properties: {snowy: "false"}
     },
-    Offers: {
-        Recipes: [
-            {
-                buy: {id: "minecraft:rotten_flesh", Count: 32b},
-                sell: {id: "minecraft:emerald", Count: 1b},
-                maxUses: 16,
-                uses: 0,
-                rewardExp: 1b
-            }
-        ]
-    }
+    transformation: {
+        translation: [0.0f, 0.5f, 0.0f],
+        scale: [2.0f, 2.0f, 2.0f],
+        left_rotation: [0.0f, 0.0f, 0.0f, 1.0f],
+        right_rotation: [0.0f, 0.0f, 0.0f, 1.0f]
+    },
+    interpolation_duration: 20,
+    brightness: {block: 15, sky: 15}
 }
-
 ```
 
 * SNBT 格式, 適用於 `/summon`, `/data get/merge/modify entity` 指令.
@@ -109,10 +105,17 @@
 
 ## 載具與非生物物件標籤 (Vehicles & Objects)
 
-> 不具備常規生命值與 AI 的物理實體, 如掉落物, 盔甲座, 礦車.
+> 不具備常規生命值與 AI 的物理實體, 如掉落物, 展示實體, 盔甲座.
 
 | 實體類型 | 標籤 (Tag) | 類型 | 說明 |
 | --- | --- | --- | --- |
+| **展示實體** | `block_state` | `compound` | **僅限 block_display**: 定義顯示的方塊種類 (包含 `Name` 與 `Properties`) |
+| `(display)` | `item` | `compound` | **僅限 item_display**: 顯示的物品 NBT 資料 |
+|  | `text` | `string` | **僅限 text_display**: 顯示的 JSON 文本內容 |
+|  | `transformation` | `compound` | 定義縮放, 平移與旋轉矩陣 (見下方結構說明) |
+|  | `interpolation_duration` | `int` | 動畫插值持續刻數, 用於實現平滑移動或變形 |
+|  | `brightness` | `compound` | 覆寫顯示亮度 (包含 `block` 與 `sky` 數值, 範圍 0-15) |
+|  | `billboard` | `string` | 看板模式: `fixed`, `vertical`, `horizontal`, `center` |
 | **掉落物 (item)** | `Item` | `compound` | 掉落物本身的物品數據 (包含 `id`, `Count`, `tag`) |
 |  | `Age` | `short` | 掉落物存在的刻數 (達到 6000s, 即 5 分鐘時會消失) |
 |  | `PickupDelay` | `short` | 玩家無法拾取的冷卻刻數 (玩家按 Q 丟出時預設為 40s) |
@@ -146,8 +149,21 @@
 | --- | --- | --- | --- |
 | `Head` | `list` | `[0f,0f,0f]` | 頭部旋轉角度 |
 | `Body` | `list` | `[0f,0f,0f]` | 身體主幹旋轉角度 |
-| `LeftArm` / `RightArm` | `list` | `[...]` | 左右手臂旋轉角度 (預設左手為 `[-10f,0f,-10f]`, 右手為 `[-15f,0f,10f]`) |
-| `LeftLeg` / `RightLeg` | `list` | `[...]` | 左右腿部旋轉角度 (預設左腿為 `[-1f,0f,-1f]`, 右腿為 `[1f,0f,1f]`) |
+| `LeftArm` / `RightArm` | `list` | `[...]` | 左右手臂旋轉角度 |
+| `LeftLeg` / `RightLeg` | `list` | `[...]` | 左右腿部旋轉角度 |
+
+---
+
+### `展示實體 Transformation` 結構
+
+> 控制展示實體 (Display Entities) 的幾何變換.
+
+| 子標籤 | 類型 | 預設 | 說明 |
+| --- | --- | --- | --- |
+| `translation` | `list (float)` | `[0f,0f,0f]` | 平移位移量 `[X, Y, Z]` |
+| `scale` | `list (float)` | `[1f,1f,1f]` | 縮放倍率 `[X, Y, Z]` |
+| `left_rotation` | `list (float)` | `[0f,0f,0f,1f]` | 左旋轉四元數 `[x, y, z, w]` |
+| `right_rotation` | `list (float)` | `[0f,0f,0f,1f]` | 右旋轉四元數 `[x, y, z, w]` |
 
 ---
 
