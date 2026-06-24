@@ -1,7 +1,3 @@
-好的, 這是 `block_entities` (方塊實體矩陣) 的最後一項: **視覺與裝飾 (Visual & Decor)**.
-
----
-
 # 視覺與裝飾方塊實體 NBT (Visual & Decor Block Entities NBT)
 
 > **分類:** `NBT` | **適用版本:** `JE ≤ 1.20.4`
