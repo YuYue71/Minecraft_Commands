@@ -1,94 +1,73 @@
-# functions (函式)
+# functions (函式腳本)
 
-> **分類:** `資料包元素` | **檔案格式:** `mcfunction` | **命名空間支援:** `true` | **熱重載:** `/reload`
+> **分類:** `函式巨集` | **檔案格式:** `mcfunction` | **適用版本:** `JE ≤ 1.20.4` | **熱重載:** `/reload`
 
 ---
 
 ## 目錄
 
-* [目錄路徑](#目錄路徑-directory--path)
-* [核心結構](#核心結構-core-structure)
-* [節點說明](#節點說明-node-explanations)
-    * [指令與語法](#指令與語法)
-    * [巨集系統 (Macros)](#巨集系統-macros)
-* [外部連結](#外部連結-references)
+* [1. 目錄路徑 (Directory & Path)](#1-目錄路徑-directory--path)
+* [2. 語法規範 (Syntax Rules)](#2-語法規範-syntax-rules)
+* [3. 執行環境與上下文 (Execution Context)](#3-執行環境與上下文-execution-context)
+* [4. 標籤調用 (Function Tags)](#4-標籤調用-function-tags)
+* [5. 外部連結 (References)](#5-外部連結-references)
 
 ---
 
-## 目錄路徑 (Directory & Path)
+## 1. 目錄路徑 (Directory & Path)
 
-> 說明該元素檔案在資料包內部的標準存放位置.
+> 定義函式檔案在資料包中的物理位置與遊戲內調用路徑.
 
 ```file
 data/<namespace>/functions/[子資料夾]/<檔案名稱>.mcfunction
 ```
 
-* `<namespace>` = 命名空間 (如 `minecraft`, `example`)
-* `[子資料夾]` = 開發者自訂的分類目錄 (選填)
-* `<檔案名稱>` = 決定遊戲內調用該元素的 ID 名稱
-* 遊戲內調用格式為: `<namespace>:[子資料夾/]<檔案名稱>` (例如 `example:magic/fireball`)
+* `<namespace>`: 命名空間 (如 `minecraft`, `example`).
+* `[子資料夾]`: 可選, 用於指令腳本的分類管理.
+* 調用指令: `/function <namespace>:[子資料夾]/<檔案名稱>`.
+* 標籤調用: `/function #<namespace>:[子資料夾]/<標籤名稱>`.
 
 ---
 
-## 核心結構 (Core Structure)
+## 2. 語法規範 (Syntax Rules)
 
-> 函式由一系列純文字指令組成, 每行一條指令. 支援註解與 1.20+ 的巨集語法.
+> 函式檔案為純文字格式, 每行指令皆在同一遊戲刻 (Tick) 內按順序執行.
 
-```mcfunction
-# 這是註解 (Comment)
-# 每一行代表一條指令
-say 執行函式中...
-execute as @a run particle flame ~ ~ ~ 0.5 0.5 0.5 0.1 10
-
-# 巨集範例 (Macro) - 1.20+
-$say 傳入的參數值為: $(value)
-$give @s $(item){Count:1}
-```
-
-* 函式執行時具備原子性 (Atomicity), 所有指令會在同一個遊戲刻 (Tick) 內按順序執行.
-
-| 語法元素 | 類型 | 說明 |
-| --- | --- | --- |
-| `#` | `Comment` | 註解行, 執行時會被忽略 |
-| `$` | `Macro` | 巨集標記, 允許從 NBT 傳入參數 (1.20+) |
-| `$(key)` | `Variable` | 巨集變數佔位符 |
+* **基本語法**: 每行僅限一條指令, 且指令前綴 **禁止** 加上斜線 `/`.
+* **註釋規範**: 以 `#` 開頭的行會被視為註釋, 系統將自動忽略不執行.
+* **空白行**: 允許使用空白行分隔邏輯區塊, 不會影響指令執行效能.
+* **指令上限**: 單次函式調用的指令執行總量受遊戲規則 `maxCommandChainLength` 限制 (預設為 65536 條).
+* **巨集 (Macros)**: (1.20.2+) 支援以 `$` 開頭的行, 並透過 `$(變數名)` 接收來自 NBT 的動態參數.
 
 ---
 
-## 節點說明 (Node Explanations)
+## 3. 執行環境與上下文 (Execution Context)
 
-### 指令與語法
+> 函式執行時會繼承調用者的狀態, 除非透過 `execute` 指令重新定義.
 
-> 函式內部的指令必須符合遊戲版本的語法規範.
-
-| 屬性 | 說明 |
-| --- | --- |
-| `空行` | 執行時會被自動忽略, 用於增加代碼可讀性. |
-| `執行上限` | 受遊戲規則 `maxCommandChainLength` 限制 (預設 65536). |
-| `回傳值` | 可透過 `/return` 指令提前終止並傳回數值. |
+* **執行者 (Executor)**: 預設為執行 `/function` 指令的實體、命令方塊或伺服器後台.
+* **座標與維度**: 預設繼承執行者當前所在的座標、朝向與維度.
+* **權限等級**: 函式內的指令執行權限通常與調用源相同.
+* **上下文偏移**: 常用 `/execute as <實體> at @s run function <路徑>` 來切換執行環境.
 
 ---
 
-### 巨集系統 (Macros)
+## 4. 標籤調用 (Function Tags)
 
-> 於 JE 1.20 引進, 允許動態替換指令中的部分內容.
+> 透過 JSON 標籤將多個函式組合成一個組, 實現批量執行或系統事件掛載.
 
-| 組件 | 說明 |
-| --- | --- |
-| `引導符 $` | 必須位於指令行的最開頭. |
-| `定義變數` | 使用 `$(var_name)` 格式. |
-| `呼叫方式` | 必須配合 `/function <id> with <source>` 語法傳遞 NBT 資料. |
+* **標籤路徑**: `data/<namespace>/tags/functions/<標籤名稱>.json`.
+* **預設保留標籤**:
+    * `minecraft:tick`: 每遊戲刻自動執行一次 (每秒 20 次). 常見於偵測邏輯與計時器.
+    * `minecraft:load`: 世界載入或執行 `/reload` 時自動執行一次. 常見於初始化計分板或系統宣告.
 
 ---
 
-## 外部連結 (References)
+## 5. 外部連結 (References)
 
-* [Minecraft Wiki - Function](https://minecraft.fandom.com/zh/wiki/Java%E7%89%88%E5%87%BD%E6%95%B0)
 * [Misode Data Pack Generators - Function](https://misode.github.io/function/)
-* [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
-* [座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)
+* [Minecraft Wiki - Functions](https://zh.minecraft.wiki/)
 * [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
-* [實體 NBT 矩陣 (Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
-* [方塊實體 NBT 矩陣 (Block Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
-* [物品 NBT 矩陣 (Items)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
-* [函式指令 (function)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/function.md)
+* [相關指令: /function](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/function.md)
+* [相關指令: /execute](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/execute.md)
+* [相關指令: /reload](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/reload.md)

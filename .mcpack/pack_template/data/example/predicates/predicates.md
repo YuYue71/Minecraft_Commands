@@ -1,124 +1,150 @@
 # predicates (謂詞 / 判定條件)
 
-> **分類:** `資料包元素` | **檔案格式:** `json` | **命名空間支援:** `true` | **熱重載:** `/reload`
+> **分類:** `邏輯判定` | **檔案格式:** `json` | **適用版本:** `JE ≤ 1.20.4` | **熱重載:** `/reload`
 
 ---
 
 ## 目錄
 
-* [目錄路徑](#目錄路徑-directory--path)
-* [核心結構](#核心結構-core-structure)
-* [節點說明](#節點說明-node-explanations)
-    * [condition (條件類型)](#condition-條件類型)
-    * [terms (複合條件)](#terms-array)
-* [原版條件類型 (Conditions) 窮舉清單](#原版條件類型-conditions-窮舉清單)
-* [外部連結](#外部連結-references)
+* [1. 目錄路徑 (Directory & Path)](#1-目錄路徑-directory--path)
+* [2. 核心結構範本 (Core Structure Skeleton)](#2-核心結構範本-core-structure-skeleton)
+* [3. 根節點屬性表 (Root Properties)](#3-根節點屬性表-root-properties)
+* [4. 子對象詳解 (Sub-object Details)](#4-子對象詳解-sub-object-details)
+    * [4.1 entity_properties 屬性細節](#41-entity_properties-屬性細節)
+    * [4.2 location_check 屬性細節](#42-location_check-屬性細節)
+    * [4.3 複合條件項目 (terms)](#43-複合條件項目-terms)
+* [5. 參數枚舉與可用值全清單 (Value Enumerations)](#5-參數枚舉與可用值全清單-value-enumerations)
+    * [5.1 條件類型 (Condition IDs)](#51-條件類型-condition-ids)
+    * [5.2 實體類型 (Entity Targets)](#52-實體類型-entity-targets)
+* [6. 數據約束與邊界條件 (Data Constraints)](#6-數據約束與邊界條件-data-constraints)
+* [7. 外部連結 (References)](#7-外部連結-references)
 
 ---
 
-## 目錄路徑 (Directory & Path)
+## 1. 目錄路徑 (Directory & Path)
 
-> 謂詞檔案用於定義複雜的邏輯判斷, 常與 `/execute if predicate` 或戰利品表配合使用.
+> 定義可重複調用的邏輯判斷單元, 用於指令篩選或戰利品表執行門檻.
 
 ```file
 data/<namespace>/predicates/[子資料夾]/<檔案名稱>.json
 ```
 
-* `<namespace>` = 命名空間 (如 `minecraft`, `example`)
-* `[子資料夾]` = 開發者自訂的分類目錄 (選填)
-* `<檔案名稱>` = 決定該謂詞的 ID 名稱
-* 遊戲內調用格式為: `<namespace>:[子資料夾]/<檔案名稱>` (例如 `example:is_sneaking`)
+* `<namespace>`: 命名空間 (如 `minecraft`, `example`).
+* `<registry>`: `predicates`.
+* 調用標識符: `<namespace>:[子資料夾]/<檔案名稱>` (用於 `execute if predicate`).
 
 ---
 
-## 核心結構 (Core Structure)
+## 2. 核心結構範本 (Core Structure Skeleton)
 
-> 謂詞的核心是一個條件物件或多個條件的邏輯組合.
+> 包含單一判定與複合邏輯判定的編寫骨架.
 
 ```json
+// 單一判定範例 (檢查玩家是否正在潛行)
 {
-    "condition": "minecraft:entity_properties",
-    "entity": "this",
-    "predicate": {
-        "flags": {
-            "is_sneaking": true
-        }
+  "condition": "minecraft:entity_properties",
+  "entity": "this",
+  "predicate": {
+    "flags": {
+      "is_sneaking": true
     }
+  }
+}
+
+// 複合判定範例 (AND 邏輯)
+{
+  "condition": "minecraft:all_of",
+  "terms": [
+    { "condition": "minecraft:weather_check", "is_raining": true },
+    { "condition": "minecraft:location_check", "location": { "dimension": "minecraft:overworld" } }
+  ]
 }
 ```
 
-| 鍵值 / 節點 (Key) | 類型 | 必填 | 說明 |
-| --- | --- | --- | --- |
-| `"condition"` | `string` | 是 | 指定判斷條件的類型 ID |
-| `"terms"` | `array` | 否 | 用於複合條件 (如 `all_of`, `any_of`) 的子條件列表 |
+---
+
+## 3. 根節點屬性表 (Root Properties)
+
+> 檔案第一層級的鍵值定義.
+
+| 鍵值 (Key) | 類型 | 必填 | 簡述 | 說明、預設值與可用值索引 |
+| --- | --- | --- | --- | --- |
+| `"condition"` | `string` | 是 | 條件類型 | 指定要執行的判定邏輯. 可用值詳見 [5.1](#51-條件類型-condition-ids). |
+| `"terms"` | `array` | 否 | 子條件清單 | 僅用於複合條件 (如 `all_of`). 連結至 [4.3](#43-複合條件項目-terms). |
+| `...` | `mixed` | 否 | 條件參數 | 依據 `"condition"` 的類型填入對應參數. 詳見 [4.1](#41-entity_properties-屬性細節) - [4.2](#42-location_check-屬性細節). |
 
 ---
 
-## 節點說明 (Node Explanations)
+## 4. 子對象詳解 (Sub-object Details)
 
-### `condition` (條件類型)
+### 4.1 entity_properties 屬性細節
 
-> 定義該謂詞執行的具體邏輯判斷方式.
+> 檢查特定實體的屬性狀態 (Misode: Entity Properties).
 
-| 屬性 | 說明 |
-| --- | --- |
-| `類型` | 必須為有效的原版條件 ID (詳見下表). |
-| `參數` | 根據不同的 `"condition"` 類型, 根目錄需填入對應的參數節點. |
+| 子鍵值 (Sub-key) | 類型 | 必填 | 簡述 | 說明 |
+| --- | --- | --- | --- | --- |
+| `"entity"` | `enum` | 是 | 目標實體 | 指定要檢查哪一個實體. 可用值詳見 [5.2](#52-實體類型-entity-targets). |
+| `"predicate"` | `object` | 是 | 屬性詳情 | 包含 `flags`, `equipment`, `nbt` 等詳細判定. |
 
----
+### 4.2 location_check 屬性細節
 
-### `terms (Array)`
+> 檢查特定位置的環境狀態 (Misode: Location Check).
 
-> 僅在 `condition` 為 `all_of`, `any_of` 等複合類型時使用.
+| 子鍵值 (Sub-key) | 類型 | 必填 | 簡述 | 說明 |
+| --- | --- | --- | --- | --- |
+| `"offsetX"` | `int` | 否 | X 軸偏移 | 相對於基準點的水平偏移量. |
+| `"location"` | `object` | 是 | 位置詳情 | 包含 `biome`, `dimension`, `structure` 等判定. |
 
-| 鍵值 / 節點 (Key) | 類型 | 必填 | 說明 |
-| --- | --- | --- | --- |
-| `"condition"` | `string` | 是 | 子條件的類型 ID |
-| `...` | `mixed` | 否 | 該子條件所需的特定參數 |
+### 4.3 複合條件項目 (terms)
 
----
+> `all_of`, `any_of` 等陣列中的元素結構.
 
-## 原版條件類型 (Conditions) 窮舉清單
-
-### 邏輯組合類 (Logical Composites)
-
-| ID | 說明 |
-| --- | --- |
-| `minecraft:all_of` | 所有子條件 (terms) 皆須成立 (AND). |
-| `minecraft:any_of` | 任一子條件 (terms) 成立即可 (OR). |
-| `minecraft:inverted` | 反轉子條件的結果 (NOT). 需使用 `term` 節點. |
-| `minecraft:reference` | 引用另一個謂詞檔案. 需使用 `name` 節點. |
-
-### 環境與狀態類 (Environment & States)
-
-| ID | 說明 |
-| --- | --- |
-| `minecraft:weather_check` | 檢查天氣狀態 (如 `is_raining`, `is_thundering`). |
-| `minecraft:time_check` | 檢查世界時間 (Time). |
-| `minecraft:location_check` | 檢查座標、維度、生物群系或方塊狀態. |
-| `minecraft:entity_properties` | 檢查實體的屬性 (如 NBT、裝備、效果、旗標). |
-| `minecraft:entity_scores` | 檢查實體的計分板數值. |
-| `minecraft:value_check` | 檢查一個動態數值是否在範圍內. |
-
-### 物品與戰鬥類 (Items & Combat)
-
-| ID | 說明 |
-| --- | --- |
-| `minecraft:match_tool` | 檢查工具/物品是否符合特定屬性 (常用於挖掘條件). |
-| `minecraft:damage_source_properties` | 檢查傷害來源的屬性. |
-| `minecraft:killed_by_player` | 檢查是否被玩家擊殺. |
-| `minecraft:random_chance` | 隨機機率判定 (0.0 到 1.0). |
-| `minecraft:random_chance_with_looting` | 結合掠奪 (Looting) 等級的隨機機率判定. |
+| 子鍵值 (Sub-key) | 類型 | 必填 | 簡述 | 說明 |
+| --- | --- | --- | --- | --- |
+| `"condition"` | `string` | 是 | 子條件類型 | 遞迴調用任何合法的條件 ID. |
+| `...` | `mixed` | 否 | 子條件參數 | 填入該子條件所需的對應屬性. |
 
 ---
 
-## 外部連結 (References)
+## 5. 參數枚舉與可用值全清單 (Value Enumerations)
 
-* [Minecraft Wiki - Predicate](https://zh.minecraft.wiki/w/%E8%B0%93%E8%AF%8D?variant=zh-tw)
+### 5.1 條件類型 (Condition IDs)
+
+| 參數值 (Value) | 簡述 | 完整遊戲行為說明與影響範圍 |
+| --- | --- | --- |
+| `minecraft:all_of` | 邏輯 AND | 當所有 `terms` 內條件皆成立時返回 true. |
+| `minecraft:any_of` | 邏輯 OR | 當 `terms` 內任一條件成立時返回 true. |
+| `minecraft:inverted` | 邏輯 NOT | 反轉 `term` 節點內條件的判定結果. |
+| `minecraft:entity_properties` | 實體屬性 | 檢查實體的 NBT、效果、裝備或狀態旗標. |
+| `minecraft:location_check` | 位置環境 | 檢查座標處的群系、維度、結構或光照. |
+| `minecraft:weather_check` | 天氣狀態 | 檢查當前世界是否正在下雨或雷雨. |
+| `minecraft:time_check` | 時間檢查 | 檢查世界時間是否在指定區間內. |
+| `minecraft:random_chance` | 隨機機率 | 基於固定機率進行判定 (0.0 - 1.0). |
+| `minecraft:match_tool` | 工具檢查 | 檢查使用的物品/工具之 ID、標籤、附魔或耐久. |
+| `minecraft:reference` | 引用謂詞 | 調用另一個已定義的 `.json` 謂詞檔案. |
+
+### 5.2 實體類型 (Entity Targets)
+
+| 參數值 (Value) | 簡述 | 完整遊戲行為說明與影響範圍 |
+| --- | --- | --- |
+| `this` | 執行者 | 當前執行指令或觸發事件的實體. |
+| `killer` | 擊殺者 | 造成死亡事件的直接來源實體. |
+| `killer_player` | 擊殺玩家 | 造成死亡事件且必須為玩家身份的實體. |
+
+---
+
+## 6. 數據約束與邊界條件 (Data Constraints)
+
+* **隨機機率 (chance)**: 必須介於 `0.0` 與 `1.0` 之間. `0.0` 永不成立, `1.0` 必定成立.
+* **數值範圍 (range)**: 許多欄位支援 `{"min": x, "max": y}` 格式, 必須確保 `min ≤ max`.
+* **引用深度**: `reference` 類型避免循環引用, 否則會導致資料包載入時堆疊溢位 (StackOverflow).
+
+---
+
+## 7. 外部連結 (References)
+
 * [Misode Data Pack Generators - Predicate](https://misode.github.io/predicate/)
-* [資源位置與命名空間規範 (Resource Locations)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/ResourceLocations.md)
+* [Minecraft Wiki - Predicate Definition](https://zh.minecraft.wiki/)
 * [目標選擇器 (Target Selectors)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/TargetSelectors.md)
 * [座標系統 (Coordinate Systems)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/coordinates.md)
-* [實體 NBT 矩陣 (Entities)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.NBT/list.md)
-* [方塊狀態與標籤 (Block States & Tags)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.syntax_components/BlockStates_or_Tags.md)
-* [判定條件指令 (execute)](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/execute.md)
+* [相關指令: /execute if predicate](https://github.com/YuYue71/Minecraft_Commands/blob/main/.commands/execute.md)
