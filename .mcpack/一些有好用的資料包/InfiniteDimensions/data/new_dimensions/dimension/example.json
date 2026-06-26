@@ -1,0 +1,19 @@
+{
+  "type": "new_dimensions:example",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [
+        {
+          "height": 1,
+          "block": "minecraft:smooth_sandstone"
+        },
+        {
+          "height": 2,
+          "block": "minecraft:sand"
+        }
+      ],
+      "biome": "minecraft:the_void"
+    }
+  }
+}

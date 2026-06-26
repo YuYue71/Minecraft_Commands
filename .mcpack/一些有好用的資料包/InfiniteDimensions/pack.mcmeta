@@ -1,0 +1,10 @@
+{
+    "pack": {
+        "pack_format": 26,
+        "supported_formats": {
+            "min_inclusive": 18,
+            "max_inclusive": 48
+        },
+        "description": "新增維度"
+    }
+}

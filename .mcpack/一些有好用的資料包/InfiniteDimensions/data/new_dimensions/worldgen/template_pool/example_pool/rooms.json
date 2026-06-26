@@ -1,0 +1,105 @@
+{
+    "name": "new_dimensions:example_pool/rooms",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/a",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/b",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/c",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/d",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/e",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/f",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/g",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/h",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/i",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/j",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+            "element_type": "minecraft:single_pool_element",
+            "location": "new_dimensions:example_structures/k",
+            "projection": "rigid",
+            "processors": "minecraft:empty"
+            }
+        }
+    ]
+}
