@@ -110,6 +110,7 @@
 | 聊天訊息 | [`chat_type`](pack_template/data/example/chat_type/chat_type.md) | 自定義聊天室訊息的顯示格式與外觀. |
 | 自訂維度 | [`dimension`](pack_template/data/example/dimension/dimension.md) | 定義全新的自訂維度 (包含地形生成器設定). |
 | 維度類型 | [`dimension_type`](pack_template/data/example/dimension_type/dimension_type.md) | 定義維度的環境與物理屬性 (如時間流速, 亮度, 高度限制, 床的爆炸與否). |
+| 世界生成 | [`worldgen`](pack_template/data/example/worldgen/list.md) |
 
 ---
 
